@@ -1,0 +1,670 @@
+<!DOCTYPE html><html class="light" lang="es"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Gestión de Inventario | SquatGym</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-bright": "#fcf9f8",
+                      "on-error-container": "#93000a",
+                      "surface-container-low": "#f6f3f2",
+                      "on-surface-variant": "#3d4a3e",
+                      "tertiary": "#5d5f5f",
+                      "on-primary-fixed-variant": "#005228",
+                      "surface-container-highest": "#e5e2e1",
+                      "on-surface": "#1c1b1b",
+                      "secondary-fixed": "#e5e2e1",
+                      "outline-variant": "#bbcbbb",
+                      "error-container": "#ffdad6",
+                      "primary": "#006d37",
+                      "background": "#fcf9f8",
+                      "on-primary": "#ffffff",
+                      "primary-fixed": "#6bfe9c",
+                      "surface-container-high": "#eae7e7",
+                      "surface-container": "#f0eded",
+                      "on-tertiary-container": "#434546",
+                      "outline": "#6c7b6d",
+                      "on-secondary-fixed": "#1c1b1b",
+                      "error": "#ba1a1a",
+                      "surface-variant": "#e5e2e1",
+                      "on-background": "#1c1b1b",
+                      "primary-container": "#2ecc71",
+                      "on-secondary-container": "#636262",
+                      "secondary-container": "#e2dfde",
+                      "surface-dim": "#dcd9d9",
+                      "primary-fixed-dim": "#4ae183",
+                      "on-tertiary": "#ffffff",
+                      "surface-tint": "#006d37",
+                      "inverse-surface": "#313030",
+                      "on-tertiary-fixed": "#1a1c1c",
+                      "surface-container-lowest": "#ffffff",
+                      "on-secondary": "#ffffff",
+                      "on-secondary-fixed-variant": "#474746",
+                      "on-primary-fixed": "#00210c",
+                      "on-error": "#ffffff",
+                      "inverse-on-surface": "#f3f0ef",
+                      "secondary-fixed-dim": "#c8c6c5",
+                      "surface": "#fcf9f8",
+                      "tertiary-fixed-dim": "#c6c6c7",
+                      "on-tertiary-fixed-variant": "#454747",
+                      "secondary": "#5f5e5e",
+                      "tertiary-container": "#b2b3b3",
+                      "inverse-primary": "#4ae183",
+                      "on-primary-container": "#005027",
+                      "tertiary-fixed": "#e2e2e2"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "fontFamily": {
+                      "headline": ["Manrope"],
+                      "display": ["Manrope"],
+                      "body": ["Inter"],
+                      "label": ["Inter"]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .brand-gym { color: #27ae60; }
+        .dark .brand-gym { color: #5cec88; }
+        .nav-tab {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            height: 2.25rem;
+            flex-shrink: 0;
+            overflow: hidden;
+            border-radius: 0.5rem;
+            padding-inline: 0.875rem;
+            color: #727971;
+            font-family: Manrope, sans-serif;
+            font-size: 0.875rem;
+            font-weight: 600;
+            isolation: isolate;
+            transition: color 180ms ease, background-color 180ms ease, box-shadow 180ms ease;
+        }
+        .nav-tab::before {
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            border-radius: inherit;
+            background: radial-gradient(circle at 50% 50%, rgb(39 174 96 / 0.28) 0 18%, transparent 19% 100%), rgb(39 174 96 / 0.10);
+            content: "";
+            opacity: 0;
+            transform: scale(0.2);
+            transform-origin: center;
+        }
+        .nav-tab:hover {
+            background-color: rgb(39 174 96 / 0.10);
+            color: #27ae60;
+            box-shadow: inset 0 0 0 1px rgb(39 174 96 / 0.28);
+        }
+        .nav-tab:hover::before { animation: nav-wave 650ms ease-out forwards; }
+        @keyframes nav-wave {
+            0% { opacity: 0; transform: scale(0.2); }
+            30% { opacity: 1; }
+            100% { opacity: 0; transform: scale(2.8); }
+        }
+        .nav-tab-active,
+        .nav-tab-active:hover {
+            background-color: #27ae60;
+            color: #ffffff;
+            box-shadow: 0 8px 22px rgb(39 174 96 / 0.22);
+            font-weight: 800;
+        }
+        .nav-tab-active::before,
+        .nav-tab-active:hover::before {
+            animation: none;
+            opacity: 0;
+        }
+        .profile-dropdown-panel,
+        .notifications-panel {
+            background-color: #ffffff;
+            border-color: #bbcbbb;
+            box-shadow: 0 24px 60px rgb(0 0 0 / 0.22);
+            opacity: 1;
+            backdrop-filter: none;
+        }
+        .dark .profile-dropdown-panel,
+        .dark .notifications-panel {
+            background-color: #1a5231;
+            box-shadow: 0 24px 70px rgb(0 0 0 / 0.55);
+        }
+        .notifications-panel {
+            position: fixed;
+            right: 1rem;
+            top: 7.25rem;
+            width: min(20rem, calc(100vw - 2rem));
+            max-width: none;
+        }
+        @keyframes bell-ring {
+            0% { transform: rotate(0deg); }
+            15% { transform: rotate(18deg); }
+            30% { transform: rotate(-16deg); }
+            45% { transform: rotate(12deg); }
+            60% { transform: rotate(-8deg); }
+            75% { transform: rotate(5deg); }
+            100% { transform: rotate(0deg); }
+        }
+        .bell-ring {
+            animation: bell-ring 0.7s ease-in-out;
+            transform-origin: top center;
+        }
+        @media (max-width: 640px) {
+            .notifications-panel {
+                left: 1rem;
+                right: 1rem;
+                width: auto;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-background text-on-surface font-body antialiased">
+<header class="fixed left-0 top-0 z-50 w-full border-b border-outline-variant bg-surface-container-lowest/95 shadow-sm backdrop-blur-md">
+<div class="flex h-16 w-full items-center justify-between gap-3 px-4 sm:px-6 md:px-10">
+<a class="flex min-w-0 items-center gap-2 sm:gap-3" href="../home.html" aria-label="Ir al inicio">
+<img class="hidden h-10 w-10 shrink-0 rounded-lg border border-outline-variant bg-white object-contain p-1 sm:block" alt="Logo SquatGym" src="../../img/logo.png">
+<span class="whitespace-nowrap font-headline text-lg font-black text-on-surface sm:text-2xl">Squat<span class="brand-gym">Gym</span></span>
+</a>
+<div class="flex shrink-0 items-center justify-end gap-1 sm:gap-2">
+<div class="relative">
+<button type="button" class="flex h-9 w-9 items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-low active:scale-95 sm:h-10 sm:w-10" id="notifications-button" aria-label="Ver notificaciones" aria-expanded="false" aria-controls="notifications-dropdown">
+<span class="relative block">
+<span class="material-symbols-outlined" id="notifications-icon" style="font-variation-settings: 'FILL' 1">notifications</span>
+<span class="absolute right-0.5 top-0 h-2 w-2 rounded-full border border-surface-container-lowest bg-red-500 hidden" id="notification-dot"></span>
+</span>
+</button>
+<div class="notifications-panel z-[100] hidden overflow-hidden rounded-lg border" id="notifications-dropdown" role="menu">
+<div class="flex items-center justify-between gap-4 border-b border-outline-variant p-4">
+<div>
+<p class="text-sm font-bold text-on-surface">Notificaciones</p>
+<p class="text-xs text-on-surface-variant" id="notification-status">Sin novedades pendientes</p>
+</div>
+<button type="button" class="rounded-full p-1 text-on-surface-variant hover:bg-surface-container" id="mark-notifications-read" aria-label="Marcar notificaciones como leídas">
+<span class="material-symbols-outlined text-lg">done_all</span>
+</button>
+</div>
+<div class="max-h-72 overflow-y-auto p-2" id="notifications-list">
+<article class="rounded-md px-3 py-3 hover:bg-surface-container">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined mt-0.5 text-lg text-primary">inventory_2</span>
+<div>
+<p class="text-sm font-semibold text-on-surface">Stock bajo</p>
+<p class="text-xs leading-5 text-on-surface-variant">Quedan pocas unidades de proteína whey.</p>
+<p class="mt-1 text-[11px] font-semibold text-primary">Hace 1 min</p>
+</div>
+</div>
+</article>
+<article class="rounded-md px-3 py-3 hover:bg-surface-container">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined mt-0.5 text-lg text-primary">event_available</span>
+<div>
+<p class="text-sm font-semibold text-on-surface">Clase por comenzar</p>
+<p class="text-xs leading-5 text-on-surface-variant">Funcional de las 18:00 tiene 12 inscriptos.</p>
+<p class="mt-1 text-[11px] font-semibold text-on-surface-variant">Hace 12 min</p>
+</div>
+</div>
+</article>
+</div>
+</div>
+</div>
+<button type="button" class="flex h-9 w-9 items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-low active:scale-95 sm:h-10 sm:w-10" id="theme-toggle" aria-label="Cambiar a modo oscuro">
+<span class="material-symbols-outlined" id="theme-toggle-dark-icon">dark_mode</span>
+<span class="material-symbols-outlined hidden" id="theme-toggle-light-icon">light_mode</span>
+</button>
+<div class="relative ml-1 flex items-center border-l border-outline-variant pl-2 sm:ml-2 sm:pl-4">
+<button type="button" class="flex h-10 items-center gap-3 rounded-lg px-1 hover:bg-surface-container-low sm:px-2" id="profile-menu-button" aria-expanded="false" aria-controls="profile-dropdown">
+<span class="hidden flex-col items-end sm:flex">
+<span class="text-xs font-bold text-on-surface">Admin Squat</span>
+<span class="text-[10px] uppercase tracking-wider text-on-surface-variant">Super Admin</span>
+</span>
+<span class="flex h-9 w-9 items-center justify-center rounded-lg border border-outline-variant bg-primary-container/15 text-primary shadow-sm">
+<span class="material-symbols-outlined">person</span>
+</span>
+</button>
+<div class="profile-dropdown-panel absolute right-0 top-full z-[100] mt-2 hidden w-56 max-w-[calc(100vw-2rem)] overflow-hidden rounded-lg border" id="profile-dropdown" role="menu">
+<div class="border-b border-outline-variant p-4">
+<p class="text-sm font-bold text-on-surface">Admin Squat</p>
+<p class="text-xs text-on-surface-variant">Super Administrador</p>
+</div>
+<div class="p-2">
+<button type="button" class="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-on-surface hover:bg-surface-container" role="menuitem">
+<span class="material-symbols-outlined text-lg">person</span>
+Mi Perfil
+</button>
+<button type="button" class="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-on-surface hover:bg-surface-container" role="menuitem">
+<span class="material-symbols-outlined text-lg">settings</span>
+Configuración
+</button>
+</div>
+<div class="border-t border-outline-variant p-2">
+<button type="button" class="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-semibold text-error hover:bg-error-container/15" role="menuitem" onclick="window.location.href='../../index.html'">
+<span class="material-symbols-outlined text-lg">logout</span>
+Cerrar sesión
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<nav class="no-scrollbar h-12 w-full overflow-x-auto bg-surface-container-lowest/95" aria-label="Navegación principal">
+<div class="flex h-full w-max min-w-full items-center gap-1 px-4 sm:px-6 md:px-10">
+<a class="nav-tab active:scale-95" href="../home.html">Inicio</a>
+<a class="nav-tab active:scale-95" href="../kiosco/kiosco.html">Kiosco</a>
+<a class="nav-tab nav-tab-active active:scale-95" href="inventario.html" aria-current="page">Inventario</a>
+<a class="nav-tab active:scale-95" href="../home.html#asistencias">Asistencias</a>
+<a class="nav-tab active:scale-95" href="../usuarios/gestionroles.html">Usuarios</a>
+</div>
+</nav>
+</header>
+<div class="flex pt-32 justify-center">
+<!-- Main Content Area - Full Width & Centered -->
+<main class="flex-1 max-w-7xl p-8 bg-surface">
+<!-- Content Header -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
+<div>
+<h1 class="text-[3.5rem] font-black font-headline text-on-surface leading-tight tracking-tighter" style="">INVENTARIO</h1>
+<p class="text-on-surface-variant max-w-2xl mt-2 font-body text-lg" style="">Monitorea las existncias, actualice precios y gestione el catálogo de productos del gimnasio en tiempo real.</p>
+</div>
+<button class="bg-gradient-to-br from-primary to-primary-container text-white px-8 py-4 rounded-xl font-bold flex items-center gap-3 active:scale-95 transition-transform shadow-lg shadow-primary/20" onclick="window.location.href='agregarproducto.html'" style="">
+<span class="material-symbols-outlined" data-icon="add_circle" style="">add_circle</span>
+<span class="" style="">+ Agregar Producto</span>
+</button>
+</div>
+<!-- Bento Stats Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+<div class="bg-surface-container-low rounded-xl p-6 flex flex-col justify-between h-40">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="inventory" style="">inventory</span>
+<div>
+<p class="text-on-surface-variant text-sm font-semibold uppercase tracking-wider" style="">Total Productos</p>
+<p class="text-3xl font-black font-headline" style="">1,248</p>
+</div>
+</div>
+<div class="bg-primary-container/10 border border-primary-container/20 rounded-xl p-6 flex flex-col justify-between h-40">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="trending_up" style="">trending_up</span>
+<div>
+<p class="text-on-surface-variant text-sm font-semibold uppercase tracking-wider" style="">Valor Inventario</p>
+<p class="text-3xl font-black font-headline text-primary" style="">$45,200.00</p>
+</div>
+</div>
+<div class="bg-error-container/20 rounded-xl p-6 flex flex-col justify-between h-40">
+<span class="material-symbols-outlined text-error text-3xl" data-icon="warning" style="">warning</span>
+<div>
+<p class="text-on-surface-variant text-sm font-semibold uppercase tracking-wider" style="">Stock Bajo</p>
+<p class="text-3xl font-black font-headline text-error" style="">12 Items</p>
+</div>
+</div>
+</div>
+<!-- Horizontal Category Filter -->
+<div class="flex gap-3 mb-8 overflow-x-auto no-scrollbar pb-2">
+<button class="bg-on-surface text-surface px-6 py-2 rounded-full font-bold text-sm whitespace-nowrap" style="">TODOS LOS PRODUCTOS</button>
+<button class="bg-surface-container-high text-on-surface-variant px-6 py-2 rounded-full font-bold text-sm whitespace-nowrap hover:bg-surface-container-highest transition-colors" style="">BEBIDAS</button>
+<button class="bg-surface-container-high text-on-surface-variant px-6 py-2 rounded-full font-bold text-sm whitespace-nowrap hover:bg-surface-container-highest transition-colors" style="">COMESTIBLES</button>
+<button class="bg-surface-container-high text-on-surface-variant px-6 py-2 rounded-full font-bold text-sm whitespace-nowrap hover:bg-surface-container-highest transition-colors" style="">INDUMENTARIA</button>
+<button class="bg-surface-container-high text-on-surface-variant px-6 py-2 rounded-full font-bold text-sm whitespace-nowrap hover:bg-surface-container-highest transition-colors" style="">ACCESORIOS</button>
+<button class="bg-surface-container-high text-on-surface-variant px-6 py-2 rounded-full font-bold text-sm whitespace-nowrap hover:bg-surface-container-highest transition-colors" style="">EQUIPO</button>
+</div>
+<!-- Product Table/List Canvas -->
+<div class="bg-surface-container-low rounded-2xl overflow-hidden">
+<div class="grid grid-cols-12 px-8 py-4 bg-surface-container font-headline font-extrabold text-xs tracking-widest text-on-surface-variant border-b border-outline-variant/10">
+<div class="col-span-5" style="">PRODUCTO</div>
+<div class="col-span-2" style="">CATEGORÍA</div>
+<div class="col-span-2" style="">PRECIO</div>
+<div class="col-span-1" style="">STOCK</div>
+<div class="col-span-2 text-right" style="">ACCIONES</div>
+</div>
+<div class="divide-y divide-outline-variant/10">
+<!-- Product Row 1 -->
+<div class="grid grid-cols-12 px-8 py-6 items-center hover:bg-surface-container-high transition-colors group">
+<div class="col-span-5 flex items-center gap-4">
+<div class="w-16 h-16 rounded-xl bg-surface-container-highest overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform" data-alt="Sleek black aluminum water bottle with a metallic finish on a minimalist light background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHPkH1-bA3mMz9u-bM15f6B7B5B3PmhazD2oRdtkCo0QLt8jeHiAbR4vM8JlWwNLQW4sUhdQNEXSDc-HYnV591ZM3nUCTcFpL8XEwf9eW9s6SZHrXuF4fUmHsW-Z-ZuKe8BDMIZJ5IUIKmsOqyIoax_BwKYRYCKOkCUuACYoDtPraURBoEEck1u_rgM2yfA9L-Ea1mr_z_GMzXDjPNdyGvTuDp3XbITb_JkAxq_no7hejd39t7Y4vSKrK76Zha7-KEVcFIymPDdQ" style="">
+</div>
+<div>
+<h4 class="font-headline font-bold text-on-surface" style="">Botella Térmica SquatGym 750ml</h4>
+<p class="text-xs text-on-surface-variant" style="">SKU: SG-ACC-001</p>
+</div>
+</div>
+<div class="col-span-2">
+<span class="px-3 py-1 rounded-full bg-surface-container-highest text-[10px] font-bold uppercase" style="">ACCESORIOS</span>
+</div>
+<div class="col-span-2 font-headline font-bold text-primary" style="">$25.00</div>
+<div class="col-span-1">
+<div class="flex items-center gap-2">
+<span class="font-bold" style="">42</span>
+<div class="w-2 h-2 rounded-full bg-primary-container shadow-[0_0_8px_rgba(46,204,113,0.5)]"></div>
+</div>
+</div>
+<div class="col-span-2 flex justify-end gap-3">
+<button class="text-primary font-bold text-xs hover:underline" onclick="window.location.href='editarprodcuto.html'" style="">Modificar</button>
+<button class="text-error font-bold text-xs hover:underline" style="">Eliminar</button>
+</div>
+</div>
+<!-- Product Row 2 -->
+<div class="grid grid-cols-12 px-8 py-6 items-center hover:bg-surface-container-high transition-colors group">
+<div class="col-span-5 flex items-center gap-4">
+<div class="w-16 h-16 rounded-xl bg-surface-container-highest overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform" data-alt="Can of organic energy drink with vibrant green design on a clean light grey surface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBX6OL0TmVDzjOomttsNfTaxFubzrVeyTuV9E0BhZTxNM67rEDP_s1TT3Kyl95lt4UZFQYQLi6-mRBG2rAZTywLV7Z8APaCgSm2LV8kXQHwRvcgu2xGpX3yz_lSdiCb3Io_LLKlacI1sYB5HSyB-1UMt8TuBVU4wmORejSjL5ZCm2hCshfKIZf_YmHhKkZSSVMIFB_xUzQ2Bvtxaq0j2i5u_NQF_-ed5L0JaPVcx1yEPJykdD70Aoe2MBz6i44R-suCUJ1qAvT3qg" style="">
+</div>
+<div>
+<h4 class="font-headline font-bold text-on-surface" style="">Bebida Isotónica Blue Rush</h4>
+<p class="text-xs text-on-surface-variant" style="">SKU: SG-BEB-042</p>
+</div>
+</div>
+<div class="col-span-2">
+<span class="px-3 py-1 rounded-full bg-surface-container-highest text-[10px] font-bold uppercase" style="">BEBIDAS</span>
+</div>
+<div class="col-span-2 font-headline font-bold text-primary" style="">$3.50</div>
+<div class="col-span-1">
+<div class="flex items-center gap-2">
+<span class="font-bold text-error" style="">8</span>
+<div class="w-2 h-2 rounded-full bg-error animate-pulse"></div>
+</div>
+</div>
+<div class="col-span-2 flex justify-end gap-3">
+<button class="text-primary font-bold text-xs hover:underline" onclick="window.location.href='editarprodcuto.html'" style="">Modificar</button>
+<button class="text-error font-bold text-xs hover:underline" style="">Eliminar</button>
+</div>
+</div>
+<!-- Product Row 3 -->
+<div class="grid grid-cols-12 px-8 py-6 items-center hover:bg-surface-container-high transition-colors group">
+<div class="col-span-5 flex items-center gap-4">
+<div class="w-16 h-16 rounded-xl bg-surface-container-highest overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform" data-alt="High-quality black gym training gloves with leather accents and secure velcro straps" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBSsllEmu6eGl3fdZajV6vxyR_dDF_3T1bJWAo8-QmVjTXQMPGAkNn-i43-jObgBgRsMzAhyEN_FXhMoYX25xhU-w4EWi6IFz2XDhTObRzKXf0uuQz5pS98AYXrGHG2wgRA_sqkc3wHULMCaer-BI3jIyQ558nP2_dPECC9f7KHNRyv4rJDBo9TmF0hQWUrzS-WMQjpuaTKzgOktGJyEdaWekRuM0NMTdOb9r-D-nX4UU9hBVRwKRLYnir_Ref0igvQgEq2ipQw2A" style="">
+</div>
+<div>
+<h4 class="font-headline font-bold text-on-surface" style="">Guantes de Entrenamiento Pro</h4>
+<p class="text-xs text-on-surface-variant" style="">SKU: SG-IND-015</p>
+</div>
+</div>
+<div class="col-span-2">
+<span class="px-3 py-1 rounded-full bg-surface-container-highest text-[10px] font-bold uppercase" style="">INDUMENTARIA</span>
+</div>
+<div class="col-span-2 font-headline font-bold text-primary" style="">$18.99</div>
+<div class="col-span-1">
+<div class="flex items-center gap-2">
+<span class="font-bold" style="">124</span>
+<div class="w-2 h-2 rounded-full bg-primary-container"></div>
+</div>
+</div>
+<div class="col-span-2 flex justify-end gap-3">
+<button class="text-primary font-bold text-xs hover:underline" onclick="window.location.href='editarprodcuto.html'" style="">Modificar</button>
+<button class="text-error font-bold text-xs hover:underline" style="">Eliminar</button>
+</div>
+</div>
+<!-- Product Row 4 -->
+<div class="grid grid-cols-12 px-8 py-6 items-center hover:bg-surface-container-high transition-colors group">
+<div class="col-span-5 flex items-center gap-4">
+<div class="w-16 h-16 rounded-xl bg-surface-container-highest overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform" data-alt="Set of black hex dumbbells neatly organized on a modern storage rack in a high-end home gym" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9tQYgH62WFKotSLvKvfEgUILyK8ofm0VEvFn3MJPYSqVl4fIw1gGgiES-yhTqDDEu0xOeC0J0-PWmzk7f0RL2d2joqUqzZhS0OvsQEzWMTbvYOaL7IhYHsmDUZQlJdE95ksVFMjENZk7W2scuicqYQ61ZGtIJwRrkWOvPQeiD5RA5aOD22HKkjYZpWNX6tMRupV22c7XvFLUlDVbWQSpt6Xd_u_IIzwrwIbd8Ui5Xad4oiVAOHD3KM7z7H-4gON4g2ZHU_2x7Kg" style="">
+</div>
+<div>
+<h4 class="font-headline font-bold text-on-surface" style="">Mancuerna Hexagonal 10kg</h4>
+<p class="text-xs text-on-surface-variant" style="">SKU: SG-EQU-099</p>
+</div>
+</div>
+<div class="col-span-2">
+<span class="px-3 py-1 rounded-full bg-surface-container-highest text-[10px] font-bold uppercase" style="">EQUIPO</span>
+</div>
+<div class="col-span-2 font-headline font-bold text-primary" style="">$55.00</div>
+<div class="col-span-1">
+<div class="flex items-center gap-2">
+<span class="font-bold" style="">15</span>
+<div class="w-2 h-2 rounded-full bg-primary-fixed"></div>
+</div>
+</div>
+<div class="col-span-2 flex justify-end gap-3">
+<button class="text-primary font-bold text-xs hover:underline" onclick="window.location.href='editarprodcuto.html'" style="">Modificar</button>
+<button class="text-error font-bold text-xs hover:underline" style="">Eliminar</button>
+</div>
+</div>
+</div>
+<!-- Pagination Placeholder -->
+<div class="px-8 py-4 flex justify-between items-center bg-surface-container-high/30">
+<p class="text-xs text-on-surface-variant font-medium" style="">Mostrando 4 de 1,248 productos</p>
+<div class="flex gap-2">
+<button class="p-2 rounded-lg bg-surface-container-highest hover:bg-outline-variant transition-colors" style="">
+<span class="material-symbols-outlined text-sm" data-icon="chevron_left" style="">chevron_left</span>
+</button>
+<button class="p-2 rounded-lg bg-on-surface text-surface font-bold text-xs px-4" style="">1</button>
+<button class="p-2 rounded-lg bg-surface-container-highest hover:bg-outline-variant transition-colors text-xs px-4" style="">2</button>
+<button class="p-2 rounded-lg bg-surface-container-highest hover:bg-outline-variant transition-colors text-xs px-4" style="">3</button>
+<button class="p-2 rounded-lg bg-surface-container-highest hover:bg-outline-variant transition-colors" style="">
+<span class="material-symbols-outlined text-sm" data-icon="chevron_right" style="">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+</div>
+<script>
+  const THEME_KEY = 'squatgym-theme';
+
+  function saveTheme(theme) {
+    try {
+      localStorage.setItem(THEME_KEY, theme);
+    } catch (error) {
+      // El navegador puede bloquear localStorage en algunos contextos locales.
+    }
+  }
+
+  function setTheme(theme) {
+    const selectedTheme = theme === 'dark' ? 'dark' : 'light';
+    const html = document.documentElement;
+    const darkIcon = document.getElementById('theme-toggle-dark-icon');
+    const lightIcon = document.getElementById('theme-toggle-light-icon');
+    const themeButton = document.getElementById('theme-toggle');
+
+    html.classList.remove('light', 'dark');
+    html.classList.add(selectedTheme);
+    saveTheme(selectedTheme);
+
+    if (darkIcon && lightIcon) {
+      darkIcon.classList.toggle('hidden', selectedTheme === 'dark');
+      lightIcon.classList.toggle('hidden', selectedTheme === 'light');
+    }
+
+    if (themeButton) {
+      themeButton.setAttribute(
+        'aria-label',
+        selectedTheme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'
+      );
+    }
+  }
+
+  function toggleTheme() {
+    const isDark = document.documentElement.classList.contains('dark');
+    setTheme(isDark ? 'light' : 'dark');
+  }
+
+  let unreadNotificationCount = 0;
+
+  function updateNotificationState() {
+    const notificationDot = document.getElementById('notification-dot');
+    const notificationButton = document.getElementById('notifications-button');
+    const notificationStatus = document.getElementById('notification-status');
+    const hasUnread = unreadNotificationCount > 0;
+
+    if (notificationDot) {
+      notificationDot.classList.toggle('hidden', !hasUnread);
+    }
+
+    if (notificationButton) {
+      notificationButton.setAttribute(
+        'aria-label',
+        hasUnread
+          ? `Ver notificaciones, ${unreadNotificationCount} sin leer`
+          : 'Ver notificaciones'
+      );
+    }
+
+    if (notificationStatus) {
+      notificationStatus.textContent = hasUnread
+        ? `${unreadNotificationCount} sin leer`
+        : 'Sin novedades pendientes';
+    }
+  }
+
+  function animateNotificationBell() {
+    const notificationIcon = document.getElementById('notifications-icon');
+
+    if (!notificationIcon) {
+      return;
+    }
+
+    notificationIcon.classList.remove('bell-ring');
+    void notificationIcon.offsetWidth;
+    notificationIcon.classList.add('bell-ring');
+  }
+
+  function prependNotification({ icon, title, body, time }) {
+    const notificationsList = document.getElementById('notifications-list');
+
+    if (!notificationsList) {
+      return;
+    }
+
+    const article = document.createElement('article');
+    article.className = 'rounded-md px-3 py-3 hover:bg-surface-container';
+
+    const row = document.createElement('div');
+    row.className = 'flex items-start gap-3';
+
+    const iconElement = document.createElement('span');
+    iconElement.className = 'material-symbols-outlined mt-0.5 text-lg text-primary';
+    iconElement.textContent = icon;
+
+    const content = document.createElement('div');
+
+    const titleElement = document.createElement('p');
+    titleElement.className = 'text-sm font-semibold text-on-surface';
+    titleElement.textContent = title;
+
+    const bodyElement = document.createElement('p');
+    bodyElement.className = 'text-xs leading-5 text-on-surface-variant';
+    bodyElement.textContent = body;
+
+    const timeElement = document.createElement('p');
+    timeElement.className = 'mt-1 text-[11px] font-semibold text-primary';
+    timeElement.textContent = time;
+
+    content.append(titleElement, bodyElement, timeElement);
+    row.append(iconElement, content);
+    article.append(row);
+    notificationsList.prepend(article);
+  }
+
+  function receiveNotification(notification) {
+    unreadNotificationCount += 1;
+    prependNotification(notification);
+    updateNotificationState();
+    animateNotificationBell();
+  }
+
+  function markNotificationsRead() {
+    unreadNotificationCount = 0;
+    updateNotificationState();
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const themeButton = document.getElementById('theme-toggle');
+    const profileButton = document.getElementById('profile-menu-button');
+    const profileDropdown = document.getElementById('profile-dropdown');
+    const notificationsButton = document.getElementById('notifications-button');
+    const notificationsDropdown = document.getElementById('notifications-dropdown');
+    const markNotificationsReadButton = document.getElementById('mark-notifications-read');
+    let savedTheme = 'light';
+
+    try {
+      savedTheme = localStorage.getItem(THEME_KEY) || 'light';
+    } catch (error) {
+      savedTheme = 'light';
+    }
+
+    setTheme(savedTheme);
+    updateNotificationState();
+
+    if (themeButton) {
+      themeButton.addEventListener('click', toggleTheme);
+    }
+
+    if (notificationsButton && notificationsDropdown) {
+      notificationsButton.addEventListener('click', (event) => {
+        event.stopPropagation();
+        const isHidden = notificationsDropdown.classList.toggle('hidden');
+        notificationsButton.setAttribute('aria-expanded', String(!isHidden));
+        profileDropdown?.classList.add('hidden');
+        profileButton?.setAttribute('aria-expanded', 'false');
+      });
+
+      notificationsDropdown.addEventListener('click', (event) => {
+        event.stopPropagation();
+      });
+    }
+
+    if (markNotificationsReadButton) {
+      markNotificationsReadButton.addEventListener('click', markNotificationsRead);
+    }
+
+    if (profileButton && profileDropdown) {
+      profileButton.addEventListener('click', (event) => {
+        event.stopPropagation();
+        const isHidden = profileDropdown.classList.toggle('hidden');
+        profileButton.setAttribute('aria-expanded', String(!isHidden));
+        notificationsDropdown?.classList.add('hidden');
+        notificationsButton?.setAttribute('aria-expanded', 'false');
+      });
+
+      profileDropdown.addEventListener('click', (event) => {
+        event.stopPropagation();
+      });
+    }
+
+    window.addEventListener('click', () => {
+      profileDropdown?.classList.add('hidden');
+      profileButton?.setAttribute('aria-expanded', 'false');
+      notificationsDropdown?.classList.add('hidden');
+      notificationsButton?.setAttribute('aria-expanded', 'false');
+    });
+
+    window.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        profileDropdown?.classList.add('hidden');
+        profileButton?.setAttribute('aria-expanded', 'false');
+        notificationsDropdown?.classList.add('hidden');
+        notificationsButton?.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    window.setTimeout(() => {
+      receiveNotification({
+        icon: 'inventory_2',
+        title: 'Stock bajo',
+        body: 'Quedan pocas unidades de proteína whey.',
+        time: 'Ahora'
+      });
+    }, 900);
+  });
+</script>
+</body></html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "secondary-fixed-dim": "#c8c6c5",
+                "on-secondary": "#ffffff",
+                "secondary": "#5f5e5e",
+                "on-primary-fixed": "#00210c",
+                "inverse-on-surface": "#f3f0ef",
+                "background": "#fcf9f8",
+                "surface-container-lowest": "#ffffff",
+                "surface-container-highest": "#e5e2e1",
+                "on-tertiary": "#ffffff",
+                "surface-container": "#f0eded",
+                "on-tertiary-fixed-variant": "#454747",
+                "on-primary-container": "#005027",
+                "outline": "#6c7b6d",
+                "surface": "#fcf9f8",
+                "on-tertiary-fixed": "#1a1c1c",
+                "on-primary-fixed-variant": "#005228",
+                "tertiary": "#5d5f5f",
+                "primary-fixed-dim": "#4ae183",
+                "secondary-fixed": "#e5e2e1",
+                "on-tertiary-container": "#434546",
+                "primary-fixed": "#6bfe9c",
+                "surface-container-high": "#eae7e7",
+                "on-surface": "#1c1b1b",
+                "on-primary": "#ffffff",
+                "error-container": "#ffdad6",
+                "surface-tint": "#006d37",
+                "surface-dim": "#dcd9d9",
+                "primary": "#006d37",
+                "primary-container": "#2ecc71",
+                "surface-container-low": "#f6f3f2",
+                "outline-variant": "#bbcbbb",
+                "on-secondary-fixed": "#1c1b1b",
+                "on-error-container": "#93000a",
+                "tertiary-fixed-dim": "#c6c6c7",
+                "on-background": "#1c1b1b",
+                "on-secondary-fixed-variant": "#474746",
+                "inverse-primary": "#4ae183",
+                "secondary-container": "#e2dfde",
+                "inverse-surface": "#313030",
+                "surface-bright": "#fcf9f8",
+                "tertiary-fixed": "#e2e2e2",
+                "surface-variant": "#e5e2e1",
+                "on-error": "#ffffff",
+                "tertiary-container": "#b2b3b3",
+                "on-surface-variant": "#3d4a3e",
+                "error": "#ba1a1a",
+                "on-secondary-container": "#636262"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.125rem",
+                "lg": "0.25rem",
+                "xl": "0.5rem",
+                "full": "0.75rem"
+            },
+            "fontFamily": {
+                "headline": ["Manrope"],
+                "display": ["Manrope"],
+                "body": ["Inter"],
+                "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .kinetic-gradient {
+            background: linear-gradient(135deg, #006D37 0%, #2ECC71 100%);
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-background text-on-surface font-body antialiased">
+<!-- TopAppBar -->
+<header class="bg-[#FCF9F8] dark:bg-[#1C1B1B] border-b border-[#F6F3F2] dark:border-[#2A2A2A] sticky top-0 z-50">
+<div class="flex justify-between items-center w-full px-6 py-4 max-w-screen-2xl mx-auto">
+<a class="text-2xl font-['Manrope'] font-extrabold text-[#006D37] dark:text-[#2ECC71] tracking-tight" href="../../home.html">
+      SquatGym
+    </a>
+<nav class="hidden md:flex items-center gap-8">
+<a class="font-['Manrope'] font-bold tracking-tight text-sm uppercase text-[#006D37] dark:text-[#2ECC71] border-b-2 border-[#006D37] pb-1" href="../kiosco.html">Tienda</a>
+<a class="font-['Manrope'] font-bold tracking-tight text-sm uppercase text-[#3D4A3E] dark:text-[#EAE7E7] hover:text-[#006D37] transition-colors duration-200" href="../kiosco.html#carrito">Carrito</a>
+<a class="font-['Manrope'] font-bold tracking-tight text-sm uppercase text-[#3D4A3E] dark:text-[#EAE7E7] hover:text-[#006D37] transition-colors duration-200" href="../kiosco.html#historial">Historial</a>
+</nav>
+<div class="flex items-center gap-2">
+<button class="p-2 text-[#3D4A3E] dark:text-[#EAE7E7] hover:bg-[#EAE7E7] dark:hover:bg-[#3D4A3E] rounded-full transition-colors duration-200 scale-95 active:opacity-80">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-[#3D4A3E] dark:text-[#EAE7E7] hover:bg-[#EAE7E7] dark:hover:bg-[#3D4A3E] rounded-full transition-colors duration-200 scale-95 active:opacity-80">
+<span class="material-symbols-outlined text-2xl">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Payment Canvas -->
+<main class="flex-grow flex flex-col items-center justify-center px-6 pb-32">
+<div class="max-w-4xl w-full flex flex-col items-center">
+<!-- Payment Instruction Card -->
+<div class="bg-surface-container-lowest rounded-[2rem] p-12 w-full flex flex-col items-center text-center shadow-[0px_12px_32px_rgba(28,27,27,0.06)] relative overflow-hidden">
+<!-- Background Accent decoration -->
+<div class="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full -mr-32 -mt-32"></div>
+<!-- Illustration Section -->
+<div class="relative mb-10 group">
+<div class="absolute inset-0 bg-primary/10 rounded-full blur-3xl group-hover:bg-primary/20 transition-all"></div>
+<div class="relative w-48 h-48 flex items-center justify-center">
+<img alt="3D render of a sleek black card terminal with a glowing green contactless sensor and a modern credit card being tapped" class="w-40 h-40 object-contain drop-shadow-2xl" data-alt="3D render of a sleek black card terminal with a glowing green contactless sensor and a modern credit card being tapped" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAaqonjz8buzAzZ8xTwuIIosQh3qwE2V1ueMFTofe8Pafs4xiojwKKEFX-avjGAKsJycaXnfkANihU4fhJO3aOpQMa05XI9o4R4RHfgocSxxdHAIx0U4zqyiByyNHy9M7jR0BnUKHgtADD8nWvsBNbMZOOP9lHSoqj0NCHJDN8FpaIyrHpzg6NCNcmLGDvHuDI2tMqpxaX3acRI6_6FOePg-ebLZhZ5A2WRnEU-mV8nbt4ZezqT8DeRlhgX_Uj6YYomaNrD_vZZcg"/>
+</div>
+</div>
+<!-- Textual Cues -->
+<h1 class="font-headline font-extrabold text-3xl md:text-4xl text-on-surface mb-4 tracking-tight">
+                    Pago con Tarjeta
+                </h1>
+<p class="font-body text-on-surface-variant text-lg md:text-xl max-w-md leading-relaxed mb-12">
+                    Por favor, ingrese o acerque su tarjeta al lector para continuar
+                </p>
+<!-- Amount Display (The Kinetic Curator Style) -->
+<div class="bg-surface-container-low rounded-full px-10 py-6 mb-8 flex flex-col items-center border border-outline-variant/15">
+<span class="font-label text-xs uppercase tracking-[0.2em] text-secondary mb-1">Total a Pagar</span>
+<span class="font-headline font-black text-5xl md:text-6xl text-primary tracking-tighter">
+                        $2.480,50
+                    </span>
+</div>
+<!-- Transaction Security Tag -->
+<div class="flex items-center gap-2 text-on-surface-variant/60 font-medium text-sm">
+<span class="material-symbols-outlined text-sm">lock</span>
+<span>Transacción Segura y Encriptada</span>
+</div>
+</div>
+<!-- Secondary Actions -->
+<div class="mt-12 flex justify-center w-full">
+<button class="flex items-center gap-3 px-8 py-4 bg-secondary-container text-on-secondary-container font-headline font-bold rounded-xl hover:bg-surface-container-highest transition-all transform active:scale-95" onclick="window.location.href='metodopago.html'">
+<span class="material-symbols-outlined">arrow_back</span>
+                    Volver
+                </button>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (The Footer Shell) -->
+</body></html>

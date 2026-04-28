@@ -1,0 +1,684 @@
+<!DOCTYPE html><html class="light" lang="es"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface": "#fcf9f8",
+                    "on-tertiary-fixed-variant": "#454747",
+                    "on-secondary-fixed-variant": "#474746",
+                    "secondary-container": "#e2dfde",
+                    "inverse-surface": "#313030",
+                    "primary": "#006d37",
+                    "surface-dim": "#dcd9d9",
+                    "inverse-primary": "#4ae183",
+                    "outline-variant": "#bbcbbb",
+                    "on-tertiary": "#ffffff",
+                    "tertiary-fixed-dim": "#c6c6c7",
+                    "on-primary": "#ffffff",
+                    "on-surface": "#1c1b1b",
+                    "on-secondary": "#ffffff",
+                    "on-background": "#1c1b1b",
+                    "surface-container-high": "#eae7e7",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary-fixed": "#1c1b1b",
+                    "on-surface-variant": "#3d4a3e",
+                    "secondary-fixed": "#e5e2e1",
+                    "surface-bright": "#fcf9f8",
+                    "primary-container": "#2ecc71",
+                    "tertiary": "#5d5f5f",
+                    "on-error": "#ffffff",
+                    "surface-container-highest": "#e5e2e1",
+                    "outline": "#6c7b6d",
+                    "on-tertiary-container": "#434546",
+                    "surface-container": "#f0eded",
+                    "error": "#ba1a1a",
+                    "tertiary-container": "#b2b3b3",
+                    "inverse-on-surface": "#f3f0ef",
+                    "primary-fixed": "#6bfe9c",
+                    "tertiary-fixed": "#e2e2e2",
+                    "secondary": "#5f5e5e",
+                    "primary-fixed-dim": "#4ae183",
+                    "on-secondary-container": "#636262",
+                    "on-error-container": "#93000a",
+                    "background": "#fcf9f8",
+                    "surface-variant": "#e5e2e1",
+                    "surface-tint": "#006d37",
+                    "on-primary-fixed": "#00210c",
+                    "secondary-fixed-dim": "#c8c6c5",
+                    "on-primary-container": "#005027",
+                    "on-tertiary-fixed": "#1a1c1c",
+                    "error-container": "#ffdad6",
+                    "on-primary-fixed-variant": "#005228",
+                    "surface-container-low": "#f6f3f2"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope"],
+                    "display": ["Manrope"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .brand-gym { color: #27ae60; }
+        .dark .brand-gym { color: #5cec88; }
+        .nav-tab {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            height: 2.25rem;
+            flex-shrink: 0;
+            overflow: hidden;
+            border-radius: 0.5rem;
+            padding-inline: 0.875rem;
+            color: #727971;
+            font-family: Manrope, sans-serif;
+            font-size: 0.875rem;
+            font-weight: 600;
+            isolation: isolate;
+            transition: color 180ms ease, background-color 180ms ease, box-shadow 180ms ease;
+        }
+        .nav-tab::before {
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            border-radius: inherit;
+            background: radial-gradient(circle at 50% 50%, rgb(39 174 96 / 0.28) 0 18%, transparent 19% 100%), rgb(39 174 96 / 0.10);
+            content: "";
+            opacity: 0;
+            transform: scale(0.2);
+            transform-origin: center;
+        }
+        .nav-tab:hover {
+            background-color: rgb(39 174 96 / 0.10);
+            color: #27ae60;
+            box-shadow: inset 0 0 0 1px rgb(39 174 96 / 0.28);
+        }
+        .nav-tab:hover::before { animation: nav-wave 650ms ease-out forwards; }
+        @keyframes nav-wave {
+            0% { opacity: 0; transform: scale(0.2); }
+            30% { opacity: 1; }
+            100% { opacity: 0; transform: scale(2.8); }
+        }
+        .nav-tab-active,
+        .nav-tab-active:hover {
+            background-color: #27ae60;
+            color: #ffffff;
+            box-shadow: 0 8px 22px rgb(39 174 96 / 0.22);
+            font-weight: 800;
+        }
+        .nav-tab-active::before,
+        .nav-tab-active:hover::before {
+            animation: none;
+            opacity: 0;
+        }
+        .profile-dropdown-panel,
+        .notifications-panel {
+            background-color: #ffffff;
+            border-color: #bbcbbb;
+            box-shadow: 0 24px 60px rgb(0 0 0 / 0.22);
+            opacity: 1;
+            backdrop-filter: none;
+        }
+        .dark .profile-dropdown-panel,
+        .dark .notifications-panel {
+            background-color: #1a5231;
+            box-shadow: 0 24px 70px rgb(0 0 0 / 0.55);
+        }
+        .notifications-panel {
+            position: fixed;
+            right: 1rem;
+            top: 7.25rem;
+            width: min(20rem, calc(100vw - 2rem));
+            max-width: none;
+        }
+        @keyframes bell-ring {
+            0% { transform: rotate(0deg); }
+            15% { transform: rotate(18deg); }
+            30% { transform: rotate(-16deg); }
+            45% { transform: rotate(12deg); }
+            60% { transform: rotate(-8deg); }
+            75% { transform: rotate(5deg); }
+            100% { transform: rotate(0deg); }
+        }
+        .bell-ring {
+            animation: bell-ring 0.7s ease-in-out;
+            transform-origin: top center;
+        }
+        @media (max-width: 640px) {
+            .notifications-panel {
+                left: 1rem;
+                right: 1rem;
+                width: auto;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-background text-on-surface font-body antialiased">
+<header class="fixed left-0 top-0 z-50 w-full border-b border-outline-variant bg-surface-container-lowest/95 shadow-sm backdrop-blur-md">
+<div class="flex h-16 w-full items-center justify-between gap-3 px-4 sm:px-6 md:px-10">
+<a class="flex min-w-0 items-center gap-2 sm:gap-3" href="../home.html" aria-label="Ir al inicio">
+<img class="hidden h-10 w-10 shrink-0 rounded-lg border border-outline-variant bg-white object-contain p-1 sm:block" alt="Logo SquatGym" src="../../img/logo.png">
+<span class="whitespace-nowrap font-headline text-lg font-black text-on-surface sm:text-2xl">Squat<span class="brand-gym">Gym</span></span>
+</a>
+<div class="flex shrink-0 items-center justify-end gap-1 sm:gap-2">
+<div class="relative">
+<button type="button" class="flex h-9 w-9 items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-low active:scale-95 sm:h-10 sm:w-10" id="notifications-button" aria-label="Ver notificaciones" aria-expanded="false" aria-controls="notifications-dropdown">
+<span class="relative block">
+<span class="material-symbols-outlined" id="notifications-icon" style="font-variation-settings: 'FILL' 1">notifications</span>
+<span class="absolute right-0.5 top-0 h-2 w-2 rounded-full border border-surface-container-lowest bg-red-500 hidden" id="notification-dot"></span>
+</span>
+</button>
+<div class="notifications-panel z-[100] hidden overflow-hidden rounded-lg border" id="notifications-dropdown" role="menu">
+<div class="flex items-center justify-between gap-4 border-b border-outline-variant p-4">
+<div>
+<p class="text-sm font-bold text-on-surface">Notificaciones</p>
+<p class="text-xs text-on-surface-variant" id="notification-status">Sin novedades pendientes</p>
+</div>
+<button type="button" class="rounded-full p-1 text-on-surface-variant hover:bg-surface-container" id="mark-notifications-read" aria-label="Marcar notificaciones como leídas">
+<span class="material-symbols-outlined text-lg">done_all</span>
+</button>
+</div>
+<div class="max-h-72 overflow-y-auto p-2" id="notifications-list">
+<article class="rounded-md px-3 py-3 hover:bg-surface-container">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined mt-0.5 text-lg text-primary">inventory_2</span>
+<div>
+<p class="text-sm font-semibold text-on-surface">Stock bajo</p>
+<p class="text-xs leading-5 text-on-surface-variant">Quedan pocas unidades de proteína whey.</p>
+<p class="mt-1 text-[11px] font-semibold text-primary">Hace 1 min</p>
+</div>
+</div>
+</article>
+<article class="rounded-md px-3 py-3 hover:bg-surface-container">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined mt-0.5 text-lg text-primary">event_available</span>
+<div>
+<p class="text-sm font-semibold text-on-surface">Clase por comenzar</p>
+<p class="text-xs leading-5 text-on-surface-variant">Funcional de las 18:00 tiene 12 inscriptos.</p>
+<p class="mt-1 text-[11px] font-semibold text-on-surface-variant">Hace 12 min</p>
+</div>
+</div>
+</article>
+</div>
+</div>
+</div>
+<button type="button" class="flex h-9 w-9 items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-low active:scale-95 sm:h-10 sm:w-10" id="theme-toggle" aria-label="Cambiar a modo oscuro">
+<span class="material-symbols-outlined" id="theme-toggle-dark-icon">dark_mode</span>
+<span class="material-symbols-outlined hidden" id="theme-toggle-light-icon">light_mode</span>
+</button>
+<div class="relative ml-1 flex items-center border-l border-outline-variant pl-2 sm:ml-2 sm:pl-4">
+<button type="button" class="flex h-10 items-center gap-3 rounded-lg px-1 hover:bg-surface-container-low sm:px-2" id="profile-menu-button" aria-expanded="false" aria-controls="profile-dropdown">
+<span class="hidden flex-col items-end sm:flex">
+<span class="text-xs font-bold text-on-surface">Admin Squat</span>
+<span class="text-[10px] uppercase tracking-wider text-on-surface-variant">Super Admin</span>
+</span>
+<span class="flex h-9 w-9 items-center justify-center rounded-lg border border-outline-variant bg-primary-container/15 text-primary shadow-sm">
+<span class="material-symbols-outlined">person</span>
+</span>
+</button>
+<div class="profile-dropdown-panel absolute right-0 top-full z-[100] mt-2 hidden w-56 max-w-[calc(100vw-2rem)] overflow-hidden rounded-lg border" id="profile-dropdown" role="menu">
+<div class="border-b border-outline-variant p-4">
+<p class="text-sm font-bold text-on-surface">Admin Squat</p>
+<p class="text-xs text-on-surface-variant">Super Administrador</p>
+</div>
+<div class="p-2">
+<button type="button" class="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-on-surface hover:bg-surface-container" role="menuitem">
+<span class="material-symbols-outlined text-lg">person</span>
+Mi Perfil
+</button>
+<button type="button" class="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-on-surface hover:bg-surface-container" role="menuitem">
+<span class="material-symbols-outlined text-lg">settings</span>
+Configuración
+</button>
+</div>
+<div class="border-t border-outline-variant p-2">
+<button type="button" class="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-semibold text-error hover:bg-error-container/15" role="menuitem" onclick="window.location.href='../../index.html'">
+<span class="material-symbols-outlined text-lg">logout</span>
+Cerrar sesión
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<nav class="no-scrollbar h-12 w-full overflow-x-auto bg-surface-container-lowest/95" aria-label="Navegación principal">
+<div class="flex h-full w-max min-w-full items-center gap-1 px-4 sm:px-6 md:px-10">
+<a class="nav-tab active:scale-95" href="../home.html">Inicio</a>
+<a class="nav-tab active:scale-95" href="../kiosco/kiosco.html">Kiosco</a>
+<a class="nav-tab active:scale-95" href="../inventario/inventario.html">Inventario</a>
+<a class="nav-tab active:scale-95" href="../home.html#asistencias">Asistencias</a>
+<a class="nav-tab nav-tab-active active:scale-95" href="gestionroles.html" aria-current="page">Usuarios</a>
+</div>
+</nav>
+</header>
+<main class="pt-32 pb-20 px-8 max-w-7xl mx-auto">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+<div>
+<h1 class="font-headline font-extrabold text-4xl tracking-tight text-on-surface mb-2" style="">Gestión de Roles y Seguridad</h1>
+<p class="text-on-surface-variant font-body text-lg max-w-2xl" style="">Configura los accesos y niveles de autorización para el personal administrativo y operativo de SquatGym.</p>
+</div>
+<button class="bg-surface-container-highest text-on-surface px-6 py-3 rounded-xl font-headline font-bold text-lg flex items-center gap-2 hover:bg-surface-container-high active:scale-95 transition-all border border-outline-variant" style="">
+<span class="material-symbols-outlined" style="">security</span>
+                Auditar perfiles
+            </button><button class="bg-gradient-to-br from-primary to-primary-container text-on-primary px-6 py-3 rounded-xl font-headline font-bold text-lg flex items-center gap-2 hover:opacity-90 active:scale-95 transition-all shadow-lg shadow-primary/10" style="">
+<span class="material-symbols-outlined" style="">add_circle</span>Nuevo usuario</button>
+</div>
+<!-- Dashboard-style Overview (Bento Grid Style) -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+<div class="bg-surface-container-lowest p-6 rounded-xl border-none shadow-sm flex flex-col justify-between h-32">
+<span class="text-on-surface-variant font-medium text-sm" style="">Usuarios Totales</span>
+<div class="flex items-baseline gap-2">
+<span class="font-headline font-black text-4xl" style="">48</span>
+<span class="text-primary font-bold text-sm" style="">+2 este mes</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl border-none shadow-sm flex flex-col justify-between h-32">
+<span class="text-on-surface-variant font-medium text-sm" style="">Roles Definidos</span>
+<div class="flex items-baseline gap-2">
+<span class="font-headline font-black text-4xl" style="">6</span>
+<span class="text-on-surface-variant font-bold text-sm" style="">Niveles de acceso</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl border-none shadow-sm flex flex-col justify-between h-32">
+<span class="text-on-surface-variant font-medium text-sm" style="">Estado de Seguridad</span>
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 bg-primary-fixed rounded-full shadow-[0_0_8px_#6bfe9c]"></span>
+<span class="font-headline font-bold text-xl text-primary" style="">Protegido</span>
+</div>
+</div>
+</div>
+<!-- Filter & Search Canvas -->
+<div class="bg-surface-container-low p-6 rounded-xl mb-8">
+<div class="relative w-full max-w-2xl mx-auto">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant" style="">search</span>
+<input class="w-full bg-surface-container-highest border-none rounded-xl pl-12 pr-4 py-4 focus:ring-2 focus:ring-primary text-on-surface placeholder:text-on-surface-variant/60" placeholder="Buscar por nombre, rol o permiso..." type="text">
+</div>
+</div>
+<!-- Data Table Section -->
+<div class="bg-surface-container-lowest rounded-2xl overflow-hidden shadow-sm">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low">
+<th class="px-8 py-5 font-headline font-bold text-on-surface-variant text-sm uppercase tracking-wider" style="">Nombre de Usuario</th>
+<th class="px-8 py-5 font-headline font-bold text-on-surface-variant text-sm uppercase tracking-wider" style="">Rol Actual</th>
+<th class="px-8 py-5 font-headline font-bold text-on-surface-variant text-sm uppercase tracking-wider" style="">Estado</th>
+<th class="px-8 py-5 font-headline font-bold text-on-surface-variant text-sm uppercase tracking-wider text-right" style="">Acciones</th>
+</tr>
+</thead>
+<tbody class="divide-y-0">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-8 py-6" style="">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center overflow-hidden">
+<img alt="Avatar" class="w-full h-full object-cover" data-alt="professional headshot of a smiling man in a business casual outfit with soft studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBc8TkWu_CBpdM3ej-QBWMGfmGQSW5JXuZGNiG6pXvS202yJZML9cQ-bYz7sfOCGRTyT6MdWvKIcRzWVBVPKgCEpkN_vSqHVCzmdj6Ma99G4lcgE5gDI8pqTUcV8PG1IwSVFru91lYcta8JtPSY3GIziQbOVZIXii-TZJi2Efvrpb1XCgKR2p3tMEpIZvdmf8GScJRKRSCb-3S8OM6sqhDfDlFdPdNkYxCDXvjWjzciE2Cv6WXbtJ8aoH-AH2S7qsjZxk6UjqN4GA" style="">
+</div>
+<div>
+<div class="font-headline font-bold text-on-surface" style="">Alejandro Moreno</div>
+<div class="text-xs text-on-surface-variant font-body" style="">amoreno@squatgym.com</div>
+</div>
+</div>
+</td>
+<td class="px-8 py-6 font-body font-medium text-on-surface" style="">Superadministrador</td>
+<td class="px-8 py-6" style="">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 bg-primary-container rounded-full"></span>
+<span class="text-sm font-body text-on-surface" style="">Activo</span>
+</div>
+</td>
+<td class="px-8 py-6 text-right" style="">
+<div class="flex justify-end gap-2 group-hover:opacity-100 transition-opacity"><button class="p-2 hover:bg-primary/10 rounded-lg text-primary transition-colors flex items-center gap-1" title="Editar rol" style="">
+<span class="material-symbols-outlined" style="">edit</span>
+<span class="text-xs font-bold" style="">Editar</span>
+</button>
+<button class="p-2 hover:bg-error/10 rounded-lg text-error transition-colors flex items-center gap-1" title="Borrar rol" style="">
+<span class="material-symbols-outlined" style="">delete</span>
+<span class="text-xs font-bold" style="">Borrar</span>
+</button></div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="bg-surface-container-low/30 hover:bg-surface-container-low transition-colors group">
+<td class="px-8 py-6" style="">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center overflow-hidden">
+<img alt="Avatar" class="w-full h-full object-cover" data-alt="professional headshot of a woman with glasses and confident expression against a neutral office background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBomBDuTASrA2WLr23uM-SnFQ56CMHqBqQBPhyYmHHcahs7qH01LPlhrgcZxtwpPfVc80uraQQGQqnoq8fIbBjb5RrgbikK4oNyYnQw6cd7HFdozWH_5J8VS-cxFTC4yUguvEAlXZlmJb23MFufKjIuRVT_WaMO2fzai4AvoWSUw0BzsI3RBEV1EXPkFcwOnEovLPbE_6Aj3PaWxaPfVfqZAYcnuDiVeWGomcnsLf0C3AGmpQUoNxJVip_Raj49w3mijzNA6demlw" style="">
+</div>
+<div>
+<div class="font-headline font-bold text-on-surface" style="">Beatriz Sánchez</div>
+<div class="text-xs text-on-surface-variant font-body" style="">bsanchez@squatgym.com</div>
+</div>
+</div>
+</td>
+<td class="px-8 py-6 font-body font-medium text-on-surface" style="">Gerente de Kiosco</td>
+<td class="px-8 py-6" style="">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 bg-primary-container rounded-full"></span>
+<span class="text-sm font-body text-on-surface" style="">Activo</span>
+</div>
+</td>
+<td class="px-8 py-6 text-right" style="">
+<div class="flex justify-end gap-2 group-hover:opacity-100 transition-opacity"><button class="p-2 hover:bg-primary/10 rounded-lg text-primary transition-colors flex items-center gap-1" title="Editar rol" style="">
+<span class="material-symbols-outlined" style="">edit</span>
+<span class="text-xs font-bold" style="">Editar</span>
+</button>
+<button class="p-2 hover:bg-error/10 rounded-lg text-error transition-colors flex items-center gap-1" title="Borrar rol" style="">
+<span class="material-symbols-outlined" style="">delete</span>
+<span class="text-xs font-bold" style="">Borrar</span>
+</button></div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-8 py-6" style="">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center overflow-hidden">
+<img alt="Avatar" class="w-full h-full object-cover" data-alt="portrait of a man with a beard looking directly at the camera with a neutral and friendly expression" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDireartc3nRWs6yESUWXEYGlNhW32saVJzrUdz9IsYxv95HSjLBeAF2RxgNJnhr3keY86Ibo_VAwX1StYfszGSogZsy5_SCbwd2onr4ugT3F1uBerVU2SNtCQpyDt-8Xe-Y0STgD6xFxrtsG9kCLXzldox4xEW037giyImYPMWrKuzmjk-OHKFV-2oc2Wbl31AgH62OtpQjG_msnBqP7cOBAENY62YVVlFLA5H083Yq0Mmvla0oF2LpfODWqC4rYH8A4jgJmoWkQ" style="">
+</div>
+<div>
+<div class="font-headline font-bold text-on-surface" style="">Carlos Ruiz</div>
+<div class="text-xs text-on-surface-variant font-body" style="">cruiz@squatgym.com</div>
+</div>
+</div>
+</td>
+<td class="px-8 py-6 font-body font-medium text-on-surface" style="">Personal Operativo</td>
+<td class="px-8 py-6" style="">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 bg-error rounded-full"></span>
+<span class="text-sm font-body text-on-surface" style="">Inactivo</span>
+</div>
+</td>
+<td class="px-8 py-6 text-right" style="">
+<div class="flex justify-end gap-2 group-hover:opacity-100 transition-opacity"><button class="p-2 hover:bg-primary/10 rounded-lg text-primary transition-colors flex items-center gap-1" title="Editar rol" style="">
+<span class="material-symbols-outlined" style="">edit</span>
+<span class="text-xs font-bold" style="">Editar</span>
+</button>
+<button class="p-2 hover:bg-error/10 rounded-lg text-error transition-colors flex items-center gap-1" title="Borrar rol" style="">
+<span class="material-symbols-outlined" style="">delete</span>
+<span class="text-xs font-bold" style="">Borrar</span>
+</button></div>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="bg-surface-container-low/30 hover:bg-surface-container-low transition-colors group">
+<td class="px-8 py-6" style="">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center overflow-hidden">
+<img alt="Avatar" class="w-full h-full object-cover" data-alt="natural portrait of a young woman with a focused and professional gaze in bright lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAcfJDlz4VNO6zO05z_YQz-pCSgciiFxmlGG9okbJ0ON9D__I2VcXtohLh0f9dYVUpOaqsi0COfgsM3nrnjLKxyEgPicVzsc_ZmZZkGd3vEwTRzh3OtNyJuc0ppSGG_tZDnUz3fh8zA6sHfe0NJna3yVyW8hIWJm8lo0Cj-OMVVdSuYmUoBIcVKihNccCj0u5TF5ce8WMl25UcDYxM9Sl_fIklCZmctYh6fpUHAzjoEAJ1BXDUVMsM7I5umADaOhOPTtR7EoYW0ZA" style="">
+</div>
+<div>
+<div class="font-headline font-bold text-on-surface" style="">Diana Lopez</div>
+<div class="text-xs text-on-surface-variant font-body" style="">dlopez@squatgym.com</div>
+</div>
+</div>
+</td>
+<td class="px-8 py-6 font-body font-medium text-on-surface" style="">Analista Inventario</td>
+<td class="px-8 py-6" style="">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 bg-primary-container rounded-full"></span>
+<span class="text-sm font-body text-on-surface" style="">Activo</span>
+</div>
+</td>
+<td class="px-8 py-6 text-right" style="">
+<div class="flex justify-end gap-2 group-hover:opacity-100 transition-opacity"><button class="p-2 hover:bg-primary/10 rounded-lg text-primary transition-colors flex items-center gap-1" title="Editar rol" style="">
+<span class="material-symbols-outlined" style="">edit</span>
+<span class="text-xs font-bold" style="">Editar</span>
+</button>
+<button class="p-2 hover:bg-error/10 rounded-lg text-error transition-colors flex items-center gap-1" title="Borrar rol" style="">
+<span class="material-symbols-outlined" style="">delete</span>
+<span class="text-xs font-bold" style="">Borrar</span>
+</button></div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination Shell -->
+<div class="px-8 py-4 bg-surface-container-low flex justify-between items-center">
+<span class="text-sm text-on-surface-variant font-body" style="">Mostrando 4 de 48 usuarios</span>
+<div class="flex gap-2">
+<button class="p-2 rounded-lg hover:bg-surface-container-high transition-colors disabled:opacity-30" disabled="" style="">
+<span class="material-symbols-outlined" style="">chevron_left</span>
+</button>
+<button class="p-2 rounded-lg hover:bg-surface-container-high transition-colors" style="">
+<span class="material-symbols-outlined" style="">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Role Permissions Glossary Section -->
+</main>
+<!-- Simple Footer for Admin Context -->
+<script>
+  const THEME_KEY = 'squatgym-theme';
+
+  function saveTheme(theme) {
+    try {
+      localStorage.setItem(THEME_KEY, theme);
+    } catch (error) {
+      // El navegador puede bloquear localStorage en algunos contextos locales.
+    }
+  }
+
+  function setTheme(theme) {
+    const selectedTheme = theme === 'dark' ? 'dark' : 'light';
+    const html = document.documentElement;
+    const darkIcon = document.getElementById('theme-toggle-dark-icon');
+    const lightIcon = document.getElementById('theme-toggle-light-icon');
+    const themeButton = document.getElementById('theme-toggle');
+
+    html.classList.remove('light', 'dark');
+    html.classList.add(selectedTheme);
+    saveTheme(selectedTheme);
+
+    if (darkIcon && lightIcon) {
+      darkIcon.classList.toggle('hidden', selectedTheme === 'dark');
+      lightIcon.classList.toggle('hidden', selectedTheme === 'light');
+    }
+
+    if (themeButton) {
+      themeButton.setAttribute(
+        'aria-label',
+        selectedTheme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'
+      );
+    }
+  }
+
+  function toggleTheme() {
+    const isDark = document.documentElement.classList.contains('dark');
+    setTheme(isDark ? 'light' : 'dark');
+  }
+
+  let unreadNotificationCount = 0;
+
+  function updateNotificationState() {
+    const notificationDot = document.getElementById('notification-dot');
+    const notificationButton = document.getElementById('notifications-button');
+    const notificationStatus = document.getElementById('notification-status');
+    const hasUnread = unreadNotificationCount > 0;
+
+    if (notificationDot) {
+      notificationDot.classList.toggle('hidden', !hasUnread);
+    }
+
+    if (notificationButton) {
+      notificationButton.setAttribute(
+        'aria-label',
+        hasUnread
+          ? `Ver notificaciones, ${unreadNotificationCount} sin leer`
+          : 'Ver notificaciones'
+      );
+    }
+
+    if (notificationStatus) {
+      notificationStatus.textContent = hasUnread
+        ? `${unreadNotificationCount} sin leer`
+        : 'Sin novedades pendientes';
+    }
+  }
+
+  function animateNotificationBell() {
+    const notificationIcon = document.getElementById('notifications-icon');
+
+    if (!notificationIcon) {
+      return;
+    }
+
+    notificationIcon.classList.remove('bell-ring');
+    void notificationIcon.offsetWidth;
+    notificationIcon.classList.add('bell-ring');
+  }
+
+  function prependNotification({ icon, title, body, time }) {
+    const notificationsList = document.getElementById('notifications-list');
+
+    if (!notificationsList) {
+      return;
+    }
+
+    const article = document.createElement('article');
+    article.className = 'rounded-md px-3 py-3 hover:bg-surface-container';
+
+    const row = document.createElement('div');
+    row.className = 'flex items-start gap-3';
+
+    const iconElement = document.createElement('span');
+    iconElement.className = 'material-symbols-outlined mt-0.5 text-lg text-primary';
+    iconElement.textContent = icon;
+
+    const content = document.createElement('div');
+
+    const titleElement = document.createElement('p');
+    titleElement.className = 'text-sm font-semibold text-on-surface';
+    titleElement.textContent = title;
+
+    const bodyElement = document.createElement('p');
+    bodyElement.className = 'text-xs leading-5 text-on-surface-variant';
+    bodyElement.textContent = body;
+
+    const timeElement = document.createElement('p');
+    timeElement.className = 'mt-1 text-[11px] font-semibold text-primary';
+    timeElement.textContent = time;
+
+    content.append(titleElement, bodyElement, timeElement);
+    row.append(iconElement, content);
+    article.append(row);
+    notificationsList.prepend(article);
+  }
+
+  function receiveNotification(notification) {
+    unreadNotificationCount += 1;
+    prependNotification(notification);
+    updateNotificationState();
+    animateNotificationBell();
+  }
+
+  function markNotificationsRead() {
+    unreadNotificationCount = 0;
+    updateNotificationState();
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const themeButton = document.getElementById('theme-toggle');
+    const profileButton = document.getElementById('profile-menu-button');
+    const profileDropdown = document.getElementById('profile-dropdown');
+    const notificationsButton = document.getElementById('notifications-button');
+    const notificationsDropdown = document.getElementById('notifications-dropdown');
+    const markNotificationsReadButton = document.getElementById('mark-notifications-read');
+    let savedTheme = 'light';
+
+    try {
+      savedTheme = localStorage.getItem(THEME_KEY) || 'light';
+    } catch (error) {
+      savedTheme = 'light';
+    }
+
+    setTheme(savedTheme);
+    updateNotificationState();
+
+    if (themeButton) {
+      themeButton.addEventListener('click', toggleTheme);
+    }
+
+    if (notificationsButton && notificationsDropdown) {
+      notificationsButton.addEventListener('click', (event) => {
+        event.stopPropagation();
+        const isHidden = notificationsDropdown.classList.toggle('hidden');
+        notificationsButton.setAttribute('aria-expanded', String(!isHidden));
+        profileDropdown?.classList.add('hidden');
+        profileButton?.setAttribute('aria-expanded', 'false');
+      });
+
+      notificationsDropdown.addEventListener('click', (event) => {
+        event.stopPropagation();
+      });
+    }
+
+    if (markNotificationsReadButton) {
+      markNotificationsReadButton.addEventListener('click', markNotificationsRead);
+    }
+
+    if (profileButton && profileDropdown) {
+      profileButton.addEventListener('click', (event) => {
+        event.stopPropagation();
+        const isHidden = profileDropdown.classList.toggle('hidden');
+        profileButton.setAttribute('aria-expanded', String(!isHidden));
+        notificationsDropdown?.classList.add('hidden');
+        notificationsButton?.setAttribute('aria-expanded', 'false');
+      });
+
+      profileDropdown.addEventListener('click', (event) => {
+        event.stopPropagation();
+      });
+    }
+
+    window.addEventListener('click', () => {
+      profileDropdown?.classList.add('hidden');
+      profileButton?.setAttribute('aria-expanded', 'false');
+      notificationsDropdown?.classList.add('hidden');
+      notificationsButton?.setAttribute('aria-expanded', 'false');
+    });
+
+    window.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        profileDropdown?.classList.add('hidden');
+        profileButton?.setAttribute('aria-expanded', 'false');
+        notificationsDropdown?.classList.add('hidden');
+        notificationsButton?.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    window.setTimeout(() => {
+      receiveNotification({
+        icon: 'admin_panel_settings',
+        title: 'Revisión de seguridad',
+        body: 'Hay perfiles pendientes de auditoría.',
+        time: 'Ahora'
+      });
+    }, 900);
+  });
+</script>
+</body></html>

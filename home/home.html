@@ -1,310 +1,914 @@
-<!DOCTYPE html><html class="light" lang="es"><head>
-<meta charset="utf-8">
-<meta content="width=device-width, initial-scale=1.0" name="viewport">
-<title>SquatGym Administrator Dashboard</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
-<script id="tailwind-config">
-      tailwind.config = {
-        darkMode: "class",
-        theme: {
-          extend: {
-            colors: {
-              "primary": "#27ae60", // Slightly adjusted fresh green
-              "background-light": "#f6f8f7",
-              "background-dark": "#131f18",
-              "surface-dark": "#1a2a21",
-              "on-surface": "#1c1b1b",
-              "on-surface-dark": "#f6f8f7"
-            },
-            fontFamily: {
-              "display": ["Manrope"],
-              "headline": ["Manrope"],
-              "body": ["Inter"]
-            },
-            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
-          },
-        },
+<!DOCTYPE html>
+<html class="light" lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SquatGym - Panel principal</title>
+
+  <script>
+    (function () {
+      try {
+        const savedTheme = localStorage.getItem('squatgym-theme') || 'light';
+        document.documentElement.classList.remove('light', 'dark');
+        document.documentElement.classList.add(savedTheme === 'dark' ? 'dark' : 'light');
+      } catch (error) {
+        document.documentElement.classList.add('light');
       }
-    </script>
-<style>
-        .glass-header {
-            background: rgba(252, 249, 248, 0.7);
-            backdrop-filter: blur(20px);
+    })();
+  </script>
+
+  <script>
+    window.tailwind = window.tailwind || {};
+    window.tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            'primary-fixed': 'rgb(var(--primary-fixed) / <alpha-value>)',
+            'outline-variant': 'rgb(var(--outline-variant) / <alpha-value>)',
+            'on-secondary-fixed-variant': 'rgb(var(--on-secondary-fixed-variant) / <alpha-value>)',
+            'primary': 'rgb(var(--primary) / <alpha-value>)',
+            'on-secondary-fixed': 'rgb(var(--on-secondary-fixed) / <alpha-value>)',
+            'surface-bright': 'rgb(var(--surface-bright) / <alpha-value>)',
+            'on-tertiary-fixed-variant': 'rgb(var(--on-tertiary-fixed-variant) / <alpha-value>)',
+            'secondary': 'rgb(var(--secondary) / <alpha-value>)',
+            'neutral': 'rgb(var(--neutral) / <alpha-value>)',
+            'on-tertiary-container': 'rgb(var(--on-tertiary-container) / <alpha-value>)',
+            'on-primary-fixed-variant': 'rgb(var(--on-primary-fixed-variant) / <alpha-value>)',
+            'on-tertiary-fixed': 'rgb(var(--on-tertiary-fixed) / <alpha-value>)',
+            'on-primary-fixed': 'rgb(var(--on-primary-fixed) / <alpha-value>)',
+            'surface-container-lowest': 'rgb(var(--surface-container-lowest) / <alpha-value>)',
+            'secondary-fixed': 'rgb(var(--secondary-fixed) / <alpha-value>)',
+            'tertiary-fixed-dim': 'rgb(var(--tertiary-fixed-dim) / <alpha-value>)',
+            'surface-container-highest': 'rgb(var(--surface-container-highest) / <alpha-value>)',
+            'on-surface': 'rgb(var(--on-surface) / <alpha-value>)',
+            'on-primary': 'rgb(var(--on-primary) / <alpha-value>)',
+            'secondary-container': 'rgb(var(--secondary-container) / <alpha-value>)',
+            'on-surface-variant': 'rgb(var(--on-surface-variant) / <alpha-value>)',
+            'on-secondary-container': 'rgb(var(--on-secondary-container) / <alpha-value>)',
+            'primary-fixed-dim': 'rgb(var(--primary-fixed-dim) / <alpha-value>)',
+            'error-container': 'rgb(var(--error-container) / <alpha-value>)',
+            'surface-container': 'rgb(var(--surface-container) / <alpha-value>)',
+            'surface-tint': 'rgb(var(--surface-tint) / <alpha-value>)',
+            'surface': 'rgb(var(--surface) / <alpha-value>)',
+            'on-primary-container': 'rgb(var(--on-primary-container) / <alpha-value>)',
+            'inverse-on-surface': 'rgb(var(--inverse-on-surface) / <alpha-value>)',
+            'on-background': 'rgb(var(--on-background) / <alpha-value>)',
+            'on-tertiary': 'rgb(var(--on-tertiary) / <alpha-value>)',
+            'background': 'rgb(var(--background) / <alpha-value>)',
+            'surface-container-high': 'rgb(var(--surface-container-high) / <alpha-value>)',
+            'tertiary-container': 'rgb(var(--tertiary-container) / <alpha-value>)',
+            'surface-variant': 'rgb(var(--surface-variant) / <alpha-value>)',
+            'tertiary-fixed': 'rgb(var(--tertiary-fixed) / <alpha-value>)',
+            'on-secondary': 'rgb(var(--on-secondary) / <alpha-value>)',
+            'surface-container-low': 'rgb(var(--surface-container-low) / <alpha-value>)',
+            'inverse-primary': 'rgb(var(--inverse-primary) / <alpha-value>)',
+            'surface-dim': 'rgb(var(--surface-dim) / <alpha-value>)',
+            'secondary-fixed-dim': 'rgb(var(--secondary-fixed-dim) / <alpha-value>)',
+            'outline': 'rgb(var(--outline) / <alpha-value>)',
+            'error': 'rgb(var(--error) / <alpha-value>)',
+            'tertiary': 'rgb(var(--tertiary) / <alpha-value>)',
+            'inverse-surface': 'rgb(var(--inverse-surface) / <alpha-value>)',
+            'on-error': 'rgb(var(--on-error) / <alpha-value>)',
+            'primary-container': 'rgb(var(--primary-container) / <alpha-value>)',
+            'on-error-container': 'rgb(var(--on-error-container) / <alpha-value>)'
+          },
+          borderRadius: {
+            DEFAULT: '0.25rem',
+            lg: '0.5rem',
+            xl: '0.75rem',
+            full: '9999px'
+          },
+          spacing: {
+            'margin-x': '40px',
+            base: '8px',
+            'container-max': '1440px',
+            gutter: '24px',
+            'nav-top-height': '64px',
+            'nav-sub-height': '48px'
+          },
+          fontFamily: {
+            body: ['Inter', 'sans-serif'],
+            manrope: ['Manrope', 'sans-serif'],
+            inter: ['Inter', 'sans-serif'],
+            'label-caps': ['Inter', 'sans-serif'],
+            'headline-h2': ['Manrope', 'sans-serif'],
+            'display-lg': ['Manrope', 'sans-serif'],
+            'body-sm': ['Inter', 'sans-serif'],
+            'body-md': ['Inter', 'sans-serif'],
+            'body-lg': ['Inter', 'sans-serif'],
+            'headline-h1': ['Manrope', 'sans-serif']
+          },
+          fontSize: {
+            'label-caps': ['12px', { lineHeight: '1', letterSpacing: '0.05em', fontWeight: '700' }],
+            'headline-h2': ['24px', { lineHeight: '1.3', fontWeight: '600' }],
+            'display-lg': ['48px', { lineHeight: '1.1', letterSpacing: '0', fontWeight: '800' }],
+            'body-sm': ['14px', { lineHeight: '1.5', fontWeight: '400' }],
+            'body-md': ['16px', { lineHeight: '1.5', fontWeight: '400' }],
+            'body-lg': ['18px', { lineHeight: '1.6', fontWeight: '400' }],
+            'headline-h1': ['32px', { lineHeight: '1.2', letterSpacing: '0', fontWeight: '700' }]
+          }
         }
-        .dark .glass-header {
-            background: rgba(19, 31, 24, 0.8);
-        }
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-        .gradient-primary {
-            background: linear-gradient(135deg, #1e8449 0%, #27ae60 100%);
-        }
-        #sidebar {
-            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .sidebar-collapsed {
-            width: 80px;
-        }
-        .sidebar-expanded {
-            width: 280px;
-        }
-        .nav-text {
-            transition: opacity 0.2s ease-in-out;
-        }
-        .sidebar-collapsed .nav-text {
-            opacity: 0;
-            pointer-events: none;
-            display: none;
-        }
-        .dropdown-animation {
-            transform-origin: top right;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .dropdown-hidden {
-            opacity: 0;
-            transform: scale(0.95);
-            pointer-events: none;
-        }
-        .dropdown-visible {
-            opacity: 1;
-            transform: scale(1);
-            pointer-events: auto;
-        }
-    
-        @keyframes swing {
-            0% { transform: rotate(0deg); }
-            20% { transform: rotate(15deg); }
-            40% { transform: rotate(-15deg); }
-            60% { transform: rotate(10deg); }
-            80% { transform: rotate(-10deg); }
-            100% { transform: rotate(0deg); }
-        }
-        .animate-swing {
-            animation: swing 0.5s ease-in-out;
-            transform-origin: top center;
-        }
-    </style>
+      }
+    };
+  </script>
+
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+
+  <style>
+    :root,
+    .light {
+      --brand-gym: 39 174 96;
+      --on-brand-gym: 255 255 255;
+      --neutral: 114 121 113;
+      --secondary-black: 0 0 0;
+      --tertiary-white: 255 255 255;
+      --panel-surface: 241 244 239;
+      --sale-card: 19 31 24;
+      --on-sale-card: 255 255 255;
+      --on-sale-card-muted: 239 246 236;
+      --sale-card-button: 255 255 255;
+      --on-sale-card-button: 28 27 27;
+      --sale-card-icon: 46 204 113;
+      --on-sale-card-icon: 28 27 27;
+      --primary-fixed: 46 204 113;
+      --outline-variant: 188 202 188;
+      --on-secondary-fixed-variant: 114 121 113;
+      --primary: 39 174 96;
+      --on-secondary-fixed: 0 0 0;
+      --surface-bright: 244 251 241;
+      --on-tertiary-fixed-variant: 114 121 113;
+      --secondary: 0 0 0;
+      --on-tertiary-container: 28 27 27;
+      --on-primary-fixed-variant: 0 82 40;
+      --on-tertiary-fixed: 28 27 27;
+      --on-primary-fixed: 0 33 12;
+      --surface-container-lowest: 255 255 255;
+      --secondary-fixed: 226 226 226;
+      --tertiary-fixed-dim: 198 198 199;
+      --surface-container-highest: 221 229 219;
+      --on-surface: 28 27 27;
+      --on-primary: 255 255 255;
+      --secondary-container: 239 246 236;
+      --on-surface-variant: 114 121 113;
+      --on-secondary-container: 114 121 113;
+      --primary-fixed-dim: 39 174 96;
+      --error-container: 249 222 220;
+      --surface-container: 239 246 236;
+      --surface-tint: 39 174 96;
+      --surface: 244 251 241;
+      --on-primary-container: 0 57 26;
+      --inverse-on-surface: 236 243 233;
+      --on-background: 28 27 27;
+      --on-tertiary: 0 0 0;
+      --background: 244 251 241;
+      --surface-container-high: 239 246 236;
+      --tertiary-container: 255 255 255;
+      --surface-variant: 221 229 219;
+      --tertiary-fixed: 255 255 255;
+      --on-secondary: 255 255 255;
+      --surface-container-low: 239 246 236;
+      --inverse-primary: 46 204 113;
+      --surface-dim: 213 220 210;
+      --secondary-fixed-dim: 198 198 198;
+      --outline: 188 202 188;
+      --error: 179 38 30;
+      --tertiary: 255 255 255;
+      --inverse-surface: 43 50 44;
+      --on-error: 255 255 255;
+      --primary-container: 39 174 96;
+      --on-error-container: 147 0 10;
+    }
+
+    .dark {
+      --brand-gym: 92 236 136;
+      --on-brand-gym: 4 39 19;
+      --neutral: 186 197 187;
+      --secondary-black: 0 0 0;
+      --tertiary-white: 255 255 255;
+      --panel-surface: 14 52 31;
+      --sale-card: 184 255 197;
+      --on-sale-card: 4 39 19;
+      --on-sale-card-muted: 24 64 38;
+      --sale-card-button: 4 39 19;
+      --on-sale-card-button: 239 250 241;
+      --sale-card-icon: 4 39 19;
+      --on-sale-card-icon: 184 255 197;
+      --primary-fixed: 119 239 154;
+      --outline-variant: 58 111 74;
+      --on-secondary-fixed-variant: 226 226 226;
+      --primary: 46 211 109;
+      --on-secondary-fixed: 27 27 27;
+      --surface-bright: 38 105 61;
+      --on-tertiary-fixed-variant: 226 226 226;
+      --secondary: 255 255 255;
+      --on-tertiary-container: 226 226 226;
+      --on-primary-fixed-variant: 0 82 40;
+      --on-tertiary-fixed: 26 28 28;
+      --on-primary-fixed: 0 33 12;
+      --surface-container-lowest: 12 47 27;
+      --secondary-fixed: 226 226 226;
+      --tertiary-fixed-dim: 198 198 199;
+      --surface-container-highest: 33 95 55;
+      --on-surface: 239 250 241;
+      --on-primary: 4 39 19;
+      --secondary-container: 18 66 39;
+      --on-surface-variant: 186 197 187;
+      --on-secondary-container: 226 226 226;
+      --primary-fixed-dim: 78 220 127;
+      --error-container: 147 0 10;
+      --surface-container: 20 70 42;
+      --surface-tint: 46 211 109;
+      --surface: 6 32 18;
+      --on-primary-container: 205 255 214;
+      --inverse-on-surface: 43 50 44;
+      --on-background: 239 250 241;
+      --on-tertiary: 26 28 28;
+      --background: 1 18 10;
+      --surface-container-high: 26 82 49;
+      --tertiary-container: 20 62 38;
+      --surface-variant: 15 52 31;
+      --tertiary-fixed: 226 226 226;
+      --on-secondary: 27 27 27;
+      --surface-container-low: 15 56 33;
+      --inverse-primary: 0 109 55;
+      --surface-dim: 0 14 8;
+      --secondary-fixed-dim: 198 198 198;
+      --outline: 96 152 111;
+      --error: 255 180 171;
+      --tertiary: 255 255 255;
+      --inverse-surface: 236 243 233;
+      --on-error: 105 0 5;
+      --primary-container: 35 154 85;
+      --on-error-container: 255 218 214;
+    }
+
+    * {
+      transition-property: background-color, border-color, color, fill, stroke;
+      transition-duration: 180ms;
+      transition-timing-function: ease;
+    }
+
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+
+    body {
+      background-color: rgb(var(--background));
+      color: rgb(var(--on-background));
+    }
+
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .dashboard-title {
+      font-size: clamp(2rem, 6vw, 3rem);
+      line-height: 1.1;
+      letter-spacing: 0;
+    }
+
+    .card-bg-icon {
+      font-size: clamp(5rem, 26vw, 8rem);
+    }
+
+    .brand-gym {
+      color: rgb(var(--brand-gym));
+    }
+
+    .nav-tab {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      height: 2.25rem;
+      flex-shrink: 0;
+      overflow: hidden;
+      border-radius: 0.5rem;
+      padding-inline: 0.875rem;
+      color: rgb(var(--on-surface-variant));
+      font-family: Manrope, sans-serif;
+      font-size: 0.875rem;
+      font-weight: 600;
+      isolation: isolate;
+      transition: color 180ms ease, background-color 180ms ease, box-shadow 180ms ease;
+    }
+
+    .nav-tab::before {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      border-radius: inherit;
+      background:
+        radial-gradient(circle at 50% 50%, rgb(var(--brand-gym) / 0.28) 0 18%, transparent 19% 100%),
+        rgb(var(--brand-gym) / 0.10);
+      content: "";
+      opacity: 0;
+      transform: scale(0.2);
+      transform-origin: center;
+    }
+
+    .nav-tab:hover {
+      background-color: rgb(var(--brand-gym) / 0.10);
+      color: rgb(var(--brand-gym));
+      box-shadow: inset 0 0 0 1px rgb(var(--brand-gym) / 0.28);
+    }
+
+    .nav-tab:hover::before {
+      animation: nav-wave 650ms ease-out forwards;
+    }
+
+    @keyframes nav-wave {
+      0% {
+        opacity: 0;
+        transform: scale(0.2);
+      }
+
+      30% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 0;
+        transform: scale(2.8);
+      }
+    }
+
+    .nav-tab-active,
+    .nav-tab-active:hover {
+      background-color: rgb(var(--brand-gym));
+      color: rgb(var(--on-brand-gym));
+      box-shadow: 0 8px 22px rgb(var(--brand-gym) / 0.22);
+      font-weight: 800;
+    }
+
+    .nav-tab-active::before,
+    .nav-tab-active:hover::before {
+      animation: none;
+      opacity: 0;
+    }
+
+    .action-icon-primary {
+      background-color: rgb(var(--primary-container));
+      color: rgb(var(--on-primary));
+      box-shadow: 0 14px 28px rgb(var(--brand-gym) / 0.22);
+    }
+
+    .profile-dropdown-panel {
+      background-color: rgb(var(--surface-container-lowest));
+      border-color: rgb(var(--outline-variant));
+      box-shadow: 0 24px 60px rgb(0 0 0 / 0.22);
+      opacity: 1;
+      backdrop-filter: none;
+    }
+
+    .dark .profile-dropdown-panel {
+      background-color: rgb(var(--surface-container-high));
+      box-shadow: 0 24px 70px rgb(0 0 0 / 0.55);
+    }
+
+    .notifications-panel {
+      position: fixed;
+      right: 1rem;
+      top: 7.25rem;
+      width: min(20rem, calc(100vw - 2rem));
+      max-width: none;
+      background-color: rgb(var(--surface-container-lowest));
+      border-color: rgb(var(--outline-variant));
+      box-shadow: 0 24px 60px rgb(0 0 0 / 0.22);
+      opacity: 1;
+      backdrop-filter: none;
+    }
+
+    .dark .notifications-panel {
+      background-color: rgb(var(--surface-container-high));
+      box-shadow: 0 24px 70px rgb(0 0 0 / 0.55);
+    }
+
+    .dashboard-panel {
+      background-color: rgb(var(--panel-surface));
+    }
+
+    @keyframes bell-ring {
+      0% { transform: rotate(0deg); }
+      15% { transform: rotate(18deg); }
+      30% { transform: rotate(-16deg); }
+      45% { transform: rotate(12deg); }
+      60% { transform: rotate(-8deg); }
+      75% { transform: rotate(5deg); }
+      100% { transform: rotate(0deg); }
+    }
+
+    .bell-ring {
+      animation: bell-ring 0.7s ease-in-out;
+      transform-origin: top center;
+    }
+
+    .sale-card {
+      background-color: rgb(var(--sale-card));
+      border-color: rgb(var(--outline-variant));
+      color: rgb(var(--on-sale-card));
+      box-shadow: 0 18px 36px rgb(var(--sale-card) / 0.12);
+    }
+
+    .sale-card-bg-icon {
+      color: rgb(var(--on-sale-card));
+      opacity: 0.13;
+    }
+
+    .sale-card-icon-box {
+      background-color: rgb(var(--sale-card-icon));
+      color: rgb(var(--on-sale-card-icon));
+      box-shadow: 0 14px 28px rgb(var(--brand-gym) / 0.18);
+    }
+
+    .sale-card-title {
+      color: rgb(var(--on-sale-card));
+    }
+
+    .sale-card-text {
+      color: rgb(var(--on-sale-card-muted));
+    }
+
+    .sale-card-button {
+      background-color: rgb(var(--sale-card-button));
+      color: rgb(var(--on-sale-card-button));
+    }
+
+    .sale-card-button:hover {
+      box-shadow: inset 0 0 0 999px rgb(var(--brand-gym) / 0.12);
+    }
+
+    @media (max-width: 640px) {
+      .compact-action-card {
+        min-height: 280px;
+      }
+
+      .notifications-panel {
+        left: 1rem;
+        right: 1rem;
+        width: auto;
+      }
+    }
+  </style>
 </head>
-<body class="bg-surface font-body text-on-surface flex min-h-screen bg-background-light dark:bg-background-dark text-on-surface dark:text-on-surface-dark transition-colors duration-300 dark:text-white">
-<!-- Side Navigation Panel -->
-<aside class="sidebar-expanded h-screen sticky top-0 left-0 bg-white border-r border-outline-variant flex flex-col z-[60] dark:bg-surface-dark dark:border-white/10 shadow-xl" id="sidebar">
-<!-- Logo Section -->
-<div class="p-6 flex items-center gap-4">
-<img alt="SquatGym Logo" class="h-10 w-auto min-w-[40px]" src="https://lh3.googleusercontent.com/aida/ADBb0uhDHqVCq1UwTRP9pqRq8sQodCXA1jO3V1903fwtJYNWNAdOPZZ6wiym1mr0ovL5KK5Fv03918S3asN-EgTR1GfpyBAfkjegMI2U_Xb3mVj6UJbZOFVshb6aoCoqbZwxRf93atOJmiaVBQ_DNxRaCA5f8jDql64qU_hQqK3Ee1lig27R6IiZmCdFyHH3iZe_qixV4Eq-7mCTGnoxL68f0LJf8QqlfLksXG76s-CXro3nOEYnuCQLfKi6PA" style="">
-<h1 class="font-headline font-extrabold text-xl text-primary tracking-tight nav-text whitespace-nowrap" style=""><div><span style="font-size: 1.25rem; letter-spacing: -0.025em;">SquatGym</span></div></h1>
-</div>
-<!-- Navigation Links -->
-<nav class="flex-1 px-4 mt-4 flex flex-col gap-2">
-<a class="flex items-center gap-4 p-3 rounded-xl bg-primary/10 text-primary transition-colors" href="#" style="">
-<span class="material-symbols-outlined" style="">home</span>
-<span class="nav-text font-medium" style="">Inicio</span>
-</a>
-<button class="flex items-center gap-4 p-3 rounded-xl hover:bg-surface-container transition-colors text-on-surface-variant hover:text-primary dark:text-white/70" onclick="toggleSidebar()" style="">
-<span class="material-symbols-outlined" style="">menu_open</span>
-<span class="nav-text font-medium" style="">Colapsar</span>
-</button>
-<div class="h-[1px] bg-gray-200 dark:bg-white/10 my-4 mx-2"></div>
-<a class="flex items-center gap-4 p-3 rounded-xl hover:bg-surface-container transition-colors text-on-surface-variant hover:text-primary dark:text-white/70" href="#" style="">
-<span class="material-symbols-outlined" style="">shopping_basket</span>
-<span class="nav-text font-medium" style="">Kiosco</span>
-</a>
-<a class="flex items-center gap-4 p-3 rounded-xl hover:bg-surface-container transition-colors text-on-surface-variant hover:text-primary dark:text-white/70" href="#" style="">
-<span class="material-symbols-outlined" style="">inventory_2</span>
-<span class="nav-text font-medium" style="">Inventario</span>
-</a>
-<a class="flex items-center gap-4 p-3 rounded-xl hover:bg-surface-container transition-colors text-on-surface-variant hover:text-primary dark:text-white/70" href="#" style="">
-<span class="material-symbols-outlined" style="">fact_check</span>
-<span class="nav-text font-medium" style="">Asistencias</span>
-</a>
-<a class="flex items-center gap-4 p-3 rounded-xl hover:bg-surface-container transition-colors text-on-surface-variant hover:text-primary dark:text-white/70" href="#" style="">
-<span class="material-symbols-outlined" style="">group</span>
-<span class="nav-text font-medium" style="">Usuarios</span>
-</a>
-</nav>
-<!-- Bottom Settings Button -->
-<div class="p-4 mt-auto">
-<button class="flex items-center gap-4 p-3 rounded-xl hover:bg-surface-container transition-colors text-on-surface-variant hover:text-primary mb-2 w-full dark:text-white/70" id="theme-toggle" style="">
-<span class="material-symbols-outlined" style="">dark_mode</span>
-<span class="nav-text font-medium" style="">Modo Oscuro</span>
-</button><a class="flex items-center gap-4 p-3 rounded-xl hover:bg-error-container hover:text-on-error-container transition-colors text-on-surface-variant dark:text-white/70" href="#" style="">
-<span class="material-symbols-outlined" style="">settings</span>
-<span class="nav-text font-medium" style="">Configuración</span>
-</a>
-</div>
-</aside>
-<div class="flex-1 flex flex-col min-w-0">
-<!-- TopNavBar -->
-<header class="h-20 glass-header flex items-center justify-end px-8 sticky top-0 z-50 border-b border-outline-variant/30 dark:border-white/10">
-<div class="flex items-center gap-6">
-<!-- Notification Bell -->
-<button class="relative w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container transition-colors" onclick="toggleNotifications()" style="">
-<span class="material-symbols-outlined text-secondary" style="">notifications</span>
-<span class="absolute top-2 right-2 w-2.5 h-2.5 bg-red-600 rounded-full border border-white dark:border-background-dark" id="notif-dot"></span>
-</button>
-<!-- User Profile -->
-<div class="relative flex items-center gap-3 pl-6 border-l border-outline-variant">
-<button class="flex items-center gap-3 hover:bg-surface-container p-1 rounded-full transition-colors group" onclick="toggleProfileDropdown()" style="">
-<div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold overflow-hidden ring-2 ring-primary/20 group-hover:ring-primary/40 transition-all">
-<span class="material-symbols-outlined" style="">person</span>
-</div>
-</button>
-<!-- Profile Dropdown -->
-<div class="dropdown-hidden dropdown-animation absolute right-0 top-full mt-2 w-64 bg-white dark:bg-surface-dark rounded-2xl shadow-2xl border border-outline-variant/30 overflow-hidden z-[100]" id="profile-dropdown">
-<div class="p-5 border-b border-outline-variant/30 bg-surface-container-low">
-<p class="font-bold text-on-surface dark:text-white" style="">Admin Squat</p>
-<p class="text-xs text-on-surface-variant dark:text-white/70" style="">Super Administrador</p>
-</div>
-<div class="p-2">
-<a class="flex items-center gap-3 p-3 rounded-xl hover:bg-surface-container transition-colors text-on-surface-variant hover:text-primary dark:text-white/70" href="#" style="">
-<span class="material-symbols-outlined" style="">person_outline</span>
-<span class="text-sm font-medium" style="">Mi Perfil</span>
-</a>
-<a class="flex items-center gap-3 p-3 rounded-xl hover:bg-surface-container transition-colors text-on-surface-variant hover:text-primary dark:text-white/70" href="#" style="">
-<span class="material-symbols-outlined" style="">security</span>
-<span class="text-sm font-medium" style="">Seguridad</span>
-</a>
-<div class="h-[1px] bg-outline-variant/30 my-2"></div>
-<button class="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-error-container hover:text-on-error-container transition-colors text-error" style="">
-<span class="material-symbols-outlined" style="">logout</span>
-<span class="text-sm font-medium" style="">Cerrar sesión</span>
-</button>
-</div>
-</div>
-</div>
-</div>
-</header>
-<!-- Main Content Canvas -->
-<main class="flex-1 py-12 px-8 max-w-7xl w-full mx-auto">
-<!-- Welcome Section -->
-<section class="mb-16 text-center">
-<h2 class="font-headline text-on-surface-variant font-medium text-lg mb-2 dark:text-white/70" style="">Home</h2>
-<h3 class="font-display font-extrabold text-5xl text-on-surface tracking-tighter leading-none dark:text-white" style="">
-                Hola, <span class="text-primary" style="">Administrador</span>
-</h3>
-<p class="text-on-surface-variant mt-6 text-lg max-w-2xl mx-auto dark:text-white/70" style="">
-                Bienvenido al centro de gestión de SquatGym. Seleccione un módulo para comenzar sus operaciones.
-            </p>
-</section>
-<!-- Bento Grid for Navigation Cards -->
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-<!-- Card 1: Tomar Asistencia -->
-<div class="group relative bg-surface-container-lowest p-8 rounded-full shadow-none hover:shadow-2xl transition-all duration-300 flex flex-col justify-between border border-transparent hover:border-primary/20 overflow-hidden dark:bg-surface-dark dark:hover:border-primary/50">
-<div class="absolute -right-4 -top-4 opacity-5 group-hover:opacity-10 transition-opacity">
-<span class="material-symbols-outlined text-[120px]" style="">fact_check</span>
-</div>
-<div>
-<div class="w-16 h-16 rounded-xl bg-surface-container-low flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
-<span class="material-symbols-outlined text-3xl text-primary" style="">fact_check</span>
-</div>
-<h4 class="font-headline font-extrabold text-xl text-on-surface mb-3 dark:text-white" style="">Tomar Asistencia</h4>
-<p class="text-on-surface-variant font-body text-sm leading-relaxed mb-8 dark:text-white/70" style="">
-                        Registro manual de ingreso para socios con membresías activas o pases diarios.
-                    </p>
-</div>
-<button class="gradient-primary text-white font-headline font-bold py-3 px-6 rounded-xl flex items-center justify-center gap-2 group-hover:shadow-lg transition-all active:scale-95" style="">
-                    Acceder <span class="material-symbols-outlined text-sm" style="">arrow_forward</span>
-</button>
-</div>
-<!-- Card 2: Realizar Venta -->
-<div class="group relative bg-surface-container-lowest p-8 rounded-full shadow-none hover:shadow-2xl transition-all duration-300 flex flex-col justify-between border border-transparent hover:border-primary/20 overflow-hidden dark:bg-surface-dark dark:hover:border-primary/50">
-<div class="absolute -right-4 -top-4 opacity-5 group-hover:opacity-10 transition-opacity">
-<span class="material-symbols-outlined text-[120px]" style="">shopping_basket</span>
-</div>
-<div>
-<div class="w-16 h-16 rounded-xl bg-surface-container-low flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
-<span class="material-symbols-outlined text-3xl text-primary" style="">shopping_basket</span>
-</div>
-<h4 class="font-headline font-extrabold text-xl text-on-surface mb-3 dark:text-white" style="">Realizar Venta</h4>
-<p class="text-on-surface-variant font-body text-sm leading-relaxed mb-8 dark:text-white/70" style="">
-                        Inicie una nueva transacción de productos, bebidas o accesorios para socios del gimnasio.
-                    </p>
-</div>
-<button class="gradient-primary text-white font-headline font-bold py-3 px-6 rounded-xl flex items-center justify-center gap-2 group-hover:shadow-lg transition-all active:scale-95" style="">
-                    Acceder <span class="material-symbols-outlined text-sm" style="">arrow_forward</span>
-</button>
-</div>
-<!-- Card 3: Buscar Producto -->
-<div class="group relative bg-surface-container-lowest p-8 rounded-full shadow-none hover:shadow-2xl transition-all duration-300 flex flex-col justify-between border border-transparent hover:border-primary/20 overflow-hidden dark:bg-surface-dark dark:hover:border-primary/50">
-<div class="absolute -right-4 -top-4 opacity-5 group-hover:opacity-10 transition-opacity">
-<span class="material-symbols-outlined text-[120px]" style="">search</span>
-</div>
-<div>
-<div class="w-16 h-16 rounded-xl bg-surface-container-low flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
-<span class="material-symbols-outlined text-3xl text-primary" style="">search</span>
-</div>
-<h4 class="font-headline font-extrabold text-xl text-on-surface mb-3 dark:text-white" style="">Buscar Producto</h4>
-<p class="text-on-surface-variant font-body text-sm leading-relaxed mb-8 dark:text-white/70" style="">
-                        Localice rápidamente cualquier artículo en el catálogo por nombre, categoría o código.
-                    </p>
-</div>
-<button class="gradient-primary text-white font-headline font-bold py-3 px-6 rounded-xl flex items-center justify-center gap-2 group-hover:shadow-lg transition-all active:scale-95" style="">
-                    Ejecutar <span class="material-symbols-outlined text-sm" style="">arrow_forward</span>
-</button>
-</div>
-</div>
-</main>
-</div>
-<script>
-    function toggleSidebar() {
-        const sidebar = document.getElementById('sidebar');
-        const icon = sidebar.querySelector('nav button span.material-symbols-outlined');
-        
-        if (sidebar.classList.contains('sidebar-expanded')) {
-            sidebar.classList.remove('sidebar-expanded');
-            sidebar.classList.add('sidebar-collapsed');
-            icon.textContent = 'menu';
-        } else {
-            sidebar.classList.remove('sidebar-collapsed');
-            sidebar.classList.add('sidebar-expanded');
-            icon.textContent = 'menu_open';
-        }
+
+<body class="min-h-screen bg-background text-on-surface font-body antialiased">
+  <header class="fixed left-0 top-0 z-50 w-full border-b border-outline-variant bg-surface-container-lowest/95 shadow-sm backdrop-blur-md">
+    <div class="flex h-16 w-full items-center justify-between gap-3 px-4 sm:px-6 md:px-10">
+      <a class="flex min-w-0 items-center gap-2 sm:gap-3" href="home.html" aria-label="Ir al inicio">
+        <img class="hidden h-10 w-10 shrink-0 rounded-lg border border-outline-variant bg-white object-contain p-1 sm:block" alt="Logo SquatGym" src="../img/logo.png">
+        <span class="whitespace-nowrap font-manrope text-lg font-black text-on-surface sm:text-2xl">Squat<span class="brand-gym">Gym</span></span>
+      </a>
+
+      <div class="flex shrink-0 items-center justify-end gap-1 sm:gap-2">
+        <div class="relative">
+          <button type="button" class="flex h-9 w-9 items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-low active:scale-95 sm:h-10 sm:w-10" id="notifications-button" aria-label="Ver notificaciones" aria-expanded="false" aria-controls="notifications-dropdown">
+            <span class="relative block">
+              <span class="material-symbols-outlined" id="notifications-icon" style="font-variation-settings: 'FILL' 1">notifications</span>
+              <span class="absolute right-0.5 top-0 h-2 w-2 rounded-full border border-surface-container-lowest bg-red-500 hidden" id="notification-dot"></span>
+            </span>
+          </button>
+
+          <div class="notifications-panel z-[100] hidden overflow-hidden rounded-lg border" id="notifications-dropdown" role="menu">
+            <div class="flex items-center justify-between gap-4 border-b border-outline-variant p-4">
+              <div>
+                <p class="text-sm font-bold text-on-surface">Notificaciones</p>
+                <p class="text-xs text-on-surface-variant" id="notification-status">Sin novedades pendientes</p>
+              </div>
+              <button type="button" class="rounded-full p-1 text-on-surface-variant hover:bg-surface-container" id="mark-notifications-read" aria-label="Marcar notificaciones como leídas">
+                <span class="material-symbols-outlined text-lg">done_all</span>
+              </button>
+            </div>
+            <div class="max-h-72 overflow-y-auto p-2" id="notifications-list">
+              <article class="rounded-md px-3 py-3 hover:bg-surface-container">
+                <div class="flex items-start gap-3">
+                  <span class="material-symbols-outlined mt-0.5 text-lg text-primary">inventory_2</span>
+                  <div>
+                    <p class="text-sm font-semibold text-on-surface">Stock bajo</p>
+                    <p class="text-xs leading-5 text-on-surface-variant">Quedan pocas unidades de proteína whey.</p>
+                    <p class="mt-1 text-[11px] font-semibold text-primary">Hace 1 min</p>
+                  </div>
+                </div>
+              </article>
+              <article class="rounded-md px-3 py-3 hover:bg-surface-container">
+                <div class="flex items-start gap-3">
+                  <span class="material-symbols-outlined mt-0.5 text-lg text-primary">event_available</span>
+                  <div>
+                    <p class="text-sm font-semibold text-on-surface">Clase por comenzar</p>
+                    <p class="text-xs leading-5 text-on-surface-variant">Funcional de las 18:00 tiene 12 inscriptos.</p>
+                    <p class="mt-1 text-[11px] font-semibold text-on-surface-variant">Hace 12 min</p>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <button type="button" class="flex h-9 w-9 items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-low active:scale-95 sm:h-10 sm:w-10" id="theme-toggle" aria-label="Cambiar a modo oscuro">
+          <span class="material-symbols-outlined" id="theme-toggle-dark-icon">dark_mode</span>
+          <span class="material-symbols-outlined hidden" id="theme-toggle-light-icon">light_mode</span>
+        </button>
+
+        <div class="relative ml-1 flex items-center border-l border-outline-variant pl-2 sm:ml-2 sm:pl-4">
+          <button type="button" class="flex h-10 items-center gap-3 rounded-lg px-1 hover:bg-surface-container-low sm:px-2" id="profile-menu-button" aria-expanded="false" aria-controls="profile-dropdown">
+            <span class="hidden flex-col items-end sm:flex">
+              <span class="text-xs font-bold text-on-surface">Admin Squat</span>
+              <span class="text-[10px] uppercase tracking-wider text-on-surface-variant">Super Admin</span>
+            </span>
+            <span class="flex h-9 w-9 items-center justify-center rounded-lg border border-outline-variant bg-primary-container/15 text-primary shadow-sm">
+              <span class="material-symbols-outlined">person</span>
+            </span>
+          </button>
+
+          <div class="profile-dropdown-panel absolute right-0 top-full z-[100] mt-2 hidden w-56 max-w-[calc(100vw-2rem)] overflow-hidden rounded-lg border" id="profile-dropdown" role="menu">
+            <div class="border-b border-outline-variant p-4">
+              <p class="text-sm font-bold text-on-surface">Admin Squat</p>
+              <p class="text-xs text-on-surface-variant">Super Administrador</p>
+            </div>
+            <div class="p-2">
+              <button type="button" class="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-on-surface hover:bg-surface-container" role="menuitem">
+                <span class="material-symbols-outlined text-lg">person</span>
+                Mi Perfil
+              </button>
+              <button type="button" class="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-on-surface hover:bg-surface-container" role="menuitem">
+                <span class="material-symbols-outlined text-lg">settings</span>
+                Configuración
+              </button>
+            </div>
+            <div class="border-t border-outline-variant p-2">
+              <button type="button" class="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-semibold text-error hover:bg-error-container/15" role="menuitem" onclick="window.location.href='../index.html'">
+                <span class="material-symbols-outlined text-lg">logout</span>
+                Cerrar sesión
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <nav class="no-scrollbar h-12 w-full overflow-x-auto bg-surface-container-lowest/95" aria-label="Navegación principal">
+      <div class="flex h-full w-max min-w-full items-center gap-1 px-4 sm:px-6 md:px-10">
+        <a class="nav-tab nav-tab-active active:scale-95" href="home.html" aria-current="page">Inicio</a>
+        <a class="nav-tab active:scale-95" href="kiosco/kiosco.html">Kiosco</a>
+        <a class="nav-tab active:scale-95" href="inventario/inventario.html">Inventario</a>
+        <a class="nav-tab active:scale-95" href="#asistencias">Asistencias</a>
+        <a class="nav-tab active:scale-95" href="usuarios/gestionroles.html">Usuarios</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="mx-auto max-w-container-max px-4 pb-12 pt-32 sm:px-6 md:px-margin-x">
+    <section class="mb-12">
+      <div class="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+        <div>
+          <h2 class="dashboard-title font-manrope font-extrabold text-on-surface">Hola, <span class="text-primary">Administrador</span></h2>
+          <p class="max-w-xl font-body-lg text-body-lg text-on-surface-variant">Gestiona el flujo de tu gimnasio con eficiencia clínica y energía deportiva.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-14 grid grid-cols-1 gap-8 md:grid-cols-3 lg:gap-10 xl:gap-12">
+      <article class="dashboard-panel compact-action-card group relative cursor-pointer overflow-hidden rounded-lg border border-outline-variant p-6 transition-transform duration-200 hover:-translate-y-1 hover:shadow-xl sm:p-8">
+        <div class="absolute right-0 top-0 p-6 opacity-10 group-hover:opacity-20 sm:p-8" aria-hidden="true">
+          <span class="material-symbols-outlined card-bg-icon text-on-surface">how_to_reg</span>
+        </div>
+        <div class="relative z-10">
+          <div class="action-icon-primary mb-6 flex h-14 w-14 items-center justify-center rounded-full">
+            <span class="material-symbols-outlined text-3xl text-on-primary">check_circle</span>
+          </div>
+          <h3 class="mb-2 font-manrope text-2xl font-bold text-on-surface sm:text-headline-h1">Tomar Asistencia</h3>
+          <p class="mb-6 font-body-md text-body-md text-on-surface-variant">Registro rápido de entrada de miembros y verificación de membresías.</p>
+          <button type="button" class="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 font-bold text-on-primary hover:bg-primary-container" onclick="window.location.href='#asistencias'">
+            <span>Iniciar Registro</span>
+            <span class="material-symbols-outlined text-sm">arrow_forward</span>
+          </button>
+        </div>
+      </article>
+
+      <article class="sale-card compact-action-card group relative cursor-pointer overflow-hidden rounded-lg border p-6 transition-transform duration-200 hover:-translate-y-1 hover:shadow-xl sm:p-8">
+        <div class="absolute right-0 top-0 p-6 opacity-10 group-hover:opacity-20 sm:p-8" aria-hidden="true">
+          <span class="material-symbols-outlined card-bg-icon sale-card-bg-icon">payments</span>
+        </div>
+        <div class="relative z-10">
+          <div class="sale-card-icon-box mb-6 flex h-14 w-14 items-center justify-center rounded-full">
+            <span class="material-symbols-outlined text-3xl">shopping_cart</span>
+          </div>
+          <h3 class="sale-card-title mb-2 font-manrope text-2xl font-bold sm:text-headline-h1">Realizar Venta</h3>
+          <p class="sale-card-text mb-6 font-body-md text-body-md">Procesa pagos de suplementos, accesorios o nuevas inscripciones.</p>
+          <button type="button" class="sale-card-button inline-flex items-center gap-2 rounded-full px-6 py-3 font-bold" onclick="window.location.href='kiosco/kiosco.html'">
+            <span>Abrir Terminal</span>
+            <span class="material-symbols-outlined text-sm">point_of_sale</span>
+          </button>
+        </div>
+      </article>
+
+      <article class="dashboard-panel compact-action-card group relative cursor-pointer overflow-hidden rounded-lg border border-outline-variant p-6 transition-transform duration-200 hover:-translate-y-1 hover:shadow-xl sm:p-8">
+        <div class="absolute right-0 top-0 p-6 opacity-10 group-hover:opacity-20 sm:p-8" aria-hidden="true">
+          <span class="material-symbols-outlined card-bg-icon text-on-surface">inventory_2</span>
+        </div>
+        <div class="relative z-10">
+          <div class="mb-6 flex h-14 w-14 items-center justify-center rounded-full bg-secondary-container">
+            <span class="material-symbols-outlined text-3xl text-on-secondary-container">search</span>
+          </div>
+          <h3 class="mb-2 font-manrope text-2xl font-bold text-on-surface sm:text-headline-h1">Buscar Producto</h3>
+          <p class="mb-6 font-body-md text-body-md text-on-surface-variant">Consulta disponibilidad en stock y precios de inventario en tiempo real.</p>
+          <div class="relative">
+            <label class="sr-only" for="product-search">Buscar producto por SKU o nombre</label>
+            <input id="product-search" class="w-full rounded-full border border-outline-variant bg-surface-container px-6 py-3 pr-12 text-sm text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:ring-2 focus:ring-primary" placeholder="SKU o nombre..." type="search">
+            <span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-primary">manage_search</span>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-10 xl:gap-12" id="asistencias">
+      <article class="dashboard-panel rounded-lg border border-outline-variant p-6 shadow-sm sm:p-8">
+        <div class="mb-8 flex items-center justify-between gap-4">
+          <h4 class="font-headline-h2 text-headline-h2 text-on-surface">Asistencias Recientes</h4>
+          <button type="button" class="font-label-caps text-label-caps text-primary hover:underline" onclick="window.location.href='#asistencias'">VER TODO</button>
+        </div>
+
+        <div class="space-y-4">
+          <div class="flex flex-col gap-3 rounded-lg bg-surface-container-low p-4 hover:bg-surface-container sm:flex-row sm:items-center sm:justify-between">
+            <div class="flex items-center gap-4">
+              <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary-container/15 font-manrope font-bold text-primary">VM</span>
+              <div>
+                <p class="font-body-md text-body-md font-bold text-on-surface">Valeria Méndez</p>
+                <p class="text-body-sm text-secondary">Socio #8210 • Plan Gold</p>
+              </div>
+            </div>
+            <div class="flex items-center justify-between gap-3 sm:flex-col sm:items-end">
+              <span class="rounded-full bg-primary-container/15 px-3 py-1 font-label-caps text-label-caps text-primary">ACTIVA</span>
+              <span class="mt-1 text-body-sm text-secondary">Hace 2 min</span>
+            </div>
+          </div>
+
+          <div class="flex flex-col gap-3 rounded-lg bg-surface-container-low p-4 hover:bg-surface-container sm:flex-row sm:items-center sm:justify-between">
+            <div class="flex items-center gap-4">
+              <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-secondary-container font-manrope font-bold text-on-secondary-container">CR</span>
+              <div>
+                <p class="font-body-md text-body-md font-bold text-on-surface">Carlos Ruiz</p>
+                <p class="text-body-sm text-secondary">Socio #4492 • Plan Básico</p>
+              </div>
+            </div>
+            <div class="flex items-center justify-between gap-3 sm:flex-col sm:items-end">
+              <span class="rounded-full bg-error-container/20 px-3 py-1 font-label-caps text-label-caps text-error">VENCIDO</span>
+              <span class="mt-1 text-body-sm text-secondary">Hace 15 min</span>
+            </div>
+          </div>
+
+          <div class="flex flex-col gap-3 rounded-lg bg-surface-container-low p-4 hover:bg-surface-container sm:flex-row sm:items-center sm:justify-between">
+            <div class="flex items-center gap-4">
+              <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary-container/15 font-manrope font-bold text-primary">EG</span>
+              <div>
+                <p class="font-body-md text-body-md font-bold text-on-surface">Elena Gómez</p>
+                <p class="text-body-sm text-secondary">Socio #1023 • Plan VIP</p>
+              </div>
+            </div>
+            <div class="flex items-center justify-between gap-3 sm:flex-col sm:items-end">
+              <span class="rounded-full bg-primary-container/15 px-3 py-1 font-label-caps text-label-caps text-primary">ACTIVA</span>
+              <span class="mt-1 text-body-sm text-secondary">Hace 22 min</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="group relative min-h-[360px] overflow-hidden rounded-lg border border-outline-variant shadow-sm sm:min-h-[400px]">
+        <div class="absolute inset-0 z-10 bg-gradient-to-t from-black/85 via-black/55 to-black/20" aria-hidden="true"></div>
+        <img alt="Sala moderna de entrenamiento" class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1600&auto=format&fit=crop" loading="lazy">
+        <div class="absolute bottom-0 left-0 z-20 p-6 sm:p-10">
+          <span class="mb-4 inline-block rounded-full bg-primary-container px-4 py-1 font-label-caps text-label-caps text-white">TIP DEL DÍA</span>
+          <h3 class="mb-4 font-manrope text-3xl font-extrabold text-white sm:text-display-lg">Optimiza tu Inventario</h3>
+          <p class="mb-6 max-w-sm text-body-lg text-white/90">El 40% de tus ventas de suplementos ocurren entre las 18:00 y las 20:00. Asegúrate de tener stock listo.</p>
+          <button type="button" class="rounded-full bg-white px-8 py-3 font-bold text-zinc-950 hover:bg-primary hover:text-white" onclick="window.location.href='inventario/inventario.html'">Revisar Stock</button>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <button type="button" class="fixed bottom-10 right-10 z-50 hidden h-16 w-16 items-center justify-center rounded-full bg-primary text-on-primary shadow-2xl hover:bg-primary-container active:scale-95 sm:flex" aria-label="Agregar elemento" onclick="window.location.href='inventario/agregarproducto.html'">
+    <span class="material-symbols-outlined text-3xl">add</span>
+  </button>
+
+  <script>
+    const THEME_KEY = 'squatgym-theme';
+
+    function saveTheme(theme) {
+      try {
+        localStorage.setItem(THEME_KEY, theme);
+      } catch (error) {
+        // El navegador puede bloquear localStorage en algunos contextos locales.
+      }
     }
 
-    document.getElementById('theme-toggle').addEventListener('click', function() {
-        const html = document.documentElement;
-        const isDark = html.classList.toggle('dark');
-        
-        const icon = this.querySelector('.material-symbols-outlined');
-        const text = this.querySelector('.nav-text');
-        
-        if (isDark) {
-            icon.textContent = 'light_mode';
-            text.textContent = 'Modo Claro';
-        } else {
-            icon.textContent = 'dark_mode';
-            text.textContent = 'Modo Oscuro';
-        }
+    function setTheme(theme) {
+      const selectedTheme = theme === 'dark' ? 'dark' : 'light';
+      const html = document.documentElement;
+      const darkIcon = document.getElementById('theme-toggle-dark-icon');
+      const lightIcon = document.getElementById('theme-toggle-light-icon');
+      const themeButton = document.getElementById('theme-toggle');
+
+      html.classList.remove('light', 'dark');
+      html.classList.add(selectedTheme);
+      saveTheme(selectedTheme);
+
+      if (darkIcon && lightIcon) {
+        darkIcon.classList.toggle('hidden', selectedTheme === 'dark');
+        lightIcon.classList.toggle('hidden', selectedTheme === 'light');
+      }
+
+      if (themeButton) {
+        themeButton.setAttribute(
+          'aria-label',
+          selectedTheme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'
+        );
+      }
+    }
+
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.contains('dark');
+      setTheme(isDark ? 'light' : 'dark');
+    }
+
+    let unreadNotificationCount = 0;
+
+    function updateNotificationState() {
+      const notificationDot = document.getElementById('notification-dot');
+      const notificationButton = document.getElementById('notifications-button');
+      const notificationStatus = document.getElementById('notification-status');
+      const hasUnread = unreadNotificationCount > 0;
+
+      if (notificationDot) {
+        notificationDot.classList.toggle('hidden', !hasUnread);
+      }
+
+      if (notificationButton) {
+        notificationButton.setAttribute(
+          'aria-label',
+          hasUnread
+            ? `Ver notificaciones, ${unreadNotificationCount} sin leer`
+            : 'Ver notificaciones'
+        );
+      }
+
+      if (notificationStatus) {
+        notificationStatus.textContent = hasUnread
+          ? `${unreadNotificationCount} sin leer`
+          : 'Sin novedades pendientes';
+      }
+    }
+
+    function animateNotificationBell() {
+      const notificationIcon = document.getElementById('notifications-icon');
+
+      if (!notificationIcon) {
+        return;
+      }
+
+      notificationIcon.classList.remove('bell-ring');
+      void notificationIcon.offsetWidth;
+      notificationIcon.classList.add('bell-ring');
+    }
+
+    function prependNotification({ icon, title, body, time }) {
+      const notificationsList = document.getElementById('notifications-list');
+
+      if (!notificationsList) {
+        return;
+      }
+
+      const article = document.createElement('article');
+      article.className = 'rounded-md px-3 py-3 hover:bg-surface-container';
+
+      const row = document.createElement('div');
+      row.className = 'flex items-start gap-3';
+
+      const iconElement = document.createElement('span');
+      iconElement.className = 'material-symbols-outlined mt-0.5 text-lg text-primary';
+      iconElement.textContent = icon;
+
+      const content = document.createElement('div');
+
+      const titleElement = document.createElement('p');
+      titleElement.className = 'text-sm font-semibold text-on-surface';
+      titleElement.textContent = title;
+
+      const bodyElement = document.createElement('p');
+      bodyElement.className = 'text-xs leading-5 text-on-surface-variant';
+      bodyElement.textContent = body;
+
+      const timeElement = document.createElement('p');
+      timeElement.className = 'mt-1 text-[11px] font-semibold text-primary';
+      timeElement.textContent = time;
+
+      content.append(titleElement, bodyElement, timeElement);
+      row.append(iconElement, content);
+      article.append(row);
+      notificationsList.prepend(article);
+    }
+
+    function receiveNotification(notification) {
+      unreadNotificationCount += 1;
+      prependNotification(notification);
+      updateNotificationState();
+      animateNotificationBell();
+    }
+
+    function markNotificationsRead() {
+      unreadNotificationCount = 0;
+      updateNotificationState();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const themeButton = document.getElementById('theme-toggle');
+      const profileButton = document.getElementById('profile-menu-button');
+      const profileDropdown = document.getElementById('profile-dropdown');
+      const notificationsButton = document.getElementById('notifications-button');
+      const notificationsDropdown = document.getElementById('notifications-dropdown');
+      const markNotificationsReadButton = document.getElementById('mark-notifications-read');
+
+      setTheme(document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+      updateNotificationState();
+
+      if (themeButton) {
+        themeButton.addEventListener('click', toggleTheme);
+      }
+
+      if (notificationsButton && notificationsDropdown) {
+        notificationsButton.addEventListener('click', (event) => {
+          event.stopPropagation();
+          const isHidden = notificationsDropdown.classList.toggle('hidden');
+          notificationsButton.setAttribute('aria-expanded', String(!isHidden));
+
+          if (!profileDropdown) {
+            return;
+          }
+
+          profileDropdown.classList.add('hidden');
+          profileButton?.setAttribute('aria-expanded', 'false');
+        });
+
+        notificationsDropdown.addEventListener('click', (event) => {
+          event.stopPropagation();
+        });
+      }
+
+      if (markNotificationsReadButton) {
+        markNotificationsReadButton.addEventListener('click', markNotificationsRead);
+      }
+
+      if (profileButton && profileDropdown) {
+        profileButton.addEventListener('click', (event) => {
+          event.stopPropagation();
+          const isHidden = profileDropdown.classList.toggle('hidden');
+          profileButton.setAttribute('aria-expanded', String(!isHidden));
+
+          if (!notificationsDropdown) {
+            return;
+          }
+
+          notificationsDropdown.classList.add('hidden');
+          notificationsButton?.setAttribute('aria-expanded', 'false');
+        });
+
+        profileDropdown.addEventListener('click', (event) => {
+          event.stopPropagation();
+        });
+
+        window.addEventListener('click', () => {
+          profileDropdown.classList.add('hidden');
+          profileButton.setAttribute('aria-expanded', 'false');
+          notificationsDropdown?.classList.add('hidden');
+          notificationsButton?.setAttribute('aria-expanded', 'false');
+        });
+
+        window.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape') {
+            profileDropdown.classList.add('hidden');
+            profileButton.setAttribute('aria-expanded', 'false');
+            notificationsDropdown?.classList.add('hidden');
+            notificationsButton?.setAttribute('aria-expanded', 'false');
+          }
+        });
+      }
+
+      window.setTimeout(() => {
+        receiveNotification({
+          icon: 'how_to_reg',
+          title: 'Nuevo ingreso registrado',
+          body: 'Valeria Méndez acaba de validar su asistencia.',
+          time: 'Ahora'
+        });
+      }, 900);
     });
-
-    function toggleProfileDropdown() {
-        const dropdown = document.getElementById('profile-dropdown');
-        if (dropdown.classList.contains('dropdown-hidden')) {
-            dropdown.classList.remove('dropdown-hidden');
-            dropdown.classList.add('dropdown-visible');
-        } else {
-            dropdown.classList.remove('dropdown-visible');
-            dropdown.classList.add('dropdown-hidden');
-        }
-    }
-
-    function toggleNotifications() {
-        const bell = document.querySelector('button[onclick="toggleNotifications()"] .material-symbols-outlined');
-        bell.classList.remove('animate-swing');
-        void bell.offsetWidth; // Trigger reflow to restart animation
-        bell.classList.add('animate-swing');
-    }
-
-    document.addEventListener('click', (event) => {
-        const dropdown = document.getElementById('profile-dropdown');
-        if (!dropdown) return;
-        const button = dropdown.previousElementSibling;
-        if (button && !dropdown.contains(event.target) && !button.contains(event.target)) {
-            dropdown.classList.remove('dropdown-visible');
-            dropdown.classList.add('dropdown-hidden');
-        }
-    });
-</script>
-</body></html>
+  </script>
+</body>
+</html>
