@@ -1,0 +1,23 @@
+{
+  "name": "login-squad",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/GossenIan/design#readme",
+  "bugs": {
+    "url": "https://github.com/GossenIan/design/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GossenIan/design.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+
+  "scripts": {
+    "//": "start es el comando que nos permite iniciar el sv",
+    "start": "live-server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
