@@ -8,6 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Manrope:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="../../css/squatgym-header.css">
 <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -83,90 +84,84 @@
         h1, h2, h3, h4, h5, h6, .font-headline, .font-display { font-family: 'Manrope', sans-serif; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        .brand-gym { color: #27ae60; }
-        .dark .brand-gym { color: #5cec88; }
-        .nav-tab {
-            position: relative;
-            display: inline-flex;
-            align-items: center;
-            height: 2.25rem;
-            flex-shrink: 0;
-            overflow: hidden;
-            border-radius: 0.5rem;
-            padding-inline: 0.875rem;
-            color: #727971;
-            font-family: Manrope, sans-serif;
-            font-size: 0.875rem;
-            font-weight: 600;
-            isolation: isolate;
-            transition: color 180ms ease, background-color 180ms ease, box-shadow 180ms ease;
+.discount-option {
+            min-width: 4rem;
+            border: 1px solid rgb(39 174 96 / 0.22);
+            background: #ffffff;
+            color: #006d37;
+            transition: background-color 180ms ease, color 180ms ease, box-shadow 180ms ease, transform 120ms ease;
         }
-        .nav-tab::before {
-            position: absolute;
-            inset: 0;
-            z-index: -1;
-            border-radius: inherit;
-            background: radial-gradient(circle at 50% 50%, rgb(39 174 96 / 0.28) 0 18%, transparent 19% 100%), rgb(39 174 96 / 0.10);
-            content: "";
-            opacity: 0;
-            transform: scale(0.2);
-            transform-origin: center;
+        .discount-option:hover {
+            background: rgb(39 174 96 / 0.10);
+            box-shadow: inset 0 0 0 1px rgb(39 174 96 / 0.22);
         }
-        .nav-tab:hover {
-            background-color: rgb(39 174 96 / 0.10);
-            color: #27ae60;
-            box-shadow: inset 0 0 0 1px rgb(39 174 96 / 0.28);
-        }
-        .nav-tab:hover::before { animation: nav-wave 650ms ease-out forwards; }
-        @keyframes nav-wave {
-            0% { opacity: 0; transform: scale(0.2); }
-            30% { opacity: 1; }
-            100% { opacity: 0; transform: scale(2.8); }
-        }
-        .nav-tab-active,
-        .nav-tab-active:hover {
-            background-color: #27ae60;
+        .discount-option-active {
+            background: #27ae60;
             color: #ffffff;
-            box-shadow: 0 8px 22px rgb(39 174 96 / 0.22);
-            font-weight: 800;
+            box-shadow: 0 8px 20px rgb(39 174 96 / 0.24);
         }
-        .nav-tab-active::before,
-        .nav-tab-active:hover::before {
-            animation: none;
-            opacity: 0;
+        .dark body {
+            background-color: #061f12;
+            color: #f4fbf1;
         }
-        .profile-dropdown-panel,
-        .notifications-panel {
-            background-color: #ffffff;
-            border-color: #bbcbbb;
-            box-shadow: 0 24px 60px rgb(0 0 0 / 0.22);
-            opacity: 1;
-            backdrop-filter: none;
+        .dark .bg-background,
+        .dark .bg-surface {
+            background-color: #061f12 !important;
+        }
+        .dark .bg-surface-bright,
+        .dark .bg-surface-container-lowest {
+            background-color: #0f2d1c !important;
+        }
+        .dark .bg-surface-container-low {
+            background-color: #123621 !important;
+        }
+        .dark .bg-surface-container,
+        .dark .bg-surface-container-high,
+        .dark .bg-surface-container-highest,
+        .dark .dark\:bg-zinc-800,
+        .dark .dark\:bg-zinc-900 {
+            background-color: #1a5231 !important;
+        }
+        .dark .dark\:hover\:bg-zinc-800:hover,
+        .dark .hover\:bg-\[\#EAE7E7\]:hover {
+            background-color: #215f39 !important;
+        }
+        .dark .text-on-surface,
+        .dark .dark\:text-zinc-100 {
+            color: #f4fbf1 !important;
+        }
+        .dark .text-on-surface-variant,
+        .dark .text-secondary,
+        .dark .dark\:text-zinc-400 {
+            color: #c7d8c5 !important;
+        }
+        .dark .text-primary,
+        .dark .dark\:text-\[\#2ecc71\] {
+            color: #5cec88 !important;
+        }
+        .dark .border-outline-variant,
+        .dark .border-surface-container-high {
+            border-color: rgb(92 236 136 / 0.24) !important;
         }
         .dark .profile-dropdown-panel,
         .dark .notifications-panel {
-            background-color: #1a5231;
-            box-shadow: 0 24px 70px rgb(0 0 0 / 0.55);
+            border-color: rgb(92 236 136 / 0.24);
         }
-        .notifications-panel {
-            position: fixed;
-            right: 1rem;
-            top: 7.25rem;
-            width: min(20rem, calc(100vw - 2rem));
-            max-width: none;
+        .dark img.mix-blend-multiply {
+            mix-blend-mode: normal;
         }
-        @keyframes bell-ring {
-            0% { transform: rotate(0deg); }
-            15% { transform: rotate(18deg); }
-            30% { transform: rotate(-16deg); }
-            45% { transform: rotate(12deg); }
-            60% { transform: rotate(-8deg); }
-            75% { transform: rotate(5deg); }
-            100% { transform: rotate(0deg); }
+        .dark .discount-option {
+            background: #0f2d1c;
+            border-color: rgb(92 236 136 / 0.28);
+            color: #5cec88;
         }
-        .bell-ring {
-            animation: bell-ring 0.7s ease-in-out;
-            transform-origin: top center;
+        .dark .discount-option:hover {
+            background: rgb(92 236 136 / 0.12);
+        }
+        .dark .discount-option-active {
+            background: #5cec88;
+            color: #041f13;
+            box-shadow: 0 8px 20px rgb(92 236 136 / 0.22);
         }
         @media (max-width: 640px) {
             .notifications-panel {
@@ -177,7 +172,7 @@
         }
     </style>
 </head>
-<body class="min-h-screen bg-background text-on-surface font-body antialiased">
+<body class="min-h-screen bg-background text-on-surface font-body antialiased" data-notification-icon="point_of_sale" data-notification-title="Venta pendiente" data-notification-body="Hay una operación de kiosco lista para finalizar.">
 <header class="fixed left-0 top-0 z-50 w-full border-b border-outline-variant bg-surface-container-lowest/95 shadow-sm backdrop-blur-md">
 <div class="flex h-16 w-full items-center justify-between gap-3 px-4 sm:px-6 md:px-10">
 <a class="flex min-w-0 items-center gap-2 sm:gap-3" href="../home.html" aria-label="Ir al inicio">
@@ -311,98 +306,28 @@ Cerrar sesión
 <div class="flex gap-4">
 <div class="relative flex-1">
 <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-secondary">search</span>
-<input class="w-full bg-surface-container-highest border-none rounded-xl py-4 pl-12 pr-4 text-on-surface placeholder:text-secondary focus:ring-0 focus:border-b-2 focus:border-primary transition-all font-body" placeholder="Buscar productos (Ej. Proteína, Creatina...)" type="text"/>
+<input id="product-search" class="w-full bg-surface-container-highest border-none rounded-xl py-4 pl-12 pr-4 text-on-surface placeholder:text-secondary focus:ring-0 focus:border-b-2 focus:border-primary transition-all font-body" placeholder="Buscar productos (Ej. Proteína, Creatina...)" type="text"/>
 </div>
 <button class="bg-surface-container-low text-on-surface px-6 py-4 rounded-xl font-semibold flex items-center gap-2 hover:bg-surface-container-high transition-colors">
 <span class="material-symbols-outlined" data-icon="tune">tune</span>
                             Filtros
                         </button>
+<button id="open-product-modal" type="button" class="bg-primary text-on-primary px-6 py-4 rounded-xl font-semibold flex items-center gap-2 hover:bg-primary-container hover:text-on-primary-container transition-colors active:scale-95">
+<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
+                            Nuevo
+                        </button>
 </div>
 <!-- Category Pills -->
 <div class="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
-<button class="whitespace-nowrap px-6 py-2 rounded-full bg-primary text-on-primary font-medium text-sm transition-all shadow-[0px_4px_14px_rgba(0,109,55,0.2)]">Todos</button>
-<button class="whitespace-nowrap px-6 py-2 rounded-full bg-surface-container-low text-secondary font-medium text-sm hover:bg-surface-container-high transition-all">Proteínas</button>
-<button class="whitespace-nowrap px-6 py-2 rounded-full bg-surface-container-low text-secondary font-medium text-sm hover:bg-surface-container-high transition-all">Aminoácidos</button>
-<button class="whitespace-nowrap px-6 py-2 rounded-full bg-surface-container-low text-secondary font-medium text-sm hover:bg-surface-container-high transition-all">Pre-entrenos</button>
-<button class="whitespace-nowrap px-6 py-2 rounded-full bg-surface-container-low text-secondary font-medium text-sm hover:bg-surface-container-high transition-all">Accesorios</button>
+<button type="button" class="category-filter whitespace-nowrap px-6 py-2 rounded-full bg-primary text-on-primary font-medium text-sm transition-all shadow-[0px_4px_14px_rgba(0,109,55,0.2)]" data-category="Todos">Todos</button>
+<button type="button" class="category-filter whitespace-nowrap px-6 py-2 rounded-full bg-surface-container-low text-secondary font-medium text-sm hover:bg-surface-container-high transition-all" data-category="Proteínas">Proteínas</button>
+<button type="button" class="category-filter whitespace-nowrap px-6 py-2 rounded-full bg-surface-container-low text-secondary font-medium text-sm hover:bg-surface-container-high transition-all" data-category="Aminoácidos">Aminoácidos</button>
+<button type="button" class="category-filter whitespace-nowrap px-6 py-2 rounded-full bg-surface-container-low text-secondary font-medium text-sm hover:bg-surface-container-high transition-all" data-category="Pre-entrenos">Pre-entrenos</button>
+<button type="button" class="category-filter whitespace-nowrap px-6 py-2 rounded-full bg-surface-container-low text-secondary font-medium text-sm hover:bg-surface-container-high transition-all" data-category="Accesorios">Accesorios</button>
 </div>
 <!-- Products Grid -->
-<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-<!-- Product Card 1 -->
-<div class="bg-surface-container-lowest rounded-xl p-4 flex flex-col gap-4 relative group hover:bg-surface-container-low transition-colors cursor-pointer border border-outline-variant/15">
-<div class="h-48 rounded-lg bg-surface-container-highest overflow-hidden relative">
-<img alt="Whey Protein Vanilla" class="w-full h-full object-cover mix-blend-multiply group-hover:scale-105 transition-transform duration-500" data-alt="Black tub of whey protein powder with a scoop on a clean white background studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZe1qJ5tvQvqdz1O1tKulwx4oc3dW_d3hln0r67XL6k1ySLv3VWblO_2960LjqrKXFcm3VOVwhgIFdF-hv8CFnubrL6tzTnpmvF3CoFelFLm4OkPyDEheIcECeqW5DqEddHBocLbJ6269w9Tg945mI2bz-ysyZtRkNlxRmjKmx85BkF2o-S-0usyG9qN-2yBxcatAlqzB-z3Td4cdAncXNmlqfKNerhnG9sPsYf2DE-kuKSHU3ZwZ9ktcwD2HFEhybnJhX7lr5fw"/>
-<span class="absolute top-3 left-3 bg-primary-container text-on-primary-container text-xs font-bold px-2 py-1 rounded-md">-15%</span>
-</div>
-<div class="flex flex-col gap-1">
-<span class="text-xs text-secondary font-medium uppercase tracking-wider">Optimum Nutrition</span>
-<h3 class="font-headline font-semibold text-lg leading-tight line-clamp-2">Gold Standard 100% Whey - Vainilla</h3>
-<div class="flex justify-between items-end mt-2">
-<div class="flex flex-col">
-<span class="text-sm text-secondary line-through">$45.00</span>
-<span class="font-headline font-bold text-xl text-primary">$38.25</span>
-</div>
-<button class="bg-primary text-on-primary w-10 h-10 rounded-full flex items-center justify-center hover:bg-primary-container hover:text-on-primary-container transition-colors active:scale-95">
-<span class="material-symbols-outlined" data-icon="add">add</span>
-</button>
-</div>
-</div>
-</div>
-<!-- Product Card 2 -->
-<div class="bg-surface-container-lowest rounded-xl p-4 flex flex-col gap-4 relative group hover:bg-surface-container-low transition-colors cursor-pointer border border-outline-variant/15">
-<div class="h-48 rounded-lg bg-surface-container-highest overflow-hidden">
-<img alt="Creatine Monohydrate" class="w-full h-full object-cover mix-blend-multiply group-hover:scale-105 transition-transform duration-500" data-alt="White plastic jar of creatine monohydrate powder with minimalist label on neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnmb2_pU2BGAsOrSukg8jBXG2tjLO8bAnDrHWtMH0dL6uAq0yVenf6Uq8X5nhN9wDsu13HzBgqnudTndy7g8ZyASZiTNTQNAgb0pZG7rfk3VchyNJUlO6HJG70UArlfY8UHOqQrtaZLCFKg1DSk639aMEqMMZUGX6EalDxkyptIi0909zr_NUyORwP_2D2jnSOK11xKY_l4sAuT86r4apjWy7QLPoXjj2cXk7ReKA5MjbOo9Vd0tGtBpQe2fVEE_ro1UGnb-KxTw"/>
-</div>
-<div class="flex flex-col gap-1">
-<span class="text-xs text-secondary font-medium uppercase tracking-wider">MuscleTech</span>
-<h3 class="font-headline font-semibold text-lg leading-tight line-clamp-2">Platinum Creatine 400g</h3>
-<div class="flex justify-between items-end mt-2">
-<div class="flex flex-col">
-<span class="font-headline font-bold text-xl text-primary">$22.50</span>
-</div>
-<button class="bg-surface-container-high text-on-surface w-10 h-10 rounded-full flex items-center justify-center hover:bg-primary hover:text-on-primary transition-colors active:scale-95">
-<span class="material-symbols-outlined" data-icon="add">add</span>
-</button>
-</div>
-</div>
-</div>
-<!-- Product Card 3 -->
-<div class="bg-surface-container-lowest rounded-xl p-4 flex flex-col gap-4 relative group hover:bg-surface-container-low transition-colors cursor-pointer border border-outline-variant/15">
-<div class="h-48 rounded-lg bg-surface-container-highest overflow-hidden">
-<img alt="BCAA Amino Acids" class="w-full h-full object-cover mix-blend-multiply group-hover:scale-105 transition-transform duration-500" data-alt="Brightly colored tub of BCAA amino acid powder with splash of water around it dynamic lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBN6ljKm4E3r51_4gQAJU4mMU_1X05Nl903Zakxpuc4ya5qEDb03om371edVpAOBu6sTV3fyj9y9E48sT6GeB4W6wX45PE0b2KYEdFDNRpRHUSv6bPnLU_uqv8xnCWt5_floGKGoVAeCYg1dduoJGwExTsa-CT7wzHOQmzsgMdqRZY5ws_caxhnzyjU6DUtBjbBQkcx32Xoj8iPoRm3N9J1IBNYBzAhUq13xorIUWTqYLhXK3VpDmRD9TUMDqFMqvUJW1R1VZbXuA"/>
-</div>
-<div class="flex flex-col gap-1">
-<span class="text-xs text-secondary font-medium uppercase tracking-wider">Xtend</span>
-<h3 class="font-headline font-semibold text-lg leading-tight line-clamp-2">Original BCAA - Fresa Kiwi</h3>
-<div class="flex justify-between items-end mt-2">
-<div class="flex flex-col">
-<span class="font-headline font-bold text-xl text-primary">$30.00</span>
-</div>
-<button class="bg-surface-container-high text-on-surface w-10 h-10 rounded-full flex items-center justify-center hover:bg-primary hover:text-on-primary transition-colors active:scale-95">
-<span class="material-symbols-outlined" data-icon="add">add</span>
-</button>
-</div>
-</div>
-</div>
-<!-- Product Card 4 -->
-<div class="bg-surface-container-lowest rounded-xl p-4 flex flex-col gap-4 relative group hover:bg-surface-container-low transition-colors cursor-pointer border border-outline-variant/15">
-<div class="h-48 rounded-lg bg-surface-container-highest overflow-hidden">
-<img alt="Pre-Workout" class="w-full h-full object-cover mix-blend-multiply group-hover:scale-105 transition-transform duration-500" data-alt="Neon colored tub of pre-workout supplement powder energetic lighting with subtle smoke effect" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCr20_qcQM1WvJ-yV6pa0HahbQgE3iX4iGoKiiRTvvwud2twpOe1WFj6YrJGgNhh1zNVmm3ORyWc9R06XP2QqDZZkRptfxkkiMQrL6-fO21f71k7It8PDyQuEdJqk-ErEsVmuvikp-pH2mA3N1lvKNH-o6STWZjVLinlvTj4wcBtxSqSdsrmgboPnQnTG36ciWes5e7cA-11UjOf7rlhM9XQyMmsBFIE4VGSyGmEmEK6OCgkR0IX2Jr_NBpdyuUy3QWE-yHcvbaLg"/>
-</div>
-<div class="flex flex-col gap-1">
-<span class="text-xs text-secondary font-medium uppercase tracking-wider">Cellucor</span>
-<h3 class="font-headline font-semibold text-lg leading-tight line-clamp-2">C4 Original Pre-Workout</h3>
-<div class="flex justify-between items-end mt-2">
-<div class="flex flex-col">
-<span class="font-headline font-bold text-xl text-primary">$28.99</span>
-</div>
-<button class="bg-surface-container-high text-on-surface w-10 h-10 rounded-full flex items-center justify-center hover:bg-primary hover:text-on-primary transition-colors active:scale-95">
-<span class="material-symbols-outlined" data-icon="add">add</span>
-</button>
-</div>
-</div>
-</div>
-</div>
+<div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+    </div>
 </div>
 <!-- Right Column: Cart / Checkout -->
 <div class="w-full lg:w-96 flex flex-col h-full sticky top-0" id="carrito">
@@ -413,106 +338,47 @@ Cerrar sesión
 <span class="material-symbols-outlined text-primary text-2xl" data-icon="shopping_basket">shopping_basket</span>
 <h2 class="font-headline font-bold text-xl text-on-surface">Carrito actual</h2>
 </div>
-<span class="bg-primary-container text-on-primary-container text-xs font-bold px-3 py-1 rounded-full">3 Ítems</span>
+<span class="bg-primary-container text-on-primary-container text-xs font-bold px-3 py-1 rounded-full" id="cart-count">3 Ítems</span>
 </div>
 <!-- Cart Items List -->
-<div class="flex-1 overflow-y-auto p-6 flex flex-col gap-6">
-<!-- Cart Item 1 -->
-<div class="flex gap-4 items-start group">
-<div class="w-16 h-16 rounded-lg bg-surface-container-low overflow-hidden flex-shrink-0">
-<img alt="Whey" class="w-full h-full object-cover mix-blend-multiply" data-alt="Small thumbnail of black whey protein powder tub" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEaL2e8ckKekHfmKkO-J8Lz39Di9ipmSSuzrUdKI7Ajy8coZm-Vh-AbbCCI0a71dIU7YIVZI70YpRhSsa-PDw6wXXbwEILqIK3ip8fE7q2GoR53C1Yz_CPcxjF0oPZudM8OqSXlmXpEe1uLGE9i91zljW94GbcbzozZXHlGHvm10kcfjfuPS_1IOK9i0QOGP7ERPlfY4MT9wvEBsT-TvXiMihHU9JVZ71ptRFJkwwcOGX6noWRN4csSv02jO0YO3KDVeJUV6PvfQ"/>
-</div>
-<div class="flex-1 flex flex-col">
-<h4 class="font-semibold text-sm leading-tight line-clamp-2 text-on-surface">Gold Standard 100% Whey - Vainilla</h4>
-<span class="text-primary font-bold mt-1">$38.25</span>
-<div class="flex items-center gap-3 mt-2">
-<button class="w-6 h-6 rounded-full bg-surface-container-high flex items-center justify-center text-secondary hover:bg-secondary hover:text-on-secondary transition-colors">
-<span class="material-symbols-outlined text-sm" data-icon="remove">remove</span>
-</button>
-<span class="font-medium text-sm w-4 text-center">1</span>
-<button class="w-6 h-6 rounded-full bg-surface-container-high flex items-center justify-center text-secondary hover:bg-primary hover:text-on-primary transition-colors">
-<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
-</button>
-</div>
-</div>
-<button class="text-secondary hover:text-error transition-colors mt-1 opacity-0 group-hover:opacity-100">
-<span class="material-symbols-outlined text-xl" data-icon="delete">delete</span>
-</button>
-</div>
-<!-- Cart Item 2 -->
-<div class="flex gap-4 items-start group">
-<div class="w-16 h-16 rounded-lg bg-surface-container-low overflow-hidden flex-shrink-0">
-<img alt="Creatine" class="w-full h-full object-cover mix-blend-multiply" data-alt="Small thumbnail of white creatine powder jar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBhobDzq706lzsqS-gbEmEaZVPD8_x7Y1sxGcWwhdYODIMwOBvOUCrACroX7HSUwuREDvGtWvfpYpp3wHsyyh7nh_BQDI7YW-PuxmWXxpV7IDrXWlWmBFtghx9qSOyr_KUIYHtP3PKPj4b7f9JlV_xzB5kmxuw9I2lqTZUVjbTGvR0xboyf_08JoUEqK-0qAondnBxOKiLsbJ5nZZS1AzZHF6x4K2wu2B0xMFWcJLvdXUt8Lmj6uOUYWyfgV5dhzfaE9wAL_En4kQ"/>
-</div>
-<div class="flex-1 flex flex-col">
-<h4 class="font-semibold text-sm leading-tight line-clamp-2 text-on-surface">Platinum Creatine 400g</h4>
-<span class="text-primary font-bold mt-1">$45.00</span>
-<div class="flex items-center gap-3 mt-2">
-<button class="w-6 h-6 rounded-full bg-surface-container-high flex items-center justify-center text-secondary hover:bg-secondary hover:text-on-secondary transition-colors">
-<span class="material-symbols-outlined text-sm" data-icon="remove">remove</span>
-</button>
-<span class="font-medium text-sm w-4 text-center">2</span>
-<button class="w-6 h-6 rounded-full bg-surface-container-high flex items-center justify-center text-secondary hover:bg-primary hover:text-on-primary transition-colors">
-<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
-</button>
-</div>
-</div>
-<button class="text-secondary hover:text-error transition-colors mt-1 opacity-0 group-hover:opacity-100">
-<span class="material-symbols-outlined text-xl" data-icon="delete">delete</span>
-</button>
-</div>
-<!-- Cart Item 3 -->
-<div class="flex gap-4 items-start group">
-<div class="w-16 h-16 rounded-lg bg-surface-container-low overflow-hidden flex-shrink-0 flex items-center justify-center bg-surface-container-high">
-<span class="material-symbols-outlined text-secondary text-2xl" data-icon="water_bottle">water_bottle</span>
-</div>
-<div class="flex-1 flex flex-col">
-<h4 class="font-semibold text-sm leading-tight line-clamp-2 text-on-surface">Shaker SquatGym Pro 700ml</h4>
-<span class="text-primary font-bold mt-1">$12.50</span>
-<div class="flex items-center gap-3 mt-2">
-<button class="w-6 h-6 rounded-full bg-surface-container-high flex items-center justify-center text-secondary hover:bg-secondary hover:text-on-secondary transition-colors">
-<span class="material-symbols-outlined text-sm" data-icon="remove">remove</span>
-</button>
-<span class="font-medium text-sm w-4 text-center">1</span>
-<button class="w-6 h-6 rounded-full bg-surface-container-high flex items-center justify-center text-secondary hover:bg-primary hover:text-on-primary transition-colors">
-<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
-</button>
-</div>
-</div>
-<button class="text-secondary hover:text-error transition-colors mt-1 opacity-0 group-hover:opacity-100">
-<span class="material-symbols-outlined text-xl" data-icon="delete">delete</span>
-</button>
-</div>
-</div>
+<div id="cart-items" class="flex-1 overflow-y-auto p-6 flex flex-col gap-6">
+    </div>
 <!-- Cart Footer / Totals -->
 <div class="p-6 bg-surface-container-low flex flex-col gap-4">
-<!-- Customer Info (Optional) -->
-<div class="flex items-center justify-between bg-surface-container-highest p-3 rounded-xl border border-outline-variant/20 cursor-pointer hover:bg-surface-dim transition-colors">
+<!-- Discount selector -->
+<div class="bg-surface-container-highest p-4 rounded-xl border border-outline-variant/20">
+<div class="flex items-center justify-between gap-3">
 <div class="flex items-center gap-3">
-<span class="material-symbols-outlined text-secondary" data-icon="person">person</span>
+<span class="material-symbols-outlined text-primary" data-icon="sell">sell</span>
 <div class="flex flex-col">
-<span class="text-xs text-secondary font-medium uppercase tracking-wider">Cliente</span>
-<span class="font-semibold text-sm">Venta Rápida (Invitado)</span>
+<span class="text-xs text-secondary font-medium uppercase tracking-wider">Descuento</span>
+<span class="font-semibold text-sm text-on-surface">Venta rápida</span>
 </div>
 </div>
-<span class="material-symbols-outlined text-secondary" data-icon="chevron_right">chevron_right</span>
+<span class="text-xs font-bold text-primary" id="discount-summary-rate">10%</span>
+</div>
+<div class="mt-4 grid grid-cols-3 gap-2" aria-label="Seleccionar descuento">
+<button type="button" class="discount-option discount-option-active rounded-lg px-3 py-2 text-sm font-bold active:scale-95" data-discount-rate="10" aria-pressed="true">10%</button>
+<button type="button" class="discount-option rounded-lg px-3 py-2 text-sm font-bold active:scale-95" data-discount-rate="15" aria-pressed="false">15%</button>
+<button type="button" class="discount-option rounded-lg px-3 py-2 text-sm font-bold active:scale-95" data-discount-rate="20" aria-pressed="false">20%</button>
+</div>
 </div>
 <div class="flex flex-col gap-2 mt-2">
 <div class="flex justify-between text-sm text-secondary">
 <span>Subtotal</span>
-<span>$95.75</span>
+<span id="subtotal-amount">$95.75</span>
 </div>
 <div class="flex justify-between text-sm text-secondary">
 <span>Descuentos</span>
-<span class="text-primary">-$6.75</span>
+<span class="text-primary" id="discount-amount">-$9.58</span>
 </div>
 <div class="flex justify-between text-sm text-secondary">
 <span>Impuestos (IVA 16%)</span>
-<span>$14.24</span>
+<span id="tax-amount">$13.79</span>
 </div>
 <div class="flex justify-between items-end mt-4 pt-4 border-t border-outline-variant/20">
 <span class="font-headline font-bold text-lg text-on-surface">Total</span>
-<span class="font-headline font-extrabold text-3xl text-primary leading-none">$103.24</span>
+<span class="font-headline font-extrabold text-3xl text-primary leading-none" id="total-amount">$99.96</span>
 </div>
 </div>
 <button class="w-full bg-gradient-to-br from-primary to-primary-container text-on-primary font-bold text-lg py-4 rounded-xl mt-4 flex items-center justify-center gap-2 transition-all active:scale-95 shadow-[0px_8px_24px_rgba(0,109,55,0.25)] hover:shadow-[0px_12px_32px_rgba(0,109,55,0.35)]" onclick="window.location.href='metodopago/metodopago.html'">
@@ -525,213 +391,530 @@ Cerrar sesión
 </div>
 </main>
 </div>
+<div id="product-modal" class="fixed inset-0 z-[120] hidden flex items-center justify-center bg-black/45 px-4 py-8">
+<div class="w-full max-w-2xl rounded-xl border border-outline-variant bg-surface-container-lowest shadow-2xl">
+<div class="flex items-center justify-between border-b border-outline-variant p-5">
+<div>
+<h2 class="font-headline text-xl font-bold text-on-surface">Nuevo producto</h2>
+<p class="text-sm text-secondary">Catálogo de kiosco</p>
+</div>
+<button id="close-product-modal" type="button" class="flex h-10 w-10 items-center justify-center rounded-full text-secondary hover:bg-surface-container" aria-label="Cerrar">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<form id="product-form" class="grid gap-4 p-5 sm:grid-cols-2">
+<label class="flex flex-col gap-2 text-sm font-semibold text-on-surface">
+Nombre
+<input id="new-product-name" class="rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-3 text-sm font-normal text-on-surface focus:border-primary focus:ring-primary" type="text" required>
+</label>
+<label class="flex flex-col gap-2 text-sm font-semibold text-on-surface">
+Marca
+<input id="new-product-brand" class="rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-3 text-sm font-normal text-on-surface focus:border-primary focus:ring-primary" type="text" required>
+</label>
+<label class="flex flex-col gap-2 text-sm font-semibold text-on-surface">
+Categoría
+<select id="new-product-category" class="rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-3 text-sm font-normal text-on-surface focus:border-primary focus:ring-primary" required>
+<option value="Proteínas">Proteínas</option>
+<option value="Aminoácidos">Aminoácidos</option>
+<option value="Pre-entrenos">Pre-entrenos</option>
+<option value="Accesorios">Accesorios</option>
+</select>
+</label>
+<label class="flex flex-col gap-2 text-sm font-semibold text-on-surface">
+Precio
+<input id="new-product-price" class="rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-3 text-sm font-normal text-on-surface focus:border-primary focus:ring-primary" type="number" min="0.01" step="0.01" required>
+</label>
+<label class="flex flex-col gap-2 text-sm font-semibold text-on-surface">
+Descuento
+<input id="new-product-discount" class="rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-3 text-sm font-normal text-on-surface focus:border-primary focus:ring-primary" type="number" min="0" max="90" step="1" value="0">
+</label>
+<label class="flex flex-col gap-2 text-sm font-semibold text-on-surface">
+Imagen URL
+<input id="new-product-image" class="rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-3 text-sm font-normal text-on-surface focus:border-primary focus:ring-primary" type="url" placeholder="https://...">
+</label>
+<p id="product-form-error" class="hidden rounded-lg bg-error-container px-3 py-2 text-sm font-semibold text-error sm:col-span-2"></p>
+<div class="flex justify-end gap-3 sm:col-span-2">
+<button id="cancel-product-modal" type="button" class="rounded-lg bg-surface-container px-5 py-3 font-bold text-on-surface hover:bg-surface-container-high">Cancelar</button>
+<button type="submit" class="rounded-lg bg-primary px-5 py-3 font-bold text-on-primary hover:bg-primary-container hover:text-on-primary-container">Guardar</button>
+</div>
+</form>
+</div>
+</div>
+<script src="../../js/squatgym-header.js"></script>
 <script>
-  const THEME_KEY = 'squatgym-theme';
+  const PRODUCTOS_STORAGE_KEY = 'squatgym-kiosco-products';
 
-  function saveTheme(theme) {
+  const productosBase = [
+    {
+      id: 1,
+      nombre: 'Gold Standard 100% Whey',
+      marca: 'Optimum Nutrition',
+      precio: 45.00,
+      descuento: 15,
+      img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAZe1qJ5tvQvqdz1O1tKulwx4oc3dW_d3hln0r67XL6k1ySLv3VWblO_2960LjqrKXFcm3VOVwhgIFdF-hv8CFnubrL6tzTnpmvF3CoFelFLm4OkPyDEheIcECeqW5DqEddHBocLbJ6269w9Tg945mI2bz-ysyZtRkNlxRmjKmx85BkF2o-S-0usyG9qN-2yBxcatAlqzB-z3Td4cdAncXNmlqfKNerhnG9sPsYf2DE-kuKSHU3ZwZ9ktcwD2HFEhybnJhX7lr5fw',
+      categoria: 'Proteínas'
+    },
+    {
+      id: 2,
+      nombre: 'Platinum Creatine 400g',
+      marca: 'MuscleTech',
+      precio: 22.50,
+      descuento: 0,
+      img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBnmb2_pU2BGAsOrSukg8jBXG2tjLO8bAnDrHWtMH0dL6uAq0yVenf6Uq8X5nhN9wDsu13HzBgqnudTndy7g8ZyASZiTNTQNAgb0pZG7rfk3VchyNJUlO6HJG70UArlfY8UHOqQrtaZLCFKg1DSk639aMEqMMZUGX6EalDxkyptIi0909zr_NUyORwP_2D2jnSOK11xKY_l4sAuT86r4apjWy7QLPoXjj2cXk7ReKA5MjbOo9Vd0tGtBpQe2fVEE_ro1UGnb-KxTw',
+      categoria: 'Aminoácidos'
+    },
+    {
+      id: 3,
+      nombre: 'Original BCAA - Fresa Kiwi',
+      marca: 'Xtend',
+      precio: 30.00,
+      descuento: 0,
+      img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBN6ljKm4E3r51_4gQAJU4mMU_1X05Nl903Zakxpuc4ya5qEDb03om371edVpAOBu6sTV3fyj9y9E48sT6GeB4W6wX45PE0b2KYEdFDNRpRHUSv6bPnLU_uqv8xnCWt5_floGKGoVAeCYg1dduoJGwExTsa-CT7wzHOQmzsgMdqRZY5ws_caxhnzyjU6DUtBjbBQkcx32Xoj8iPoRm3N9J1IBNYBzAhUq13xorIUWTqYLhXK3VpDmRD9TUMDqFMqvUJW1R1VZbXuA',
+      categoria: 'Aminoácidos'
+    },
+    {
+      id: 4,
+      nombre: 'C4 Original Pre-Workout',
+      marca: 'Cellucor',
+      precio: 28.99,
+      descuento: 0,
+      img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCr20_qcQM1WvJ-yV6pa0HahbQgE3iX4iGoKiiRTvvwud2twpOe1WFj6YrJGgNhh1zNVmm3ORyWc9R06XP2QqDZZkRptfxkkiMQrL6-fO21f71k7It8PDyQuEdJqk-ErEsVmuvikp-pH2mA3N1lvKNH-o6STWZjVLinlvTj4wcBtxSqSdsrmgboPnQnTG36ciWes5e7cA-11UjOf7rlhM9XQyMmsBFIE4VGSyGmEmEK6OCgkR0IX2Jr_NBpdyuUy3QWE-yHcvbaLg',
+      categoria: 'Pre-entrenos'
+    },
+    {
+      id: 5,
+      nombre: 'Shaker SquatGym Pro 700ml',
+      marca: 'SquatGym',
+      precio: 12.50,
+      descuento: 0,
+      img: '',
+      icono: 'water_bottle',
+      categoria: 'Accesorios'
+    }
+  ];
+
+  let productosPersonalizados = [];
+  let productos = [...productosBase];
+  let carrito = [];
+  let descuentoGlobal = 10;
+  let categoriaActiva = 'Todos';
+  let terminoBusqueda = '';
+  const IVA = 0.16;
+
+  function escapeHtml(value) {
+    return String(value ?? '')
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+      .replaceAll('"', '&quot;')
+      .replaceAll("'", '&#039;');
+  }
+
+  function formatCurrency(value) {
+    return `$${value.toFixed(2)}`;
+  }
+
+  function cargarProductosPersonalizados() {
     try {
-      localStorage.setItem(THEME_KEY, theme);
+      const savedProducts = JSON.parse(localStorage.getItem(PRODUCTOS_STORAGE_KEY) || '[]');
+      return Array.isArray(savedProducts) ? savedProducts : [];
     } catch (error) {
-      // El navegador puede bloquear localStorage en algunos contextos locales.
+      return [];
     }
   }
 
-  function setTheme(theme) {
-    const selectedTheme = theme === 'dark' ? 'dark' : 'light';
-    const html = document.documentElement;
-    const darkIcon = document.getElementById('theme-toggle-dark-icon');
-    const lightIcon = document.getElementById('theme-toggle-light-icon');
-    const themeButton = document.getElementById('theme-toggle');
-
-    html.classList.remove('light', 'dark');
-    html.classList.add(selectedTheme);
-    saveTheme(selectedTheme);
-
-    if (darkIcon && lightIcon) {
-      darkIcon.classList.toggle('hidden', selectedTheme === 'dark');
-      lightIcon.classList.toggle('hidden', selectedTheme === 'light');
-    }
-
-    if (themeButton) {
-      themeButton.setAttribute(
-        'aria-label',
-        selectedTheme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'
-      );
+  function guardarProductosPersonalizados() {
+    try {
+      localStorage.setItem(PRODUCTOS_STORAGE_KEY, JSON.stringify(productosPersonalizados));
+      return true;
+    } catch (error) {
+      mostrarErrorProducto('No se pudo guardar el producto en este navegador.');
+      return false;
     }
   }
 
-  function toggleTheme() {
-    const isDark = document.documentElement.classList.contains('dark');
-    setTheme(isDark ? 'light' : 'dark');
+  function sincronizarProductos() {
+    productos = [...productosBase, ...productosPersonalizados];
   }
 
-  let unreadNotificationCount = 0;
+  function normalizarProductoGuardado(producto) {
+    const id = Number(producto.id);
+    const precio = Number(producto.precio);
+    const descuento = Number(producto.descuento) || 0;
 
-  function updateNotificationState() {
-    const notificationDot = document.getElementById('notification-dot');
-    const notificationButton = document.getElementById('notifications-button');
-    const notificationStatus = document.getElementById('notification-status');
-    const hasUnread = unreadNotificationCount > 0;
-
-    if (notificationDot) {
-      notificationDot.classList.toggle('hidden', !hasUnread);
+    if (!id || !producto.nombre || !producto.marca || !producto.categoria || !Number.isFinite(precio) || precio <= 0) {
+      return null;
     }
 
-    if (notificationButton) {
-      notificationButton.setAttribute(
-        'aria-label',
-        hasUnread
-          ? `Ver notificaciones, ${unreadNotificationCount} sin leer`
-          : 'Ver notificaciones'
-      );
-    }
-
-    if (notificationStatus) {
-      notificationStatus.textContent = hasUnread
-        ? `${unreadNotificationCount} sin leer`
-        : 'Sin novedades pendientes';
-    }
+    return {
+      id,
+      nombre: String(producto.nombre).trim(),
+      marca: String(producto.marca).trim(),
+      precio,
+      descuento: Math.min(Math.max(descuento, 0), 90),
+      img: String(producto.img || '').trim(),
+      icono: String(producto.icono || 'inventory_2').trim(),
+      categoria: String(producto.categoria).trim(),
+      personalizado: true
+    };
   }
 
-  function animateNotificationBell() {
-    const notificationIcon = document.getElementById('notifications-icon');
+  function obtenerPrecioFinal(producto) {
+    return producto.descuento > 0
+      ? producto.precio * (1 - producto.descuento / 100)
+      : producto.precio;
+  }
 
-    if (!notificationIcon) {
+  function renderizarImagenProducto(producto, sizeClass) {
+    if (producto.img) {
+      return `<img src="${escapeHtml(producto.img)}" alt="${escapeHtml(producto.nombre)}" class="w-full h-full object-cover mix-blend-multiply group-hover:scale-105 transition-transform duration-500">`;
+    }
+
+    return `<div class="${sizeClass} flex items-center justify-center bg-surface-container-high"><span class="material-symbols-outlined text-secondary text-3xl">${escapeHtml(producto.icono || 'inventory_2')}</span></div>`;
+  }
+
+  function crearItemCarrito(id, cantidad) {
+    const producto = productos.find((item) => item.id === id);
+
+    if (!producto) {
+      return null;
+    }
+
+    return {
+      ...producto,
+      cantidad,
+      precioEfectivo: obtenerPrecioFinal(producto)
+    };
+  }
+
+  function cargarVentaRapida() {
+    carrito = [
+      crearItemCarrito(1, 1),
+      crearItemCarrito(2, 2),
+      crearItemCarrito(5, 1)
+    ].filter(Boolean);
+  }
+
+  function abrirModalProducto() {
+    const modal = document.getElementById('product-modal');
+    const nameInput = document.getElementById('new-product-name');
+
+    modal?.classList.remove('hidden');
+    mostrarErrorProducto('');
+    window.setTimeout(() => nameInput?.focus(), 0);
+  }
+
+  function cerrarModalProducto() {
+    const modal = document.getElementById('product-modal');
+    const form = document.getElementById('product-form');
+
+    modal?.classList.add('hidden');
+    form?.reset();
+    mostrarErrorProducto('');
+  }
+
+  function mostrarErrorProducto(message) {
+    const errorBox = document.getElementById('product-form-error');
+
+    if (!errorBox) {
       return;
     }
 
-    notificationIcon.classList.remove('bell-ring');
-    void notificationIcon.offsetWidth;
-    notificationIcon.classList.add('bell-ring');
+    errorBox.textContent = message;
+    errorBox.classList.toggle('hidden', !message);
   }
 
-  function prependNotification({ icon, title, body, time }) {
-    const notificationsList = document.getElementById('notifications-list');
+  function agregarProductoPersonalizado(event) {
+    event.preventDefault();
 
-    if (!notificationsList) {
+    const nombre = document.getElementById('new-product-name')?.value.trim();
+    const marca = document.getElementById('new-product-brand')?.value.trim();
+    const categoria = document.getElementById('new-product-category')?.value;
+    const precio = Number(document.getElementById('new-product-price')?.value);
+    const descuento = Number(document.getElementById('new-product-discount')?.value || 0);
+    const img = document.getElementById('new-product-image')?.value.trim() || '';
+
+    if (!nombre || !marca || !categoria || !Number.isFinite(precio) || precio <= 0) {
+      mostrarErrorProducto('Completá nombre, marca, categoría y precio.');
       return;
     }
 
-    const article = document.createElement('article');
-    article.className = 'rounded-md px-3 py-3 hover:bg-surface-container';
+    if (!Number.isFinite(descuento) || descuento < 0 || descuento > 90) {
+      mostrarErrorProducto('El descuento debe estar entre 0 y 90.');
+      return;
+    }
 
-    const row = document.createElement('div');
-    row.className = 'flex items-start gap-3';
+    if (img && !/^https?:\/\//i.test(img)) {
+      mostrarErrorProducto('La imagen debe ser una URL que empiece con http o https.');
+      return;
+    }
 
-    const iconElement = document.createElement('span');
-    iconElement.className = 'material-symbols-outlined mt-0.5 text-lg text-primary';
-    iconElement.textContent = icon;
+    const nuevoProducto = normalizarProductoGuardado({
+      id: Date.now(),
+      nombre,
+      marca,
+      categoria,
+      precio,
+      descuento,
+      img,
+      icono: 'inventory_2'
+    });
 
-    const content = document.createElement('div');
+    if (!nuevoProducto) {
+      mostrarErrorProducto('No se pudo crear el producto.');
+      return;
+    }
 
-    const titleElement = document.createElement('p');
-    titleElement.className = 'text-sm font-semibold text-on-surface';
-    titleElement.textContent = title;
+    productosPersonalizados.push(nuevoProducto);
+    if (!guardarProductosPersonalizados()) {
+      productosPersonalizados = productosPersonalizados.filter((producto) => producto.id !== nuevoProducto.id);
+      return;
+    }
 
-    const bodyElement = document.createElement('p');
-    bodyElement.className = 'text-xs leading-5 text-on-surface-variant';
-    bodyElement.textContent = body;
+    sincronizarProductos();
+    categoriaActiva = 'Todos';
+    terminoBusqueda = '';
 
-    const timeElement = document.createElement('p');
-    timeElement.className = 'mt-1 text-[11px] font-semibold text-primary';
-    timeElement.textContent = time;
+    const productSearch = document.getElementById('product-search');
 
-    content.append(titleElement, bodyElement, timeElement);
-    row.append(iconElement, content);
-    article.append(row);
-    notificationsList.prepend(article);
+    if (productSearch) {
+      productSearch.value = '';
+    }
+
+    renderizarProductos();
+    cerrarModalProducto();
   }
 
-  function receiveNotification(notification) {
-    unreadNotificationCount += 1;
-    prependNotification(notification);
-    updateNotificationState();
-    animateNotificationBell();
+  function obtenerProductosFiltrados() {
+    const busqueda = terminoBusqueda.trim().toLowerCase();
+
+    return productos.filter((producto) => {
+      const coincideCategoria = categoriaActiva === 'Todos' || producto.categoria === categoriaActiva;
+      const coincideBusqueda = !busqueda
+        || producto.nombre.toLowerCase().includes(busqueda)
+        || producto.marca.toLowerCase().includes(busqueda)
+        || producto.categoria.toLowerCase().includes(busqueda);
+
+      return coincideCategoria && coincideBusqueda;
+    });
   }
 
-  function markNotificationsRead() {
-    unreadNotificationCount = 0;
-    updateNotificationState();
+  function actualizarFiltrosCategoria() {
+    document.querySelectorAll('[data-category]').forEach((button) => {
+      const isActive = button.dataset.category === categoriaActiva;
+      button.className = isActive
+        ? 'category-filter whitespace-nowrap px-6 py-2 rounded-full bg-primary text-on-primary font-medium text-sm transition-all shadow-[0px_4px_14px_rgba(0,109,55,0.2)]'
+        : 'category-filter whitespace-nowrap px-6 py-2 rounded-full bg-surface-container-low text-secondary font-medium text-sm hover:bg-surface-container-high transition-all';
+    });
+  }
+
+  function renderizarProductos() {
+    const grid = document.getElementById('product-grid');
+
+    if (!grid) {
+      return;
+    }
+
+    const productosFiltrados = obtenerProductosFiltrados();
+
+    grid.innerHTML = productosFiltrados.length ? productosFiltrados.map((producto) => {
+      const precioFinal = obtenerPrecioFinal(producto);
+      const mediaProducto = renderizarImagenProducto(producto, 'w-full h-full');
+      const nombreSeguro = escapeHtml(producto.nombre);
+      const marcaSegura = escapeHtml(producto.marca);
+      const badgeDescuento = producto.descuento > 0
+        ? `<span class="absolute top-3 left-3 bg-primary-container text-on-primary-container text-xs font-bold px-2 py-1 rounded-md">-${producto.descuento}%</span>`
+        : '';
+      const precioAnterior = producto.descuento > 0
+        ? `<span class="text-sm text-secondary line-through">${formatCurrency(producto.precio)}</span>`
+        : '';
+      const botonColor = producto.descuento > 0
+        ? 'bg-primary text-on-primary hover:bg-primary-container hover:text-on-primary-container'
+        : 'bg-surface-container-high text-on-surface hover:bg-primary hover:text-on-primary';
+
+      return `
+        <div class="bg-surface-container-lowest rounded-xl p-4 flex flex-col gap-4 relative group hover:bg-surface-container-low transition-colors border border-outline-variant/15">
+          <div class="h-48 rounded-lg bg-surface-container-highest overflow-hidden relative">
+            ${mediaProducto}
+            ${badgeDescuento}
+          </div>
+          <div class="flex flex-col gap-1">
+            <span class="text-xs text-secondary font-medium uppercase tracking-wider">${marcaSegura}</span>
+            <h3 class="font-headline font-semibold text-lg leading-tight line-clamp-2">${nombreSeguro}</h3>
+            <div class="flex justify-between items-end mt-2">
+              <div class="flex flex-col">
+                ${precioAnterior}
+                <span class="font-headline font-bold text-xl text-primary">${formatCurrency(precioFinal)}</span>
+              </div>
+              <button type="button" onclick="agregarAlCarrito(${producto.id})" class="${botonColor} w-10 h-10 rounded-full flex items-center justify-center transition-colors active:scale-95" aria-label="Agregar ${nombreSeguro}">
+                <span class="material-symbols-outlined">add</span>
+              </button>
+            </div>
+          </div>
+        </div>`;
+    }).join('') : '<div class="col-span-full rounded-xl border border-dashed border-outline-variant/40 bg-surface-container-lowest p-10 text-center text-secondary"><span class="material-symbols-outlined mb-2 text-3xl">search_off</span><p class="font-semibold text-on-surface">No hay productos para mostrar</p><p class="mt-1 text-sm">Probá con otra búsqueda o categoría.</p></div>';
+
+    actualizarFiltrosCategoria();
+  }
+
+  function agregarAlCarrito(id) {
+    const producto = productos.find((item) => item.id === id);
+
+    if (!producto) {
+      return;
+    }
+
+    const itemEnCarrito = carrito.find((item) => item.id === id);
+
+    if (itemEnCarrito) {
+      itemEnCarrito.cantidad += 1;
+    } else {
+      carrito.push({
+        ...producto,
+        cantidad: 1,
+        precioEfectivo: obtenerPrecioFinal(producto)
+      });
+    }
+
+    actualizarInterfaz();
+  }
+
+  function cambiarCantidad(id, delta) {
+    const item = carrito.find((producto) => producto.id === id);
+
+    if (!item) {
+      return;
+    }
+
+    item.cantidad += delta;
+
+    if (item.cantidad <= 0) {
+      carrito = carrito.filter((producto) => producto.id !== id);
+    }
+
+    actualizarInterfaz();
+  }
+
+  function actualizarSelectorDescuento() {
+    document.querySelectorAll('[data-discount-rate]').forEach((button) => {
+      const isActive = Number(button.dataset.discountRate) === descuentoGlobal;
+      button.classList.toggle('discount-option-active', isActive);
+      button.setAttribute('aria-pressed', String(isActive));
+    });
+
+    const discountSummary = document.getElementById('discount-summary-rate');
+
+    if (discountSummary) {
+      discountSummary.textContent = `${descuentoGlobal}%`;
+    }
+  }
+
+  function actualizarInterfaz() {
+    const contenedor = document.getElementById('cart-items');
+
+    if (contenedor) {
+      contenedor.innerHTML = carrito.length
+        ? carrito.map((item) => {
+          const nombreSeguro = escapeHtml(item.nombre);
+          const mediaCarrito = item.img
+            ? `<img src="${escapeHtml(item.img)}" alt="${nombreSeguro}" class="w-full h-full object-cover mix-blend-multiply">`
+            : `<span class="material-symbols-outlined text-secondary text-2xl">${escapeHtml(item.icono || 'inventory_2')}</span>`;
+
+          return `
+          <div class="flex gap-4 items-start group">
+            <div class="w-16 h-16 rounded-lg bg-surface-container-low overflow-hidden flex-shrink-0 flex items-center justify-center">
+              ${mediaCarrito}
+            </div>
+            <div class="flex-1 flex flex-col">
+              <h4 class="font-semibold text-sm leading-tight text-on-surface">${nombreSeguro}</h4>
+              <span class="text-primary font-bold mt-1">${formatCurrency(item.precioEfectivo * item.cantidad)}</span>
+              <div class="flex items-center gap-3 mt-2">
+                <button type="button" onclick="cambiarCantidad(${item.id}, -1)" class="w-6 h-6 rounded-full bg-surface-container-high flex items-center justify-center text-secondary hover:bg-secondary hover:text-on-secondary transition-colors" aria-label="Quitar ${nombreSeguro}">
+                  <span class="material-symbols-outlined text-sm">remove</span>
+                </button>
+                <span class="font-medium text-sm w-4 text-center">${item.cantidad}</span>
+                <button type="button" onclick="cambiarCantidad(${item.id}, 1)" class="w-6 h-6 rounded-full bg-surface-container-high flex items-center justify-center text-secondary hover:bg-primary hover:text-on-primary transition-colors" aria-label="Agregar ${nombreSeguro}">
+                  <span class="material-symbols-outlined text-sm">add</span>
+                </button>
+              </div>
+            </div>
+            <button type="button" onclick="cambiarCantidad(${item.id}, -${item.cantidad})" class="text-secondary hover:text-error transition-colors mt-1 opacity-0 group-hover:opacity-100" aria-label="Eliminar ${nombreSeguro}">
+              <span class="material-symbols-outlined text-xl">delete</span>
+            </button>
+          </div>
+        `;
+        }).join('')
+        : '<div class="flex h-full min-h-40 flex-col items-center justify-center rounded-xl border border-dashed border-outline-variant/40 px-4 text-center text-secondary"><span class="material-symbols-outlined mb-2 text-3xl">shopping_cart</span><p class="text-sm font-semibold">Carrito vacío</p><p class="mt-1 text-xs">Agregue productos para iniciar la venta.</p></div>';
+    }
+
+    const subtotal = carrito.reduce((acc, item) => acc + (item.precioEfectivo * item.cantidad), 0);
+    const descuentoMonto = subtotal * (descuentoGlobal / 100);
+    const baseImponible = subtotal - descuentoMonto;
+    const impuestos = baseImponible * IVA;
+    const total = baseImponible + impuestos;
+    const totalItems = carrito.reduce((acc, item) => acc + item.cantidad, 0);
+
+    document.getElementById('subtotal-amount').textContent = formatCurrency(subtotal);
+    document.getElementById('discount-amount').textContent = `-${formatCurrency(descuentoMonto)}`;
+    document.getElementById('tax-amount').textContent = formatCurrency(impuestos);
+    document.getElementById('total-amount').textContent = formatCurrency(total);
+    document.getElementById('cart-count').textContent = `${totalItems} Ítems`;
+    actualizarSelectorDescuento();
   }
 
   document.addEventListener('DOMContentLoaded', () => {
-    const themeButton = document.getElementById('theme-toggle');
-    const profileButton = document.getElementById('profile-menu-button');
-    const profileDropdown = document.getElementById('profile-dropdown');
-    const notificationsButton = document.getElementById('notifications-button');
-    const notificationsDropdown = document.getElementById('notifications-dropdown');
-    const markNotificationsReadButton = document.getElementById('mark-notifications-read');
-    let savedTheme = 'light';
+    const productSearch = document.getElementById('product-search');
+    const productModal = document.getElementById('product-modal');
+    const openProductModal = document.getElementById('open-product-modal');
+    const closeProductModal = document.getElementById('close-product-modal');
+    const cancelProductModal = document.getElementById('cancel-product-modal');
+    const productForm = document.getElementById('product-form');
 
-    try {
-      savedTheme = localStorage.getItem(THEME_KEY) || 'light';
-    } catch (error) {
-      savedTheme = 'light';
-    }
+    productosPersonalizados = cargarProductosPersonalizados()
+      .map(normalizarProductoGuardado)
+      .filter(Boolean);
+    sincronizarProductos();
+    renderizarProductos();
+    cargarVentaRapida();
+    actualizarInterfaz();
 
-    setTheme(savedTheme);
-    updateNotificationState();
+    openProductModal?.addEventListener('click', abrirModalProducto);
+    closeProductModal?.addEventListener('click', cerrarModalProducto);
+    cancelProductModal?.addEventListener('click', cerrarModalProducto);
+    productForm?.addEventListener('submit', agregarProductoPersonalizado);
+    productModal?.addEventListener('click', (event) => {
+      if (event.target === productModal) {
+        cerrarModalProducto();
+      }
+    });
 
-    if (themeButton) {
-      themeButton.addEventListener('click', toggleTheme);
-    }
+    productSearch?.addEventListener('input', (event) => {
+      terminoBusqueda = event.target.value;
+      renderizarProductos();
+    });
 
-    if (notificationsButton && notificationsDropdown) {
-      notificationsButton.addEventListener('click', (event) => {
-        event.stopPropagation();
-        const isHidden = notificationsDropdown.classList.toggle('hidden');
-        notificationsButton.setAttribute('aria-expanded', String(!isHidden));
-        profileDropdown?.classList.add('hidden');
-        profileButton?.setAttribute('aria-expanded', 'false');
+    document.querySelectorAll('[data-category]').forEach((button) => {
+      button.addEventListener('click', () => {
+        categoriaActiva = button.dataset.category || 'Todos';
+        renderizarProductos();
       });
+    });
 
-      notificationsDropdown.addEventListener('click', (event) => {
-        event.stopPropagation();
+    document.querySelectorAll('[data-discount-rate]').forEach((button) => {
+      button.addEventListener('click', () => {
+        descuentoGlobal = Number(button.dataset.discountRate);
+        actualizarInterfaz();
       });
-    }
-
-    if (markNotificationsReadButton) {
-      markNotificationsReadButton.addEventListener('click', markNotificationsRead);
-    }
-
-    if (profileButton && profileDropdown) {
-      profileButton.addEventListener('click', (event) => {
-        event.stopPropagation();
-        const isHidden = profileDropdown.classList.toggle('hidden');
-        profileButton.setAttribute('aria-expanded', String(!isHidden));
-        notificationsDropdown?.classList.add('hidden');
-        notificationsButton?.setAttribute('aria-expanded', 'false');
-      });
-
-      profileDropdown.addEventListener('click', (event) => {
-        event.stopPropagation();
-      });
-    }
-
-    window.addEventListener('click', () => {
-      profileDropdown?.classList.add('hidden');
-      profileButton?.setAttribute('aria-expanded', 'false');
-      notificationsDropdown?.classList.add('hidden');
-      notificationsButton?.setAttribute('aria-expanded', 'false');
     });
 
     window.addEventListener('keydown', (event) => {
       if (event.key === 'Escape') {
-        profileDropdown?.classList.add('hidden');
-        profileButton?.setAttribute('aria-expanded', 'false');
-        notificationsDropdown?.classList.add('hidden');
-        notificationsButton?.setAttribute('aria-expanded', 'false');
+        cerrarModalProducto();
       }
     });
-
-    window.setTimeout(() => {
-      receiveNotification({
-        icon: 'point_of_sale',
-        title: 'Venta pendiente',
-        body: 'Hay una operación de kiosco lista para finalizar.',
-        time: 'Ahora'
-      });
-    }, 900);
   });
+
+  window.agregarAlCarrito = agregarAlCarrito;
+  window.cambiarCantidad = cambiarCantidad;
 </script>
 </body></html>
