@@ -163,6 +163,42 @@
             color: #041f13;
             box-shadow: 0 8px 20px rgb(92 236 136 / 0.22);
         }
+        .cash-close-status-balanced {
+            border-color: rgb(0 109 55 / 0.25);
+            background: rgb(45 203 115 / 0.14);
+            color: #006d37;
+        }
+        .cash-close-status-shortage {
+            border-color: rgb(179 38 30 / 0.28);
+            background: #ffdad6;
+            color: #b3261e;
+        }
+        .cash-close-status-surplus {
+            border-color: rgb(226 185 59 / 0.55);
+            background: #fff6d6;
+            color: #7a5700;
+        }
+        .cash-close-difference-balanced {
+            color: #006d37;
+        }
+        .cash-close-difference-shortage {
+            color: #b3261e;
+        }
+        .cash-close-difference-surplus {
+            color: #8a5f00;
+        }
+        .dark .cash-close-status-balanced {
+            background: rgb(92 236 136 / 0.14);
+            color: #5cec88;
+        }
+        .dark .cash-close-status-shortage {
+            background: rgb(255 218 214 / 0.12);
+            color: #ffb4ab;
+        }
+        .dark .cash-close-status-surplus {
+            background: rgb(255 246 214 / 0.12);
+            color: #f2c94c;
+        }
         @media (max-width: 640px) {
             .notifications-panel {
                 left: 1rem;
@@ -347,9 +383,10 @@ Cerrar sesión
 <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-secondary">search</span>
 <input id="product-search" class="w-full bg-surface-container-highest border-none rounded-xl py-4 pl-12 pr-4 text-on-surface placeholder:text-secondary focus:ring-0 focus:border-b-2 focus:border-primary transition-all font-body" placeholder="Buscar productos (Ej. Proteína, Creatina...)" type="text"/>
 </div>
-<button class="bg-surface-container-low text-on-surface px-6 py-4 rounded-xl font-semibold flex items-center gap-2 hover:bg-surface-container-high transition-colors">
+<button id="toggle-filters" type="button" class="bg-surface-container-low text-on-surface px-6 py-4 rounded-xl font-semibold flex items-center gap-2 hover:bg-surface-container-high transition-colors active:scale-95" aria-expanded="false" aria-controls="quick-filters">
 <span class="material-symbols-outlined" data-icon="tune">tune</span>
                             Filtros
+<span id="toggle-filters-icon" class="material-symbols-outlined text-lg" aria-hidden="true">expand_more</span>
                         </button>
 <button id="open-product-modal" type="button" class="bg-primary text-on-primary px-6 py-4 rounded-xl font-semibold flex items-center gap-2 hover:bg-primary-container hover:text-on-primary-container transition-colors active:scale-95">
 <span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
@@ -357,7 +394,7 @@ Cerrar sesión
                         </button>
 </div>
 <!-- Category Pills -->
-<div class="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+<div id="quick-filters" class="hidden flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
 <button type="button" class="category-filter whitespace-nowrap px-6 py-2 rounded-full bg-primary text-on-primary font-medium text-sm transition-all shadow-[0px_4px_14px_rgba(0,109,55,0.2)]" data-category="Todos">Todos</button>
 <button type="button" class="category-filter whitespace-nowrap px-6 py-2 rounded-full bg-surface-container-low text-secondary font-medium text-sm hover:bg-surface-container-high transition-all" data-category="Suplementos">Suplementos</button>
 <button type="button" class="category-filter whitespace-nowrap px-6 py-2 rounded-full bg-surface-container-low text-secondary font-medium text-sm hover:bg-surface-container-high transition-all" data-category="Bebidas">Bebidas</button>
@@ -592,6 +629,13 @@ ID de caja
 </section>
 <section class="rounded-xl border border-outline-variant/20 bg-surface-container-highest p-4">
 <span class="text-xs font-bold uppercase tracking-wider text-secondary">Control de efectivo</span>
+<div id="cash-close-status-banner" class="cash-close-status-balanced mt-4 flex items-start gap-3 rounded-lg border px-3 py-3 transition-colors">
+<span id="cash-close-status-icon" class="material-symbols-outlined text-xl">check_circle</span>
+<div>
+<p id="cash-close-status-title" class="text-sm font-extrabold">Caja cuadrada</p>
+<p id="cash-close-status-message" class="text-xs font-medium">El efectivo real coincide con el total esperado.</p>
+</div>
+</div>
 <div class="mt-4 grid gap-3 sm:grid-cols-2">
 <label class="flex flex-col gap-2 text-sm font-semibold text-on-surface">
 Monto inicial
@@ -614,24 +658,33 @@ Egresos / retiros
 </div>
 <label class="mt-4 flex flex-col gap-2 text-sm font-semibold text-on-surface">
 Efectivo real en caja
-<input id="cash-close-counted" class="rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-3 text-lg font-bold text-on-surface focus:border-primary focus:ring-primary" type="number" min="0" step="0.01" placeholder="0.00">
+<input id="cash-close-counted" class="rounded-lg border-2 border-primary/70 bg-primary-container/10 px-3 py-3 text-lg font-extrabold text-on-surface shadow-[0px_0px_0px_3px_rgba(0,109,55,0.08)] focus:border-primary focus:ring-2 focus:ring-primary/30" type="number" min="0" step="0.01" placeholder="0.00">
 </label>
 <div class="mt-4 flex items-center justify-between rounded-lg bg-surface-container-lowest px-3 py-3">
 <span class="text-sm font-semibold text-secondary">Diferencia</span>
 <span id="cash-close-difference" class="font-headline text-2xl font-extrabold text-primary">$0.00</span>
 </div>
+<div id="cash-close-observations-wrap" class="mt-4 hidden">
+<label class="flex flex-col gap-2 text-sm font-semibold text-on-surface">
+Observaciones del descuadre
+<textarea id="cash-close-observations" class="min-h-24 resize-y rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-3 text-sm font-normal text-on-surface focus:border-primary focus:ring-primary" placeholder="Ej. Revisión de ticket, retiro no registrado, pago manual..."></textarea>
+</label>
+<p class="mt-2 text-xs font-semibold text-secondary">Si hay sobrante o faltante, esta observación es requerida para cerrar.</p>
+</div>
 </section>
 <section class="rounded-xl border border-outline-variant/20 bg-surface-container-low p-4">
 <div class="flex items-center justify-between gap-3">
-<span class="text-xs font-bold uppercase tracking-wider text-secondary">Desglose y KPIs</span>
+<span class="text-xs font-bold uppercase tracking-wider text-secondary">Desglose del cierre</span>
 <span id="cash-close-sales-count" class="rounded-full bg-primary-container px-3 py-1 text-xs font-bold text-on-primary-container">0 ventas</span>
 </div>
+<p class="mt-4 text-xs font-bold uppercase tracking-wider text-secondary">Métodos de pago</p>
 <div class="mt-4 grid gap-2 sm:grid-cols-2">
 <div class="rounded-lg bg-surface-container-lowest px-3 py-3"><span class="text-xs font-bold uppercase text-secondary">Efectivo</span><p id="cash-close-method-cash" class="mt-1 text-lg font-extrabold text-on-surface">$0.00</p></div>
 <div class="rounded-lg bg-surface-container-lowest px-3 py-3"><span class="text-xs font-bold uppercase text-secondary">Transferencia / QR</span><p id="cash-close-method-transfer" class="mt-1 text-lg font-extrabold text-on-surface">$0.00</p></div>
 <div class="rounded-lg bg-surface-container-lowest px-3 py-3"><span class="text-xs font-bold uppercase text-secondary">Tarjeta crédito / débito</span><p id="cash-close-method-card" class="mt-1 text-lg font-extrabold text-on-surface">$0.00</p></div>
 <div class="rounded-lg bg-surface-container-lowest px-3 py-3"><span class="text-xs font-bold uppercase text-secondary">Otros métodos</span><p id="cash-close-non-cash" class="mt-1 text-lg font-extrabold text-on-surface">$0.00</p></div>
 </div>
+<p class="mt-4 text-xs font-bold uppercase tracking-wider text-secondary">Totales e impuestos</p>
 <div class="mt-4 grid gap-2 sm:grid-cols-2">
 <div class="rounded-lg bg-surface-container-lowest px-3 py-3"><span class="text-xs font-bold uppercase text-secondary">Total bruto</span><p id="cash-close-gross" class="mt-1 text-lg font-extrabold text-on-surface">$0.00</p></div>
 <div class="rounded-lg bg-surface-container-lowest px-3 py-3"><span class="text-xs font-bold uppercase text-secondary">Descuentos</span><p id="cash-close-discounts" class="mt-1 text-lg font-extrabold text-primary">$0.00</p></div>
@@ -643,9 +696,29 @@ Efectivo real en caja
 <p id="cash-close-error" class="hidden rounded-lg bg-error-container px-3 py-2 text-sm font-semibold text-error"></p>
 <div class="mt-4 flex justify-end gap-3">
 <button id="cancel-cash-close" type="button" class="rounded-lg bg-surface-container px-5 py-3 font-bold text-on-surface hover:bg-surface-container-high">Cancelar</button>
-<button id="confirm-cash-close" type="button" class="rounded-lg bg-primary px-5 py-3 font-bold text-on-primary hover:bg-primary-container hover:text-on-primary-container">Cerrar caja e imprimir</button>
+<button id="confirm-cash-close" type="button" class="rounded-lg bg-primary px-5 py-3 font-bold text-on-primary hover:bg-primary-container hover:text-on-primary-container disabled:cursor-not-allowed disabled:opacity-50">Cerrar caja e imprimir</button>
 </div>
 </div>
+</div>
+</div>
+</div>
+<div id="cash-close-confirm-modal" class="fixed inset-0 z-[145] hidden flex items-center justify-center bg-black/55 px-4 py-8">
+<div class="w-full max-w-md rounded-xl border border-outline-variant bg-surface-container-lowest p-5 shadow-2xl">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined rounded-full bg-primary-container p-2 text-primary">verified</span>
+<div>
+<h3 class="font-headline text-xl font-extrabold text-on-surface">Vuelve a confirmar</h3>
+<p class="mt-1 text-sm text-secondary">El cierre vaciará el historial del turno y abrirá el informe para imprimir.</p>
+</div>
+</div>
+<div class="mt-4 rounded-lg bg-surface-container-low px-3 py-3 text-sm text-secondary">
+<div class="flex justify-between"><span>Ventas</span><strong id="cash-close-confirm-sales" class="text-on-surface">0</strong></div>
+<div class="mt-2 flex justify-between"><span>Total neto</span><strong id="cash-close-confirm-total" class="text-on-surface">$0.00</strong></div>
+<div class="mt-2 flex justify-between"><span>Diferencia</span><strong id="cash-close-confirm-difference" class="text-on-surface">$0.00</strong></div>
+</div>
+<div class="mt-5 flex justify-end gap-3">
+<button id="cancel-cash-close-confirm" type="button" class="rounded-lg bg-surface-container px-5 py-3 font-bold text-on-surface hover:bg-surface-container-high">Revisar</button>
+<button id="execute-cash-close" type="button" class="rounded-lg bg-primary px-5 py-3 font-bold text-on-primary hover:bg-primary-container hover:text-on-primary-container">Confirmar cierre</button>
 </div>
 </div>
 </div>
@@ -797,6 +870,7 @@ Imagen URL
   let productoEnEdicionId = null;
   let turnoInicioISO = null;
   const IVA = 0.16;
+  const DIFERENCIA_CIERRE_EPSILON = 0.005;
 
   function escapeHtml(value) {
     return String(value ?? '')
@@ -935,6 +1009,7 @@ Imagen URL
     const openingInput = document.getElementById('cash-close-opening');
     const withdrawalsInput = document.getElementById('cash-close-withdrawals');
     const countedInput = document.getElementById('cash-close-counted');
+    const observationsInput = document.getElementById('cash-close-observations');
 
     if (userInput) {
       userInput.value = config.usuario;
@@ -955,6 +1030,10 @@ Imagen URL
     if (countedInput) {
       countedInput.value = '';
     }
+
+    if (observationsInput) {
+      observationsInput.value = '';
+    }
   }
 
   function obtenerDatosCierreCaja(fechaFinISO = new Date().toISOString()) {
@@ -963,6 +1042,7 @@ Imagen URL
     const montoInicial = normalizarMontoCaja(document.getElementById('cash-close-opening')?.value);
     const egresos = normalizarMontoCaja(document.getElementById('cash-close-withdrawals')?.value);
     const efectivoContado = normalizarMontoCaja(document.getElementById('cash-close-counted')?.value);
+    const observaciones = document.getElementById('cash-close-observations')?.value.trim() || '';
 
     return {
       usuario,
@@ -970,6 +1050,7 @@ Imagen URL
       montoInicial,
       egresos,
       efectivoContado,
+      observaciones,
       fechaInicioISO: obtenerInicioTurnoParaCierre(),
       fechaFinISO
     };
@@ -977,6 +1058,10 @@ Imagen URL
 
   function obtenerTotalEsperadoCierre(resumen, datosCierre) {
     return datosCierre.montoInicial + resumen.efectivo - datosCierre.egresos;
+  }
+
+  function esDiferenciaCierreSignificativa(diferencia) {
+    return Math.abs(diferencia) >= DIFERENCIA_CIERRE_EPSILON;
   }
 
   function asignarTexto(id, value) {
@@ -1881,13 +1966,47 @@ Imagen URL
     const resumen = calcularResumenCierre();
     const datosCierre = obtenerDatosCierreCaja();
     const differenceBox = document.getElementById('cash-close-difference');
+    const statusBanner = document.getElementById('cash-close-status-banner');
+    const statusIcon = document.getElementById('cash-close-status-icon');
+    const statusTitle = document.getElementById('cash-close-status-title');
+    const statusMessage = document.getElementById('cash-close-status-message');
+    const observationsWrap = document.getElementById('cash-close-observations-wrap');
+    const confirmButton = document.getElementById('confirm-cash-close');
     const totalEsperado = obtenerTotalEsperadoCierre(resumen, datosCierre);
     const diferencia = datosCierre.efectivoContado - totalEsperado;
+    const tieneDiferencia = esDiferenciaCierreSignificativa(diferencia);
+    const requiereObservacion = tieneDiferencia && !datosCierre.observaciones;
 
     if (differenceBox) {
       differenceBox.textContent = formatCurrency(diferencia);
-      differenceBox.classList.toggle('text-error', diferencia < 0);
-      differenceBox.classList.toggle('text-primary', diferencia >= 0);
+      differenceBox.className = `font-headline text-2xl font-extrabold ${!tieneDiferencia ? 'cash-close-difference-balanced' : diferencia < 0 ? 'cash-close-difference-shortage' : 'cash-close-difference-surplus'}`;
+    }
+
+    if (statusBanner && statusIcon && statusTitle && statusMessage) {
+      if (!tieneDiferencia) {
+        statusBanner.className = 'cash-close-status-balanced mt-4 flex items-start gap-3 rounded-lg border px-3 py-3 transition-colors';
+        statusIcon.textContent = 'check_circle';
+        statusTitle.textContent = 'Caja cuadrada';
+        statusMessage.textContent = 'El efectivo real coincide con el total esperado.';
+      } else if (diferencia < 0) {
+        statusBanner.className = 'cash-close-status-shortage mt-4 flex items-start gap-3 rounded-lg border px-3 py-3 transition-colors';
+        statusIcon.textContent = 'warning';
+        statusTitle.textContent = 'Faltante detectado';
+        statusMessage.textContent = 'Revisá tickets, cobros manuales y retiros antes de cerrar.';
+      } else {
+        statusBanner.className = 'cash-close-status-surplus mt-4 flex items-start gap-3 rounded-lg border px-3 py-3 transition-colors';
+        statusIcon.textContent = 'priority_high';
+        statusTitle.textContent = 'Sobrante detectado';
+        statusMessage.textContent = 'Verificá registros manuales o ingresos no cargados.';
+      }
+    }
+
+    if (observationsWrap) {
+      observationsWrap.classList.toggle('hidden', !tieneDiferencia);
+    }
+
+    if (confirmButton) {
+      confirmButton.disabled = requiereObservacion;
     }
   }
 
@@ -1929,6 +2048,7 @@ Imagen URL
 
   function cerrarCierreCaja() {
     document.getElementById('cash-close-modal')?.classList.add('hidden');
+    cerrarConfirmacionCierreCaja();
     mostrarErrorCierreCaja('');
   }
 
@@ -1938,6 +2058,9 @@ Imagen URL
     const otrosMetodos = Math.max(resumen.noEfectivo - transferenciaQr - tarjeta, 0);
     const totalEsperado = obtenerTotalEsperadoCierre(resumen, datosCierre);
     const diferencia = datosCierre.efectivoContado - totalEsperado;
+    const observacionesCierre = datosCierre.observaciones
+      ? `<h2 style="font-size: 18px; margin: 18px 0 8px;">Observaciones</h2><p style="border: 1px solid #dddddd; padding: 10px; margin: 0 0 18px;">${escapeHtml(datosCierre.observaciones)}</p>`
+      : '';
     const ventasOrdenadas = [...ventas].reverse();
     const filasVentas = ventasOrdenadas.length
       ? ventasOrdenadas.map((venta) => `
@@ -1986,6 +2109,7 @@ Imagen URL
           <div><strong>Efectivo real</strong><br>${formatCurrency(datosCierre.efectivoContado)}</div>
           <div><strong>Diferencia efectivo</strong><br>${formatCurrency(diferencia)}</div>
         </div>
+        ${observacionesCierre}
         <h2 style="font-size: 18px; margin: 18px 0 8px;">Desglose por método de pago</h2>
         <table class="print-table">
           <thead><tr><th>Método</th><th>Total</th></tr></thead>
@@ -2019,51 +2143,114 @@ Imagen URL
     `;
   }
 
-  function confirmarCierreCaja() {
+  function prepararCierreCaja() {
     const userInput = document.getElementById('cash-close-user');
     const registerInput = document.getElementById('cash-close-register-id');
     const openingInput = document.getElementById('cash-close-opening');
     const withdrawalsInput = document.getElementById('cash-close-withdrawals');
     const countedInput = document.getElementById('cash-close-counted');
+    const observationsInput = document.getElementById('cash-close-observations');
     const usuario = userInput?.value.trim();
     const cajaId = registerInput?.value.trim();
     const montoInicial = Number(openingInput?.value || 0);
     const egresos = Number(withdrawalsInput?.value || 0);
-    const efectivoContado = Number(countedInput?.value);
+    const efectivoContadoRaw = countedInput?.value.trim() || '';
+    const efectivoContado = Number(efectivoContadoRaw);
 
     if (!usuario || !cajaId) {
       mostrarErrorCierreCaja('Ingresá el usuario y el ID de caja para cerrar el turno.');
       (usuario ? registerInput : userInput)?.focus();
-      return;
+      return null;
     }
 
     if (!Number.isFinite(montoInicial) || montoInicial < 0 || !Number.isFinite(egresos) || egresos < 0) {
       mostrarErrorCierreCaja('El monto inicial y los egresos deben ser valores válidos.');
       (!Number.isFinite(montoInicial) || montoInicial < 0 ? openingInput : withdrawalsInput)?.focus();
-      return;
+      return null;
     }
 
-    if (!Number.isFinite(efectivoContado) || efectivoContado < 0) {
+    if (!efectivoContadoRaw || !Number.isFinite(efectivoContado) || efectivoContado < 0) {
       mostrarErrorCierreCaja('Ingresá el efectivo real en caja para cerrar el turno.');
       countedInput?.focus();
-      return;
+      return null;
     }
 
     const ventasParaImprimir = [...historialVentas];
     const resumen = calcularResumenCierre(ventasParaImprimir);
     const datosCierre = obtenerDatosCierreCaja(new Date().toISOString());
     datosCierre.fechaInicioISO = obtenerInicioTurnoParaCierre(ventasParaImprimir);
+    datosCierre.efectivoContado = efectivoContado;
+    const totalEsperado = obtenerTotalEsperadoCierre(resumen, datosCierre);
+    const diferencia = efectivoContado - totalEsperado;
+
+    if (esDiferenciaCierreSignificativa(diferencia) && !datosCierre.observaciones) {
+      mostrarErrorCierreCaja('Justificá el sobrante o faltante en observaciones antes de cerrar.');
+      observationsInput?.focus();
+      actualizarResumenCierreCaja();
+      return null;
+    }
+
+    return {
+      ventasParaImprimir,
+      resumen,
+      datosCierre,
+      diferencia
+    };
+  }
+
+  function abrirConfirmacionCierreCaja(detalle) {
+    const differenceSummary = document.getElementById('cash-close-confirm-difference');
+
+    asignarTexto('cash-close-confirm-sales', `${detalle.resumen.cantidad}`);
+    asignarTexto('cash-close-confirm-total', formatCurrency(detalle.resumen.total));
+    asignarTexto('cash-close-confirm-difference', formatCurrency(detalle.diferencia));
+
+    if (differenceSummary) {
+      differenceSummary.className = !esDiferenciaCierreSignificativa(detalle.diferencia)
+        ? 'cash-close-difference-balanced'
+        : detalle.diferencia < 0
+          ? 'cash-close-difference-shortage'
+          : 'cash-close-difference-surplus';
+    }
+
+    document.getElementById('cash-close-confirm-modal')?.classList.remove('hidden');
+  }
+
+  function cerrarConfirmacionCierreCaja() {
+    document.getElementById('cash-close-confirm-modal')?.classList.add('hidden');
+  }
+
+  function confirmarCierreCaja() {
+    const detalle = prepararCierreCaja();
+
+    if (!detalle) {
+      return;
+    }
+
+    mostrarErrorCierreCaja('');
+    abrirConfirmacionCierreCaja(detalle);
+  }
+
+  function ejecutarCierreCaja() {
+    const detalle = prepararCierreCaja();
+
+    if (!detalle) {
+      cerrarConfirmacionCierreCaja();
+      return;
+    }
+
     const printArea = document.getElementById('cash-close-print-area');
 
     if (printArea) {
-      printArea.innerHTML = construirListadoCierreCaja(ventasParaImprimir, resumen, datosCierre);
+      printArea.innerHTML = construirListadoCierreCaja(detalle.ventasParaImprimir, detalle.resumen, detalle.datosCierre);
     }
 
-    guardarConfiguracionCierreCaja(datosCierre);
+    guardarConfiguracionCierreCaja(detalle.datosCierre);
     historialVentas = [];
     guardarHistorialVentas();
     renderizarHistorialVentas();
     reiniciarTurnoInicio();
+    cerrarConfirmacionCierreCaja();
     cerrarCierreCaja();
     window.print();
   }
@@ -2167,8 +2354,23 @@ Imagen URL
     actualizarSelectorDescuento();
   }
 
+  function actualizarEstadoFiltrosRapidos(abierto) {
+    const filtersContainer = document.getElementById('quick-filters');
+    const toggleButton = document.getElementById('toggle-filters');
+    const toggleIcon = document.getElementById('toggle-filters-icon');
+
+    filtersContainer?.classList.toggle('hidden', !abierto);
+    toggleButton?.setAttribute('aria-expanded', String(abierto));
+
+    if (toggleIcon) {
+      toggleIcon.textContent = abierto ? 'expand_less' : 'expand_more';
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     const productSearch = document.getElementById('product-search');
+    const toggleFilters = document.getElementById('toggle-filters');
+    const quickFilters = document.getElementById('quick-filters');
     const productModal = document.getElementById('product-modal');
     const openProductModal = document.getElementById('open-product-modal');
     const closeProductModal = document.getElementById('close-product-modal');
@@ -2201,6 +2403,10 @@ Imagen URL
     const cashCloseOpening = document.getElementById('cash-close-opening');
     const cashCloseWithdrawals = document.getElementById('cash-close-withdrawals');
     const cashCloseCounted = document.getElementById('cash-close-counted');
+    const cashCloseObservations = document.getElementById('cash-close-observations');
+    const cashCloseConfirmModal = document.getElementById('cash-close-confirm-modal');
+    const cancelCashCloseConfirm = document.getElementById('cancel-cash-close-confirm');
+    const executeCashClose = document.getElementById('execute-cash-close');
 
     productosPersonalizados = cargarProductosPersonalizados()
       .map(normalizarProductoGuardado)
@@ -2272,7 +2478,23 @@ Imagen URL
       mostrarErrorCierreCaja('');
       actualizarDiferenciaCierreCaja();
     });
+    cashCloseObservations?.addEventListener('input', () => {
+      mostrarErrorCierreCaja('');
+      actualizarResumenCierreCaja();
+    });
     confirmCashClose?.addEventListener('click', confirmarCierreCaja);
+    cancelCashCloseConfirm?.addEventListener('click', cerrarConfirmacionCierreCaja);
+    executeCashClose?.addEventListener('click', ejecutarCierreCaja);
+    cashCloseConfirmModal?.addEventListener('click', (event) => {
+      if (event.target === cashCloseConfirmModal) {
+        cerrarConfirmacionCierreCaja();
+      }
+    });
+
+    toggleFilters?.addEventListener('click', () => {
+      const shouldOpen = quickFilters ? quickFilters.classList.contains('hidden') : false;
+      actualizarEstadoFiltrosRapidos(shouldOpen);
+    });
 
     productSearch?.addEventListener('input', (event) => {
       terminoBusqueda = event.target.value;
