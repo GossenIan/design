@@ -170,6 +170,45 @@
                 width: auto;
             }
         }
+        #cash-close-print-area {
+            display: none;
+        }
+        @media print {
+            @page {
+                margin: 12mm;
+            }
+            body > *:not(#cash-close-print-area) {
+                display: none !important;
+            }
+            #cash-close-print-area {
+                display: block !important;
+                color: #111111;
+                font-family: 'Inter', sans-serif;
+                padding: 0;
+            }
+            #cash-close-print-area h1,
+            #cash-close-print-area h2,
+            #cash-close-print-area h3 {
+                font-family: 'Manrope', sans-serif;
+            }
+            .print-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 14px;
+                font-size: 12px;
+            }
+            .print-table th,
+            .print-table td {
+                border-bottom: 1px solid #dddddd;
+                padding: 8px 6px;
+                text-align: left;
+                vertical-align: top;
+            }
+            .print-table th {
+                background: #f2f2f2;
+                font-weight: 800;
+            }
+        }
     </style>
 </head>
 <body class="min-h-screen bg-background text-on-surface font-body antialiased" data-notification-icon="point_of_sale" data-notification-title="Venta pendiente" data-notification-body="Hay una operación de kiosco lista para finalizar.">
@@ -270,7 +309,7 @@ Cerrar sesión
 </div>
 </nav>
 </header>
-<div class="flex flex-1 overflow-hidden pt-32">
+<div class="flex min-h-[calc(100vh-8rem)] flex-1 overflow-hidden pt-32">
 <!-- SideNavBar (Hidden on Mobile) -->
 <nav class="hidden md:flex flex-col h-[calc(100vh-8rem)] py-8 px-4 w-64 fixed left-0 top-32 bg-[#F6F3F2] dark:bg-zinc-900 border-r border-surface-container-high z-40 overflow-y-auto">
 <div class="mb-8 px-4">
@@ -286,22 +325,22 @@ Cerrar sesión
 <span class="material-symbols-outlined" data-icon="shopping_basket">shopping_basket</span>
                     Carrito
                 </a>
-<a class="flex items-center gap-3 text-[#5F5E5E] dark:text-zinc-400 px-4 py-3 hover:bg-[#EAE7E7] dark:hover:bg-zinc-800 transition-colors scale-100 active:scale-[0.98] rounded-xl font-['Inter'] text-sm font-semibold" href="#historial">
+<a id="open-sales-history" class="flex items-center gap-3 text-[#5F5E5E] dark:text-zinc-400 px-4 py-3 hover:bg-[#EAE7E7] dark:hover:bg-zinc-800 transition-colors scale-100 active:scale-[0.98] rounded-xl font-['Inter'] text-sm font-semibold" href="#historial">
 <span class="material-symbols-outlined" data-icon="history">history</span>
                     Historial
                 </a>
 </div>
 <div class="mt-auto px-4 pt-4">
-<button class="w-full bg-gradient-to-br from-primary to-primary-container text-on-primary font-bold py-3 rounded-xl transition-all active:scale-95 shadow-[0px_4px_14px_rgba(0,109,55,0.2)]" onclick="window.location.href='metodopago/metodopago.html'">
+<button id="open-cash-close" type="button" class="w-full bg-gradient-to-br from-primary to-primary-container text-on-primary font-bold py-3 rounded-xl transition-all active:scale-95 shadow-[0px_4px_14px_rgba(0,109,55,0.2)]">
                     Cerrar caja
                 </button>
 </div>
 </nav>
 <!-- Main Content Canvas -->
 <main class="flex-1 md:ml-64 p-6 lg:p-10 bg-surface overflow-y-auto">
-<div class="flex flex-col lg:flex-row gap-10 max-w-7xl mx-auto h-full">
+<div class="mx-auto flex h-full min-h-0 max-w-[96rem] flex-col gap-8 xl:flex-row xl:gap-10">
 <!-- Left Column: Products -->
-<div class="flex-1 flex flex-col gap-6">
+<div class="flex min-w-0 flex-1 flex-col gap-6">
 <!-- Search & Filter -->
 <div class="flex gap-4">
 <div class="relative flex-1">
@@ -320,68 +359,90 @@ Cerrar sesión
 <!-- Category Pills -->
 <div class="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
 <button type="button" class="category-filter whitespace-nowrap px-6 py-2 rounded-full bg-primary text-on-primary font-medium text-sm transition-all shadow-[0px_4px_14px_rgba(0,109,55,0.2)]" data-category="Todos">Todos</button>
-<button type="button" class="category-filter whitespace-nowrap px-6 py-2 rounded-full bg-surface-container-low text-secondary font-medium text-sm hover:bg-surface-container-high transition-all" data-category="Proteínas">Proteínas</button>
-<button type="button" class="category-filter whitespace-nowrap px-6 py-2 rounded-full bg-surface-container-low text-secondary font-medium text-sm hover:bg-surface-container-high transition-all" data-category="Aminoácidos">Aminoácidos</button>
-<button type="button" class="category-filter whitespace-nowrap px-6 py-2 rounded-full bg-surface-container-low text-secondary font-medium text-sm hover:bg-surface-container-high transition-all" data-category="Pre-entrenos">Pre-entrenos</button>
-<button type="button" class="category-filter whitespace-nowrap px-6 py-2 rounded-full bg-surface-container-low text-secondary font-medium text-sm hover:bg-surface-container-high transition-all" data-category="Accesorios">Accesorios</button>
+<button type="button" class="category-filter whitespace-nowrap px-6 py-2 rounded-full bg-surface-container-low text-secondary font-medium text-sm hover:bg-surface-container-high transition-all" data-category="Suplementos">Suplementos</button>
+<button type="button" class="category-filter whitespace-nowrap px-6 py-2 rounded-full bg-surface-container-low text-secondary font-medium text-sm hover:bg-surface-container-high transition-all" data-category="Bebidas">Bebidas</button>
+<button type="button" class="category-filter whitespace-nowrap px-6 py-2 rounded-full bg-surface-container-low text-secondary font-medium text-sm hover:bg-surface-container-high transition-all" data-category="Alimentos">Alimentos</button>
+<button type="button" class="category-filter whitespace-nowrap px-6 py-2 rounded-full bg-surface-container-low text-secondary font-medium text-sm hover:bg-surface-container-high transition-all" data-category="Indumentaria">Indumentaria</button>
+<button type="button" class="category-filter whitespace-nowrap px-6 py-2 rounded-full bg-surface-container-low text-secondary font-medium text-sm hover:bg-surface-container-high transition-all" data-category="Preparados">Preparados</button>
 </div>
 <!-- Products Grid -->
-<div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+<div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 min-[1900px]:grid-cols-4 gap-6">
     </div>
 </div>
 <!-- Right Column: Cart / Checkout -->
-<div class="w-full lg:w-96 flex flex-col h-full sticky top-0" id="carrito">
-<div class="bg-surface-container-lowest rounded-2xl flex flex-col h-[calc(100vh-8rem)] border border-outline-variant/15 shadow-[0px_12px_32px_rgba(28,27,27,0.06)] overflow-hidden">
+<div class="flex w-full flex-col xl:h-fit xl:w-[25rem] xl:shrink-0 2xl:w-[30rem]" id="carrito">
+<div class="flex min-h-[34rem] flex-col overflow-hidden rounded-2xl border border-outline-variant/15 bg-surface-container-lowest shadow-[0px_12px_32px_rgba(28,27,27,0.06)] xl:max-h-[calc(100vh-10rem)] xl:overflow-y-auto">
 <!-- Cart Header -->
-<div class="p-6 pb-4 border-b border-surface-container-low flex justify-between items-center bg-surface-bright">
+<div class="shrink-0 p-6 pb-4 border-b border-surface-container-low flex justify-between items-center bg-surface-bright">
 <div class="flex items-center gap-3">
 <span class="material-symbols-outlined text-primary text-2xl" data-icon="shopping_basket">shopping_basket</span>
 <h2 class="font-headline font-bold text-xl text-on-surface">Carrito actual</h2>
 </div>
-<span class="bg-primary-container text-on-primary-container text-xs font-bold px-3 py-1 rounded-full" id="cart-count">3 Ítems</span>
+<span class="bg-primary-container text-on-primary-container text-xs font-bold px-3 py-1 rounded-full" id="cart-count">0 Ítems</span>
 </div>
 <!-- Cart Items List -->
-<div id="cart-items" class="flex-1 overflow-y-auto p-6 flex flex-col gap-6">
+<div id="cart-items" class="flex min-h-[10rem] max-h-72 shrink-0 flex-col gap-4 overflow-y-auto p-5 2xl:max-h-96 2xl:p-6">
     </div>
 <!-- Cart Footer / Totals -->
-<div class="p-6 bg-surface-container-low flex flex-col gap-4">
+<div class="shrink-0 bg-surface-container-low p-4 2xl:p-5 flex flex-col gap-3">
 <!-- Discount selector -->
-<div class="bg-surface-container-highest p-4 rounded-xl border border-outline-variant/20">
+<div class="bg-surface-container-highest p-3 rounded-xl border border-outline-variant/20">
 <div class="flex items-center justify-between gap-3">
 <div class="flex items-center gap-3">
 <span class="material-symbols-outlined text-primary" data-icon="sell">sell</span>
 <div class="flex flex-col">
 <span class="text-xs text-secondary font-medium uppercase tracking-wider">Descuento</span>
-<span class="font-semibold text-sm text-on-surface">Venta rápida</span>
+<span id="discount-active-name" class="font-semibold text-sm text-on-surface">Venta rápida</span>
 </div>
 </div>
 <span class="text-xs font-bold text-primary" id="discount-summary-rate">10%</span>
 </div>
-<div class="mt-4 grid grid-cols-3 gap-2" aria-label="Seleccionar descuento">
-<button type="button" class="discount-option discount-option-active rounded-lg px-3 py-2 text-sm font-bold active:scale-95" data-discount-rate="10" aria-pressed="true">10%</button>
-<button type="button" class="discount-option rounded-lg px-3 py-2 text-sm font-bold active:scale-95" data-discount-rate="15" aria-pressed="false">15%</button>
-<button type="button" class="discount-option rounded-lg px-3 py-2 text-sm font-bold active:scale-95" data-discount-rate="20" aria-pressed="false">20%</button>
+<div id="discount-options" class="mt-4 grid grid-cols-2 gap-2" aria-label="Seleccionar descuento">
+</div>
+<div class="mt-3 grid gap-2">
+<label class="text-xs font-bold uppercase tracking-wider text-secondary">
+Tipo de descuento
+<input id="discount-name-input" class="mt-1 w-full rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-2 text-sm font-semibold normal-case tracking-normal text-on-surface focus:border-primary focus:ring-primary" type="text" value="Venta rápida" aria-label="Nombre del tipo de descuento">
+</label>
+<div class="grid grid-cols-[1fr_auto_auto_auto] items-end gap-2">
+<label class="text-xs font-bold uppercase tracking-wider text-secondary">
+Porcentaje
+<div class="relative mt-1">
+<input id="discount-rate-input" class="w-full rounded-lg border border-outline-variant bg-surface-container-lowest py-2 pl-3 pr-8 text-sm font-bold text-on-surface focus:border-primary focus:ring-primary" type="number" min="0" max="90" step="1" value="10" aria-label="Porcentaje del descuento">
+<span class="absolute right-3 top-1/2 -translate-y-1/2 text-sm font-bold text-secondary">%</span>
+</div>
+</label>
+<button id="save-discount" type="button" class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-on-primary hover:bg-primary-container hover:text-on-primary-container active:scale-95" aria-label="Guardar cambios del descuento" title="Guardar cambios">
+<span class="material-symbols-outlined text-xl">save</span>
+</button>
+<button id="add-discount" type="button" class="flex h-10 w-10 items-center justify-center rounded-lg bg-surface-container-lowest text-primary hover:bg-primary hover:text-on-primary active:scale-95" aria-label="Agregar descuento" title="Agregar descuento">
+<span class="material-symbols-outlined text-xl">add</span>
+</button>
+<button id="delete-discount" type="button" class="flex h-10 w-10 items-center justify-center rounded-lg bg-surface-container text-secondary hover:bg-error-container hover:text-error active:scale-95" aria-label="Eliminar descuento" title="Eliminar descuento">
+<span class="material-symbols-outlined text-xl">delete</span>
+</button>
+</div>
 </div>
 </div>
 <div class="flex flex-col gap-2 mt-2">
 <div class="flex justify-between text-sm text-secondary">
 <span>Subtotal</span>
-<span id="subtotal-amount">$95.75</span>
+<span id="subtotal-amount">$0.00</span>
 </div>
 <div class="flex justify-between text-sm text-secondary">
 <span>Descuentos</span>
-<span class="text-primary" id="discount-amount">-$9.58</span>
+<span class="text-primary" id="discount-amount">$0.00</span>
 </div>
 <div class="flex justify-between text-sm text-secondary">
 <span>Impuestos (IVA 16%)</span>
-<span id="tax-amount">$13.79</span>
+<span id="tax-amount">$0.00</span>
 </div>
 <div class="flex justify-between items-end mt-4 pt-4 border-t border-outline-variant/20">
 <span class="font-headline font-bold text-lg text-on-surface">Total</span>
-<span class="font-headline font-extrabold text-3xl text-primary leading-none" id="total-amount">$99.96</span>
+<span class="font-headline font-extrabold text-3xl text-primary leading-none" id="total-amount">$0.00</span>
 </div>
 </div>
-<button class="w-full bg-gradient-to-br from-primary to-primary-container text-on-primary font-bold text-lg py-4 rounded-xl mt-4 flex items-center justify-center gap-2 transition-all active:scale-95 shadow-[0px_8px_24px_rgba(0,109,55,0.25)] hover:shadow-[0px_12px_32px_rgba(0,109,55,0.35)]" onclick="window.location.href='metodopago/metodopago.html'">
+<button id="open-payment-modal" type="button" class="w-full bg-gradient-to-br from-primary to-primary-container text-on-primary font-bold text-lg py-4 rounded-xl mt-4 flex items-center justify-center gap-2 transition-all active:scale-95 shadow-[0px_8px_24px_rgba(0,109,55,0.25)] hover:shadow-[0px_12px_32px_rgba(0,109,55,0.35)] disabled:cursor-not-allowed disabled:opacity-50">
 <span class="material-symbols-outlined" data-icon="payments">payments</span>
                                 Cobrar
                             </button>
@@ -391,18 +452,216 @@ Cerrar sesión
 </div>
 </main>
 </div>
+<div id="payment-modal" class="fixed inset-0 z-[130] hidden flex items-center justify-center bg-black/45 px-4 py-8">
+<div class="max-h-[calc(100vh-4rem)] w-full max-w-5xl overflow-y-auto rounded-xl border border-outline-variant bg-background shadow-2xl">
+<div class="relative px-6 pb-6 pt-8 text-center sm:px-10">
+<button id="close-payment-modal" type="button" class="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full text-secondary hover:bg-surface-container" aria-label="Cerrar cobro">
+<span class="material-symbols-outlined">close</span>
+</button>
+<h2 class="font-headline text-3xl font-black uppercase tracking-tight text-on-surface sm:text-5xl">Seleccionar medio de pago</h2>
+<p class="mx-auto mt-3 max-w-xl text-sm leading-6 text-on-surface-variant sm:text-base">Elija el método preferido por el cliente para completar la transacción de forma segura.</p>
+<div class="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4" aria-label="Métodos de pago">
+<button type="button" class="payment-method-option group flex min-h-48 flex-col items-center justify-center rounded-xl border border-outline-variant/10 bg-surface-container-lowest p-6 text-center transition hover:border-primary-container hover:bg-primary-container/10 active:scale-[0.99]" data-payment-method="efectivo">
+<span class="mb-5 flex h-16 w-16 items-center justify-center rounded-xl bg-primary-fixed text-primary transition-transform group-hover:scale-105">
+<span class="material-symbols-outlined text-4xl">payments</span>
+</span>
+<span class="font-headline text-lg font-extrabold uppercase text-on-surface">Efectivo</span>
+<span class="mt-2 text-sm leading-5 text-on-surface-variant">Pago en caja con cálculo automático de vuelto</span>
+</button>
+<button type="button" class="payment-method-option group flex min-h-48 flex-col items-center justify-center rounded-xl border border-outline-variant/10 bg-surface-container-lowest p-6 text-center transition hover:border-primary-container hover:bg-primary-container/10 active:scale-[0.99]" data-payment-method="transferencia">
+<span class="mb-5 flex h-16 w-16 items-center justify-center rounded-xl bg-primary-fixed text-primary transition-transform group-hover:scale-105">
+<span class="material-symbols-outlined text-4xl">account_balance</span>
+</span>
+<span class="font-headline text-lg font-extrabold uppercase text-on-surface">Transferencia</span>
+<span class="mt-2 text-sm leading-5 text-on-surface-variant">Depósito bancario o transferencia inmediata</span>
+</button>
+<button type="button" class="payment-method-option group flex min-h-48 flex-col items-center justify-center rounded-xl border border-outline-variant/10 bg-surface-container-lowest p-6 text-center transition hover:border-primary-container hover:bg-primary-container/10 active:scale-[0.99]" data-payment-method="qr">
+<span class="mb-5 flex h-16 w-16 items-center justify-center rounded-xl bg-primary-fixed text-primary transition-transform group-hover:scale-105">
+<span class="material-symbols-outlined text-4xl">qr_code_2</span>
+</span>
+<span class="font-headline text-lg font-extrabold uppercase text-on-surface">QR</span>
+<span class="mt-2 text-sm leading-5 text-on-surface-variant">Escaneo rápido desde cualquier billetera virtual</span>
+</button>
+<button type="button" class="payment-method-option group flex min-h-48 flex-col items-center justify-center rounded-xl border border-outline-variant/10 bg-surface-container-lowest p-6 text-center transition hover:border-primary-container hover:bg-primary-container/10 active:scale-[0.99]" data-payment-method="tarjeta">
+<span class="mb-5 flex h-16 w-16 items-center justify-center rounded-xl bg-primary-fixed text-primary transition-transform group-hover:scale-105">
+<span class="material-symbols-outlined text-4xl">credit_card</span>
+</span>
+<span class="font-headline text-lg font-extrabold uppercase text-on-surface">Tarjeta</span>
+<span class="mt-2 text-sm leading-5 text-on-surface-variant">Crédito o Débito vía terminal bancaria</span>
+</button>
+</div>
+<div class="mx-auto mt-8 grid w-full max-w-3xl gap-4 rounded-xl border border-outline-variant/10 bg-surface-container-lowest p-4 text-left shadow-sm md:grid-cols-[1fr_1.2fr]">
+<section class="rounded-xl bg-surface-container-low p-4">
+<span class="text-xs font-bold uppercase tracking-wider text-secondary">Resumen</span>
+<div class="mt-4 flex flex-col gap-3 text-sm text-secondary">
+<div class="flex justify-between"><span>Subtotal</span><span id="payment-subtotal">$0.00</span></div>
+<div class="flex justify-between"><span>Descuento</span><span class="text-primary" id="payment-discount">$0.00</span></div>
+<div class="flex justify-between"><span>IVA 16%</span><span id="payment-tax">$0.00</span></div>
+<div class="mt-2 flex items-end justify-between border-t border-outline-variant/20 pt-4">
+<span class="font-headline text-lg font-bold text-on-surface">Total</span>
+<span class="font-headline text-3xl font-extrabold text-primary" id="payment-total">$0.00</span>
+</div>
+</div>
+</section>
+<section class="flex flex-col gap-4">
+<div id="cash-payment-fields" class="rounded-xl border border-outline-variant/20 bg-surface-container-highest p-4">
+<label class="flex flex-col gap-2 text-sm font-semibold text-on-surface">
+Monto recibido
+<input id="cash-received" class="rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-3 text-lg font-bold text-on-surface focus:border-primary focus:ring-primary" type="number" min="0" step="0.01" placeholder="0.00">
+</label>
+<div class="mt-4 flex items-center justify-between rounded-lg bg-surface-container-lowest px-3 py-3">
+<span class="text-sm font-semibold text-secondary">Vuelto</span>
+<span id="cash-change" class="font-headline text-2xl font-extrabold text-primary">$0.00</span>
+</div>
+</div>
+<div id="non-cash-payment-note" class="hidden rounded-xl border border-outline-variant/20 bg-surface-container-highest p-4 text-sm text-on-surface-variant">
+Confirma el pago cuando la operación figure aprobada en la terminal o billetera.
+</div>
+<p id="payment-error" class="hidden rounded-lg bg-error-container px-3 py-2 text-sm font-semibold text-error"></p>
+<div class="flex justify-end gap-3">
+<button id="cancel-payment-modal" type="button" class="rounded-lg bg-surface-container px-5 py-3 font-bold text-on-surface hover:bg-surface-container-high">Cancelar</button>
+<button id="confirm-payment" type="button" class="rounded-lg bg-primary px-5 py-3 font-bold text-on-primary hover:bg-primary-container hover:text-on-primary-container">Confirmar cobro</button>
+</div>
+</section>
+</div>
+<div class="mx-auto mt-6 flex w-fit items-center gap-2 rounded-full border border-outline-variant/10 bg-surface-container-low px-5 py-3 text-sm font-medium text-on-surface-variant">
+<span class="material-symbols-outlined text-lg">security</span>
+Transacción cifrada y gestionada por SquatGym Central
+</div>
+</div>
+</div>
+</div>
+<div id="receipt-modal" class="fixed inset-0 z-[140] hidden flex items-center justify-center bg-black/45 px-4 py-8">
+<div class="w-full max-w-md rounded-xl border border-outline-variant bg-surface-container-lowest p-6 text-center shadow-2xl">
+<span class="material-symbols-outlined text-5xl text-primary">receipt_long</span>
+<h2 class="mt-3 font-headline text-xl font-bold text-on-surface">Venta registrada</h2>
+<p class="mt-2 text-sm text-secondary">¿Querés imprimir el comprobante o ticket?</p>
+<div class="mt-6 flex justify-center gap-3">
+<button id="skip-receipt" type="button" class="rounded-lg bg-surface-container px-5 py-3 font-bold text-on-surface hover:bg-surface-container-high">No imprimir</button>
+<button id="print-receipt" type="button" class="rounded-lg bg-primary px-5 py-3 font-bold text-on-primary hover:bg-primary-container hover:text-on-primary-container">Imprimir</button>
+</div>
+</div>
+</div>
+<div id="sales-history-modal" class="fixed inset-0 z-[130] hidden flex items-center justify-center bg-black/45 px-4 py-8">
+<div class="max-h-[calc(100vh-4rem)] w-full max-w-4xl overflow-hidden rounded-xl border border-outline-variant bg-surface-container-lowest shadow-2xl">
+<div class="flex items-center justify-between border-b border-outline-variant p-5">
+<div>
+<h2 class="font-headline text-xl font-bold text-on-surface">Historial de ventas</h2>
+<p class="text-sm text-secondary">Ventas registradas con fecha y hora</p>
+</div>
+<button id="close-sales-history" type="button" class="flex h-10 w-10 items-center justify-center rounded-full text-secondary hover:bg-surface-container" aria-label="Cerrar historial">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div id="sales-history-list" class="max-h-[70vh] overflow-y-auto p-5">
+</div>
+</div>
+</div>
+<div id="cash-close-modal" class="fixed inset-0 z-[135] hidden flex items-center justify-center bg-black/45 px-4 py-8">
+<div class="max-h-[calc(100vh-4rem)] w-full max-w-5xl overflow-y-auto rounded-xl border border-outline-variant bg-surface-container-lowest shadow-2xl">
+<div class="flex items-center justify-between border-b border-outline-variant p-5">
+<div>
+<h2 class="font-headline text-xl font-bold text-on-surface">Informe de cierre de caja</h2>
+<p class="text-sm text-secondary">Resumen del turno, control de efectivo y listado imprimible de ventas</p>
+</div>
+<button id="close-cash-close" type="button" class="flex h-10 w-10 items-center justify-center rounded-full text-secondary hover:bg-surface-container" aria-label="Cerrar cierre de caja">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="grid gap-5 p-5 xl:grid-cols-[1.05fr_0.95fr]">
+<section class="rounded-xl border border-outline-variant/20 bg-surface-container-low p-4 xl:col-span-2">
+<span class="text-xs font-bold uppercase tracking-wider text-secondary">Encabezado de sesión</span>
+<div class="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+<label class="flex flex-col gap-2 text-sm font-semibold text-on-surface">
+Usuario
+<input id="cash-close-user" class="rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-3 text-sm font-normal text-on-surface focus:border-primary focus:ring-primary" type="text" value="Admin Squat">
+</label>
+<label class="flex flex-col gap-2 text-sm font-semibold text-on-surface">
+ID de caja
+<input id="cash-close-register-id" class="rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-3 text-sm font-normal text-on-surface focus:border-primary focus:ring-primary" type="text" value="Caja 01">
+</label>
+<div class="rounded-lg bg-surface-container-lowest px-3 py-3">
+<span class="text-xs font-bold uppercase tracking-wider text-secondary">Inicio turno</span>
+<p id="cash-close-start" class="mt-2 text-sm font-bold text-on-surface">--</p>
+</div>
+<div class="rounded-lg bg-surface-container-lowest px-3 py-3">
+<span class="text-xs font-bold uppercase tracking-wider text-secondary">Fin turno</span>
+<p id="cash-close-end" class="mt-2 text-sm font-bold text-on-surface">--</p>
+</div>
+</div>
+</section>
+<section class="rounded-xl border border-outline-variant/20 bg-surface-container-highest p-4">
+<span class="text-xs font-bold uppercase tracking-wider text-secondary">Control de efectivo</span>
+<div class="mt-4 grid gap-3 sm:grid-cols-2">
+<label class="flex flex-col gap-2 text-sm font-semibold text-on-surface">
+Monto inicial
+<input id="cash-close-opening" class="rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-3 text-sm font-bold text-on-surface focus:border-primary focus:ring-primary" type="number" min="0" step="0.01" placeholder="0.00">
+</label>
+<label class="flex flex-col gap-2 text-sm font-semibold text-on-surface">
+Egresos / retiros
+<input id="cash-close-withdrawals" class="rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-3 text-sm font-bold text-on-surface focus:border-primary focus:ring-primary" type="number" min="0" step="0.01" placeholder="0.00">
+</label>
+</div>
+<div class="mt-4 grid gap-3 text-sm text-secondary sm:grid-cols-2">
+<div class="rounded-lg bg-surface-container-lowest px-3 py-3">
+<span class="font-semibold">Ingresos en efectivo</span>
+<p id="cash-close-cash-income" class="mt-1 font-headline text-xl font-extrabold text-on-surface">$0.00</p>
+</div>
+<div class="rounded-lg bg-surface-container-lowest px-3 py-3">
+<span class="font-semibold">Total esperado</span>
+<p id="cash-close-expected" class="mt-1 font-headline text-xl font-extrabold text-on-surface">$0.00</p>
+</div>
+</div>
+<label class="mt-4 flex flex-col gap-2 text-sm font-semibold text-on-surface">
+Efectivo real en caja
+<input id="cash-close-counted" class="rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-3 text-lg font-bold text-on-surface focus:border-primary focus:ring-primary" type="number" min="0" step="0.01" placeholder="0.00">
+</label>
+<div class="mt-4 flex items-center justify-between rounded-lg bg-surface-container-lowest px-3 py-3">
+<span class="text-sm font-semibold text-secondary">Diferencia</span>
+<span id="cash-close-difference" class="font-headline text-2xl font-extrabold text-primary">$0.00</span>
+</div>
+</section>
+<section class="rounded-xl border border-outline-variant/20 bg-surface-container-low p-4">
+<div class="flex items-center justify-between gap-3">
+<span class="text-xs font-bold uppercase tracking-wider text-secondary">Desglose y KPIs</span>
+<span id="cash-close-sales-count" class="rounded-full bg-primary-container px-3 py-1 text-xs font-bold text-on-primary-container">0 ventas</span>
+</div>
+<div class="mt-4 grid gap-2 sm:grid-cols-2">
+<div class="rounded-lg bg-surface-container-lowest px-3 py-3"><span class="text-xs font-bold uppercase text-secondary">Efectivo</span><p id="cash-close-method-cash" class="mt-1 text-lg font-extrabold text-on-surface">$0.00</p></div>
+<div class="rounded-lg bg-surface-container-lowest px-3 py-3"><span class="text-xs font-bold uppercase text-secondary">Transferencia / QR</span><p id="cash-close-method-transfer" class="mt-1 text-lg font-extrabold text-on-surface">$0.00</p></div>
+<div class="rounded-lg bg-surface-container-lowest px-3 py-3"><span class="text-xs font-bold uppercase text-secondary">Tarjeta crédito / débito</span><p id="cash-close-method-card" class="mt-1 text-lg font-extrabold text-on-surface">$0.00</p></div>
+<div class="rounded-lg bg-surface-container-lowest px-3 py-3"><span class="text-xs font-bold uppercase text-secondary">Otros métodos</span><p id="cash-close-non-cash" class="mt-1 text-lg font-extrabold text-on-surface">$0.00</p></div>
+</div>
+<div class="mt-4 grid gap-2 sm:grid-cols-2">
+<div class="rounded-lg bg-surface-container-lowest px-3 py-3"><span class="text-xs font-bold uppercase text-secondary">Total bruto</span><p id="cash-close-gross" class="mt-1 text-lg font-extrabold text-on-surface">$0.00</p></div>
+<div class="rounded-lg bg-surface-container-lowest px-3 py-3"><span class="text-xs font-bold uppercase text-secondary">Descuentos</span><p id="cash-close-discounts" class="mt-1 text-lg font-extrabold text-primary">$0.00</p></div>
+<div class="rounded-lg bg-surface-container-lowest px-3 py-3"><span class="text-xs font-bold uppercase text-secondary">IVA 16%</span><p id="cash-close-tax" class="mt-1 text-lg font-extrabold text-on-surface">$0.00</p></div>
+<div class="rounded-lg bg-surface-container-lowest px-3 py-3"><span class="text-xs font-bold uppercase text-secondary">Total neto</span><p id="cash-close-total" class="mt-1 text-lg font-extrabold text-primary">$0.00</p></div>
+</div>
+</section>
+<div class="xl:col-span-2">
+<p id="cash-close-error" class="hidden rounded-lg bg-error-container px-3 py-2 text-sm font-semibold text-error"></p>
+<div class="mt-4 flex justify-end gap-3">
+<button id="cancel-cash-close" type="button" class="rounded-lg bg-surface-container px-5 py-3 font-bold text-on-surface hover:bg-surface-container-high">Cancelar</button>
+<button id="confirm-cash-close" type="button" class="rounded-lg bg-primary px-5 py-3 font-bold text-on-primary hover:bg-primary-container hover:text-on-primary-container">Cerrar caja e imprimir</button>
+</div>
+</div>
+</div>
+</div>
+</div>
 <div id="product-modal" class="fixed inset-0 z-[120] hidden flex items-center justify-center bg-black/45 px-4 py-8">
 <div class="w-full max-w-2xl rounded-xl border border-outline-variant bg-surface-container-lowest shadow-2xl">
 <div class="flex items-center justify-between border-b border-outline-variant p-5">
 <div>
-<h2 class="font-headline text-xl font-bold text-on-surface">Nuevo producto</h2>
-<p class="text-sm text-secondary">Catálogo de kiosco</p>
+<h2 id="product-modal-title" class="font-headline text-xl font-bold text-on-surface">Nuevo producto</h2>
+<p id="product-modal-description" class="text-sm text-secondary">Catálogo de kiosco</p>
 </div>
 <button id="close-product-modal" type="button" class="flex h-10 w-10 items-center justify-center rounded-full text-secondary hover:bg-surface-container" aria-label="Cerrar">
 <span class="material-symbols-outlined">close</span>
 </button>
 </div>
 <form id="product-form" class="grid gap-4 p-5 sm:grid-cols-2">
+<input id="editing-product-id" type="hidden">
 <label class="flex flex-col gap-2 text-sm font-semibold text-on-surface">
 Nombre
 <input id="new-product-name" class="rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-3 text-sm font-normal text-on-surface focus:border-primary focus:ring-primary" type="text" required>
@@ -414,10 +673,11 @@ Marca
 <label class="flex flex-col gap-2 text-sm font-semibold text-on-surface">
 Categoría
 <select id="new-product-category" class="rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-3 text-sm font-normal text-on-surface focus:border-primary focus:ring-primary" required>
-<option value="Proteínas">Proteínas</option>
-<option value="Aminoácidos">Aminoácidos</option>
-<option value="Pre-entrenos">Pre-entrenos</option>
-<option value="Accesorios">Accesorios</option>
+<option value="Suplementos">Suplementos</option>
+<option value="Bebidas">Bebidas</option>
+<option value="Alimentos">Alimentos</option>
+<option value="Indumentaria">Indumentaria</option>
+<option value="Preparados">Preparados</option>
 </select>
 </label>
 <label class="flex flex-col gap-2 text-sm font-semibold text-on-surface">
@@ -435,14 +695,38 @@ Imagen URL
 <p id="product-form-error" class="hidden rounded-lg bg-error-container px-3 py-2 text-sm font-semibold text-error sm:col-span-2"></p>
 <div class="flex justify-end gap-3 sm:col-span-2">
 <button id="cancel-product-modal" type="button" class="rounded-lg bg-surface-container px-5 py-3 font-bold text-on-surface hover:bg-surface-container-high">Cancelar</button>
-<button type="submit" class="rounded-lg bg-primary px-5 py-3 font-bold text-on-primary hover:bg-primary-container hover:text-on-primary-container">Guardar</button>
+<button id="product-submit-button" type="submit" class="rounded-lg bg-primary px-5 py-3 font-bold text-on-primary hover:bg-primary-container hover:text-on-primary-container">Guardar</button>
 </div>
 </form>
 </div>
 </div>
 <script src="../../js/squatgym-header.js"></script>
+<div id="cash-close-print-area" aria-hidden="true"></div>
 <script>
   const PRODUCTOS_STORAGE_KEY = 'squatgym-kiosco-products';
+  const DESCUENTOS_STORAGE_KEY = 'squatgym-kiosco-discounts';
+  const HISTORIAL_VENTAS_STORAGE_KEY = 'squatgym-kiosco-sales-history';
+  const CAJA_CONFIG_STORAGE_KEY = 'squatgym-kiosco-cash-close-config';
+  const TURNO_INICIO_STORAGE_KEY = 'squatgym-kiosco-shift-start';
+  const SUCURSAL_ACTIVA = 'SquatGym Central';
+  const USUARIO_ACTIVO = 'Admin Squat';
+  const CAJA_DEFAULT_ID = 'Caja 01';
+  const CATEGORIAS_KIOSCO = ['Suplementos', 'Bebidas', 'Alimentos', 'Indumentaria', 'Preparados'];
+  const CATEGORIA_ALIASES = {
+    proteinas: 'Suplementos',
+    aminoacidos: 'Suplementos',
+    'pre-entrenos': 'Suplementos',
+    accesorios: 'Bebidas',
+    comestibles: 'Alimentos',
+    equipo: 'Indumentaria'
+  };
+
+  const descuentosBase = [
+    { id: 'sin-descuento', nombre: 'Sin descuento', porcentaje: 0 },
+    { id: 'venta-rapida', nombre: 'Venta rápida', porcentaje: 10 },
+    { id: 'promo-socio', nombre: 'Promo socio', porcentaje: 15 },
+    { id: 'mayorista', nombre: 'Mayorista', porcentaje: 20 }
+  ];
 
   const productosBase = [
     {
@@ -452,7 +736,7 @@ Imagen URL
       precio: 45.00,
       descuento: 15,
       img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAZe1qJ5tvQvqdz1O1tKulwx4oc3dW_d3hln0r67XL6k1ySLv3VWblO_2960LjqrKXFcm3VOVwhgIFdF-hv8CFnubrL6tzTnpmvF3CoFelFLm4OkPyDEheIcECeqW5DqEddHBocLbJ6269w9Tg945mI2bz-ysyZtRkNlxRmjKmx85BkF2o-S-0usyG9qN-2yBxcatAlqzB-z3Td4cdAncXNmlqfKNerhnG9sPsYf2DE-kuKSHU3ZwZ9ktcwD2HFEhybnJhX7lr5fw',
-      categoria: 'Proteínas'
+      categoria: 'Suplementos'
     },
     {
       id: 2,
@@ -461,7 +745,7 @@ Imagen URL
       precio: 22.50,
       descuento: 0,
       img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBnmb2_pU2BGAsOrSukg8jBXG2tjLO8bAnDrHWtMH0dL6uAq0yVenf6Uq8X5nhN9wDsu13HzBgqnudTndy7g8ZyASZiTNTQNAgb0pZG7rfk3VchyNJUlO6HJG70UArlfY8UHOqQrtaZLCFKg1DSk639aMEqMMZUGX6EalDxkyptIi0909zr_NUyORwP_2D2jnSOK11xKY_l4sAuT86r4apjWy7QLPoXjj2cXk7ReKA5MjbOo9Vd0tGtBpQe2fVEE_ro1UGnb-KxTw',
-      categoria: 'Aminoácidos'
+      categoria: 'Suplementos'
     },
     {
       id: 3,
@@ -470,7 +754,7 @@ Imagen URL
       precio: 30.00,
       descuento: 0,
       img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBN6ljKm4E3r51_4gQAJU4mMU_1X05Nl903Zakxpuc4ya5qEDb03om371edVpAOBu6sTV3fyj9y9E48sT6GeB4W6wX45PE0b2KYEdFDNRpRHUSv6bPnLU_uqv8xnCWt5_floGKGoVAeCYg1dduoJGwExTsa-CT7wzHOQmzsgMdqRZY5ws_caxhnzyjU6DUtBjbBQkcx32Xoj8iPoRm3N9J1IBNYBzAhUq13xorIUWTqYLhXK3VpDmRD9TUMDqFMqvUJW1R1VZbXuA',
-      categoria: 'Aminoácidos'
+      categoria: 'Suplementos'
     },
     {
       id: 4,
@@ -479,7 +763,7 @@ Imagen URL
       precio: 28.99,
       descuento: 0,
       img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCr20_qcQM1WvJ-yV6pa0HahbQgE3iX4iGoKiiRTvvwud2twpOe1WFj6YrJGgNhh1zNVmm3ORyWc9R06XP2QqDZZkRptfxkkiMQrL6-fO21f71k7It8PDyQuEdJqk-ErEsVmuvikp-pH2mA3N1lvKNH-o6STWZjVLinlvTj4wcBtxSqSdsrmgboPnQnTG36ciWes5e7cA-11UjOf7rlhM9XQyMmsBFIE4VGSyGmEmEK6OCgkR0IX2Jr_NBpdyuUy3QWE-yHcvbaLg',
-      categoria: 'Pre-entrenos'
+      categoria: 'Suplementos'
     },
     {
       id: 5,
@@ -489,16 +773,29 @@ Imagen URL
       descuento: 0,
       img: '',
       icono: 'water_bottle',
-      categoria: 'Accesorios'
+      categoria: 'Bebidas'
     }
   ];
 
   let productosPersonalizados = [];
   let productos = [...productosBase];
   let carrito = [];
+  let historialVentas = [];
+  let totalesActuales = {
+    subtotal: 0,
+    descuentoMonto: 0,
+    impuestos: 0,
+    total: 0,
+    totalItems: 0
+  };
+  let metodoPagoActivo = 'efectivo';
+  let descuentosDisponibles = [...descuentosBase];
+  let descuentoActivoId = 'venta-rapida';
   let descuentoGlobal = 10;
   let categoriaActiva = 'Todos';
   let terminoBusqueda = '';
+  let productoEnEdicionId = null;
+  let turnoInicioISO = null;
   const IVA = 0.16;
 
   function escapeHtml(value) {
@@ -512,6 +809,284 @@ Imagen URL
 
   function formatCurrency(value) {
     return `$${value.toFixed(2)}`;
+  }
+
+  function formatDateTime(value) {
+    try {
+      return new Intl.DateTimeFormat('es-AR', {
+        dateStyle: 'short',
+        timeStyle: 'short'
+      }).format(new Date(value));
+    } catch (error) {
+      return String(value || '');
+    }
+  }
+
+  function formatDateOnly(value) {
+    try {
+      return new Intl.DateTimeFormat('es-AR', {
+        dateStyle: 'short'
+      }).format(new Date(value));
+    } catch (error) {
+      return String(value || '');
+    }
+  }
+
+  function formatTimeOnly(value) {
+    try {
+      return new Intl.DateTimeFormat('es-AR', {
+        hour: '2-digit',
+        minute: '2-digit'
+      }).format(new Date(value));
+    } catch (error) {
+      return String(value || '');
+    }
+  }
+
+  function leerMonto(value) {
+    const monto = Number(value);
+    return Number.isFinite(monto) ? monto : 0;
+  }
+
+  function normalizarMontoCaja(value) {
+    return Math.max(leerMonto(value), 0);
+  }
+
+  function obtenerTurnoInicio() {
+    try {
+      const savedStart = localStorage.getItem(TURNO_INICIO_STORAGE_KEY);
+
+      if (savedStart && !Number.isNaN(new Date(savedStart).getTime())) {
+        return savedStart;
+      }
+
+      const nextStart = new Date().toISOString();
+      localStorage.setItem(TURNO_INICIO_STORAGE_KEY, nextStart);
+      return nextStart;
+    } catch (error) {
+      return new Date().toISOString();
+    }
+  }
+
+  function reiniciarTurnoInicio() {
+    turnoInicioISO = new Date().toISOString();
+
+    try {
+      localStorage.setItem(TURNO_INICIO_STORAGE_KEY, turnoInicioISO);
+    } catch (error) {
+      return false;
+    }
+
+    return true;
+  }
+
+  function obtenerInicioTurnoParaCierre(ventas = historialVentas) {
+    const inicioGuardado = turnoInicioISO || obtenerTurnoInicio();
+    const fechasVentas = ventas
+      .map((venta) => new Date(venta.fechaISO).getTime())
+      .filter((fecha) => Number.isFinite(fecha));
+
+    if (!fechasVentas.length) {
+      return inicioGuardado;
+    }
+
+    const primeraVenta = new Date(Math.min(...fechasVentas)).toISOString();
+
+    return new Date(inicioGuardado).getTime() <= new Date(primeraVenta).getTime()
+      ? inicioGuardado
+      : primeraVenta;
+  }
+
+  function cargarConfiguracionCierreCaja() {
+    try {
+      const savedConfig = JSON.parse(localStorage.getItem(CAJA_CONFIG_STORAGE_KEY) || '{}');
+
+      return {
+        usuario: String(savedConfig.usuario || USUARIO_ACTIVO),
+        cajaId: String(savedConfig.cajaId || CAJA_DEFAULT_ID),
+        montoInicial: normalizarMontoCaja(savedConfig.montoInicial)
+      };
+    } catch (error) {
+      return {
+        usuario: USUARIO_ACTIVO,
+        cajaId: CAJA_DEFAULT_ID,
+        montoInicial: 0
+      };
+    }
+  }
+
+  function guardarConfiguracionCierreCaja(config) {
+    try {
+      localStorage.setItem(CAJA_CONFIG_STORAGE_KEY, JSON.stringify({
+        usuario: config.usuario || USUARIO_ACTIVO,
+        cajaId: config.cajaId || CAJA_DEFAULT_ID,
+        montoInicial: normalizarMontoCaja(config.montoInicial)
+      }));
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  function poblarConfiguracionCierreCaja() {
+    const config = cargarConfiguracionCierreCaja();
+    const userInput = document.getElementById('cash-close-user');
+    const registerInput = document.getElementById('cash-close-register-id');
+    const openingInput = document.getElementById('cash-close-opening');
+    const withdrawalsInput = document.getElementById('cash-close-withdrawals');
+    const countedInput = document.getElementById('cash-close-counted');
+
+    if (userInput) {
+      userInput.value = config.usuario;
+    }
+
+    if (registerInput) {
+      registerInput.value = config.cajaId;
+    }
+
+    if (openingInput) {
+      openingInput.value = config.montoInicial > 0 ? String(config.montoInicial) : '';
+    }
+
+    if (withdrawalsInput) {
+      withdrawalsInput.value = '';
+    }
+
+    if (countedInput) {
+      countedInput.value = '';
+    }
+  }
+
+  function obtenerDatosCierreCaja(fechaFinISO = new Date().toISOString()) {
+    const usuario = document.getElementById('cash-close-user')?.value.trim() || USUARIO_ACTIVO;
+    const cajaId = document.getElementById('cash-close-register-id')?.value.trim() || CAJA_DEFAULT_ID;
+    const montoInicial = normalizarMontoCaja(document.getElementById('cash-close-opening')?.value);
+    const egresos = normalizarMontoCaja(document.getElementById('cash-close-withdrawals')?.value);
+    const efectivoContado = normalizarMontoCaja(document.getElementById('cash-close-counted')?.value);
+
+    return {
+      usuario,
+      cajaId,
+      montoInicial,
+      egresos,
+      efectivoContado,
+      fechaInicioISO: obtenerInicioTurnoParaCierre(),
+      fechaFinISO
+    };
+  }
+
+  function obtenerTotalEsperadoCierre(resumen, datosCierre) {
+    return datosCierre.montoInicial + resumen.efectivo - datosCierre.egresos;
+  }
+
+  function asignarTexto(id, value) {
+    const element = document.getElementById(id);
+
+    if (element) {
+      element.textContent = value;
+    }
+  }
+
+  function cargarHistorialVentas() {
+    try {
+      const savedSales = JSON.parse(localStorage.getItem(HISTORIAL_VENTAS_STORAGE_KEY) || '[]');
+
+      return Array.isArray(savedSales) ? savedSales : [];
+    } catch (error) {
+      return [];
+    }
+  }
+
+  function guardarHistorialVentas() {
+    try {
+      localStorage.setItem(HISTORIAL_VENTAS_STORAGE_KEY, JSON.stringify(historialVentas));
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  function normalizarClaveCategoria(value) {
+    return String(value ?? '')
+      .trim()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase();
+  }
+
+  function normalizarCategoria(value) {
+    const clave = normalizarClaveCategoria(value);
+    const categoriaPermitida = CATEGORIAS_KIOSCO.find((categoria) => normalizarClaveCategoria(categoria) === clave);
+
+    return categoriaPermitida || CATEGORIA_ALIASES[clave] || 'Suplementos';
+  }
+
+  function normalizarDescuento(value) {
+    const descuento = Number(value);
+
+    if (!Number.isFinite(descuento)) {
+      return 0;
+    }
+
+    return Math.min(Math.max(Math.round(descuento), 0), 90);
+  }
+
+  function normalizarDescuentoGuardado(descuento) {
+    const id = String(descuento?.id || '').trim();
+    const nombre = String(descuento?.nombre || '').trim();
+
+    if (!id || !nombre) {
+      return null;
+    }
+
+    return {
+      id,
+      nombre,
+      porcentaje: normalizarDescuento(descuento.porcentaje)
+    };
+  }
+
+  function cargarDescuentosGuardados() {
+    try {
+      const savedDiscounts = JSON.parse(localStorage.getItem(DESCUENTOS_STORAGE_KEY) || '[]');
+      const descuentosNormalizados = Array.isArray(savedDiscounts)
+        ? savedDiscounts.map(normalizarDescuentoGuardado).filter(Boolean)
+        : [];
+
+      return descuentosNormalizados.length ? descuentosNormalizados : descuentosBase.map((descuento) => ({ ...descuento }));
+    } catch (error) {
+      return descuentosBase.map((descuento) => ({ ...descuento }));
+    }
+  }
+
+  function guardarDescuentosDisponibles() {
+    try {
+      localStorage.setItem(DESCUENTOS_STORAGE_KEY, JSON.stringify(descuentosDisponibles));
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  function obtenerDescuentoActivo() {
+    return descuentosDisponibles.find((descuento) => descuento.id === descuentoActivoId)
+      || descuentosDisponibles[0]
+      || { id: 'sin-descuento', nombre: 'Sin descuento', porcentaje: 0 };
+  }
+
+  function sincronizarDescuentoActivo() {
+    const descuentoActivo = obtenerDescuentoActivo();
+
+    descuentoActivoId = descuentoActivo.id;
+    descuentoGlobal = descuentoActivo.porcentaje;
+  }
+
+  function crearIdDescuento(nombre) {
+    const base = normalizarClaveCategoria(nombre)
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '') || 'descuento';
+
+    return `${base}-${Date.now()}`;
   }
 
   function cargarProductosPersonalizados() {
@@ -534,7 +1109,12 @@ Imagen URL
   }
 
   function sincronizarProductos() {
-    productos = [...productosBase, ...productosPersonalizados];
+    const productosGuardadosPorId = new Map(productosPersonalizados.map((producto) => [producto.id, producto]));
+    const idsBase = new Set(productosBase.map((producto) => producto.id));
+    const productosBaseActualizados = productosBase.map((producto) => productosGuardadosPorId.get(producto.id) || producto);
+    const productosCreados = productosPersonalizados.filter((producto) => !idsBase.has(producto.id));
+
+    productos = [...productosBaseActualizados, ...productosCreados];
   }
 
   function normalizarProductoGuardado(producto) {
@@ -554,9 +1134,40 @@ Imagen URL
       descuento: Math.min(Math.max(descuento, 0), 90),
       img: String(producto.img || '').trim(),
       icono: String(producto.icono || 'inventory_2').trim(),
-      categoria: String(producto.categoria).trim(),
+      categoria: normalizarCategoria(producto.categoria),
       personalizado: true
     };
+  }
+
+  function obtenerProductoPorId(id) {
+    const productId = Number(id);
+
+    return productos.find((producto) => producto.id === productId) || null;
+  }
+
+  function guardarProductoEditado(productoActualizado) {
+    const index = productosPersonalizados.findIndex((producto) => producto.id === productoActualizado.id);
+
+    if (index >= 0) {
+      productosPersonalizados[index] = productoActualizado;
+      return;
+    }
+
+    productosPersonalizados.push(productoActualizado);
+  }
+
+  function actualizarProductoEnCarrito(productoActualizado) {
+    carrito = carrito.map((item) => {
+      if (item.id !== productoActualizado.id) {
+        return item;
+      }
+
+      return {
+        ...productoActualizado,
+        cantidad: item.cantidad,
+        precioEfectivo: obtenerPrecioFinal(productoActualizado)
+      };
+    });
   }
 
   function obtenerPrecioFinal(producto) {
@@ -573,32 +1184,54 @@ Imagen URL
     return `<div class="${sizeClass} flex items-center justify-center bg-surface-container-high"><span class="material-symbols-outlined text-secondary text-3xl">${escapeHtml(producto.icono || 'inventory_2')}</span></div>`;
   }
 
-  function crearItemCarrito(id, cantidad) {
-    const producto = productos.find((item) => item.id === id);
+  function asignarTextoProducto(id, value) {
+    const element = document.getElementById(id);
 
-    if (!producto) {
-      return null;
+    if (element) {
+      element.textContent = value;
+    }
+  }
+
+  function asignarValorProducto(id, value) {
+    const input = document.getElementById(id);
+
+    if (input) {
+      input.value = value;
+    }
+  }
+
+  function abrirModalProducto(id = null) {
+    const modal = document.getElementById('product-modal');
+    const form = document.getElementById('product-form');
+    const nameInput = document.getElementById('new-product-name');
+    const producto = id !== null ? obtenerProductoPorId(id) : null;
+
+    if (id !== null && !producto) {
+      return;
     }
 
-    return {
-      ...producto,
-      cantidad,
-      precioEfectivo: obtenerPrecioFinal(producto)
-    };
-  }
+    form?.reset();
+    productoEnEdicionId = producto ? producto.id : null;
+    asignarValorProducto('editing-product-id', productoEnEdicionId || '');
 
-  function cargarVentaRapida() {
-    carrito = [
-      crearItemCarrito(1, 1),
-      crearItemCarrito(2, 2),
-      crearItemCarrito(5, 1)
-    ].filter(Boolean);
-  }
+    if (producto) {
+      asignarTextoProducto('product-modal-title', 'Editar producto');
+      asignarTextoProducto('product-modal-description', 'Actualizá los datos del catálogo de kiosco');
+      asignarTextoProducto('product-submit-button', 'Guardar cambios');
+      asignarValorProducto('new-product-name', producto.nombre);
+      asignarValorProducto('new-product-brand', producto.marca);
+      asignarValorProducto('new-product-category', producto.categoria);
+      asignarValorProducto('new-product-price', producto.precio);
+      asignarValorProducto('new-product-discount', producto.descuento || 0);
+      asignarValorProducto('new-product-image', producto.img || '');
+    } else {
+      asignarTextoProducto('product-modal-title', 'Nuevo producto');
+      asignarTextoProducto('product-modal-description', 'Catálogo de kiosco');
+      asignarTextoProducto('product-submit-button', 'Guardar');
+      asignarValorProducto('new-product-discount', 0);
+    }
 
-  function abrirModalProducto() {
-    const modal = document.getElementById('product-modal');
-    const nameInput = document.getElementById('new-product-name');
-
+    cerrarMenusProducto();
     modal?.classList.remove('hidden');
     mostrarErrorProducto('');
     window.setTimeout(() => nameInput?.focus(), 0);
@@ -610,6 +1243,8 @@ Imagen URL
 
     modal?.classList.add('hidden');
     form?.reset();
+    productoEnEdicionId = null;
+    asignarValorProducto('editing-product-id', '');
     mostrarErrorProducto('');
   }
 
@@ -633,6 +1268,7 @@ Imagen URL
     const precio = Number(document.getElementById('new-product-price')?.value);
     const descuento = Number(document.getElementById('new-product-discount')?.value || 0);
     const img = document.getElementById('new-product-image')?.value.trim() || '';
+    const productoExistente = productoEnEdicionId ? obtenerProductoPorId(productoEnEdicionId) : null;
 
     if (!nombre || !marca || !categoria || !Number.isFinite(precio) || precio <= 0) {
       mostrarErrorProducto('Completá nombre, marca, categoría y precio.');
@@ -649,36 +1285,44 @@ Imagen URL
       return;
     }
 
-    const nuevoProducto = normalizarProductoGuardado({
-      id: Date.now(),
+    const productoGuardado = normalizarProductoGuardado({
+      id: productoExistente?.id || Date.now(),
       nombre,
       marca,
       categoria,
       precio,
       descuento,
       img,
-      icono: 'inventory_2'
+      icono: productoExistente?.icono || 'inventory_2'
     });
 
-    if (!nuevoProducto) {
-      mostrarErrorProducto('No se pudo crear el producto.');
+    if (!productoGuardado) {
+      mostrarErrorProducto('No se pudo guardar el producto.');
       return;
     }
 
-    productosPersonalizados.push(nuevoProducto);
+    const productosPrevios = [...productosPersonalizados];
+    guardarProductoEditado(productoGuardado);
+
     if (!guardarProductosPersonalizados()) {
-      productosPersonalizados = productosPersonalizados.filter((producto) => producto.id !== nuevoProducto.id);
+      productosPersonalizados = productosPrevios;
       return;
     }
 
     sincronizarProductos();
-    categoriaActiva = 'Todos';
-    terminoBusqueda = '';
 
-    const productSearch = document.getElementById('product-search');
+    if (productoExistente) {
+      actualizarProductoEnCarrito(productoGuardado);
+      actualizarInterfaz();
+    } else {
+      categoriaActiva = 'Todos';
+      terminoBusqueda = '';
 
-    if (productSearch) {
-      productSearch.value = '';
+      const productSearch = document.getElementById('product-search');
+
+      if (productSearch) {
+        productSearch.value = '';
+      }
     }
 
     renderizarProductos();
@@ -708,6 +1352,31 @@ Imagen URL
     });
   }
 
+  function cerrarMenusProducto() {
+    document.querySelectorAll('[data-product-menu]').forEach((menu) => {
+      menu.classList.add('hidden');
+    });
+
+    document.querySelectorAll('[data-product-menu-button]').forEach((button) => {
+      button.setAttribute('aria-expanded', 'false');
+    });
+  }
+
+  function toggleProductMenu(event, id) {
+    event.stopPropagation();
+
+    const menu = document.querySelector(`[data-product-menu="${id}"]`);
+    const button = document.querySelector(`[data-product-menu-button="${id}"]`);
+    const estabaAbierto = menu ? !menu.classList.contains('hidden') : false;
+
+    cerrarMenusProducto();
+
+    if (menu && !estabaAbierto) {
+      menu.classList.remove('hidden');
+      button?.setAttribute('aria-expanded', 'true');
+    }
+  }
+
   function renderizarProductos() {
     const grid = document.getElementById('product-grid');
 
@@ -731,9 +1400,22 @@ Imagen URL
       const botonColor = producto.descuento > 0
         ? 'bg-primary text-on-primary hover:bg-primary-container hover:text-on-primary-container'
         : 'bg-surface-container-high text-on-surface hover:bg-primary hover:text-on-primary';
+      const menuProducto = `
+          <div class="absolute right-3 top-3 z-20">
+            <button type="button" onclick="toggleProductMenu(event, ${producto.id})" class="flex h-9 w-9 items-center justify-center rounded-full bg-surface-container-lowest/90 text-secondary shadow-sm ring-1 ring-outline-variant/30 backdrop-blur hover:bg-surface-container hover:text-on-surface active:scale-95" aria-label="Opciones de ${nombreSeguro}" aria-haspopup="menu" aria-expanded="false" data-product-menu-button="${producto.id}">
+              <span class="material-symbols-outlined text-xl">more_vert</span>
+            </button>
+            <div class="absolute right-0 top-11 hidden w-40 overflow-hidden rounded-lg border border-outline-variant/30 bg-surface-container-lowest shadow-xl" data-product-menu="${producto.id}" role="menu">
+              <button type="button" onclick="abrirModalProducto(${producto.id})" class="flex w-full items-center gap-2 px-3 py-2 text-left text-sm font-semibold text-on-surface hover:bg-surface-container" role="menuitem">
+                <span class="material-symbols-outlined text-lg">edit</span>
+                Editar
+              </button>
+            </div>
+          </div>`;
 
       return `
         <div class="bg-surface-container-lowest rounded-xl p-4 flex flex-col gap-4 relative group hover:bg-surface-container-low transition-colors border border-outline-variant/15">
+          ${menuProducto}
           <div class="h-48 rounded-lg bg-surface-container-highest overflow-hidden relative">
             ${mediaProducto}
             ${badgeDescuento}
@@ -795,18 +1477,626 @@ Imagen URL
     actualizarInterfaz();
   }
 
+  function actualizarCantidadCarrito(id, value) {
+    const item = carrito.find((producto) => producto.id === id);
+    const cantidad = Math.floor(Number(value));
+
+    if (!item) {
+      return;
+    }
+
+    if (!Number.isFinite(cantidad)) {
+      actualizarInterfaz();
+      return;
+    }
+
+    if (cantidad <= 0) {
+      carrito = carrito.filter((producto) => producto.id !== id);
+    } else {
+      item.cantidad = cantidad;
+    }
+
+    actualizarInterfaz();
+  }
+
+  function seleccionarDescuento(id) {
+    const descuento = descuentosDisponibles.find((item) => item.id === id);
+
+    if (!descuento) {
+      return;
+    }
+
+    descuentoActivoId = descuento.id;
+    descuentoGlobal = descuento.porcentaje;
+    actualizarInterfaz();
+  }
+
+  function renderizarOpcionesDescuento() {
+    const discountOptions = document.getElementById('discount-options');
+
+    if (!discountOptions) {
+      return;
+    }
+
+    discountOptions.innerHTML = descuentosDisponibles.map((descuento) => {
+      const isActive = descuento.id === descuentoActivoId;
+      const nombreSeguro = escapeHtml(descuento.nombre);
+      const activeClass = isActive ? ' discount-option-active' : '';
+
+      return `
+        <button type="button" class="discount-option${activeClass} min-h-14 rounded-lg px-3 py-2 text-left active:scale-95" data-discount-id="${escapeHtml(descuento.id)}" aria-pressed="${isActive}">
+          <span class="block truncate text-[11px] font-semibold leading-tight">${nombreSeguro}</span>
+          <span class="block text-sm font-black">${descuento.porcentaje}%</span>
+        </button>
+      `;
+    }).join('');
+  }
+
+  function actualizarFormularioDescuento(descuento) {
+    const discountNameInput = document.getElementById('discount-name-input');
+    const discountRateInput = document.getElementById('discount-rate-input');
+
+    if (discountNameInput) {
+      discountNameInput.value = descuento.nombre;
+    }
+
+    if (discountRateInput) {
+      discountRateInput.value = descuento.porcentaje;
+    }
+  }
+
   function actualizarSelectorDescuento() {
-    document.querySelectorAll('[data-discount-rate]').forEach((button) => {
-      const isActive = Number(button.dataset.discountRate) === descuentoGlobal;
-      button.classList.toggle('discount-option-active', isActive);
+    sincronizarDescuentoActivo();
+    renderizarOpcionesDescuento();
+
+    const descuentoActivo = obtenerDescuentoActivo();
+    const discountActiveName = document.getElementById('discount-active-name');
+    const discountSummary = document.getElementById('discount-summary-rate');
+
+    if (discountActiveName) {
+      discountActiveName.textContent = descuentoActivo.nombre;
+    }
+
+    if (discountSummary) {
+      discountSummary.textContent = descuentoActivo.porcentaje > 0 ? `${descuentoActivo.porcentaje}%` : 'Sin descuento';
+    }
+
+    actualizarFormularioDescuento(descuentoActivo);
+  }
+
+  function guardarDescuentoActivo() {
+    const descuentoActivo = obtenerDescuentoActivo();
+    const discountNameInput = document.getElementById('discount-name-input');
+    const discountRateInput = document.getElementById('discount-rate-input');
+    const nombre = discountNameInput?.value.trim();
+    const porcentaje = normalizarDescuento(discountRateInput?.value);
+
+    if (!nombre) {
+      discountNameInput?.focus();
+      return;
+    }
+
+    descuentoActivo.nombre = nombre;
+    descuentoActivo.porcentaje = porcentaje;
+    descuentoGlobal = porcentaje;
+    guardarDescuentosDisponibles();
+    actualizarInterfaz();
+  }
+
+  function agregarDescuentoDesdeFormulario() {
+    const discountNameInput = document.getElementById('discount-name-input');
+    const discountRateInput = document.getElementById('discount-rate-input');
+    const nombre = discountNameInput?.value.trim();
+    const porcentaje = normalizarDescuento(discountRateInput?.value);
+
+    if (!nombre) {
+      discountNameInput?.focus();
+      return;
+    }
+
+    const nuevoDescuento = {
+      id: crearIdDescuento(nombre),
+      nombre,
+      porcentaje
+    };
+
+    descuentosDisponibles.push(nuevoDescuento);
+    descuentoActivoId = nuevoDescuento.id;
+    descuentoGlobal = nuevoDescuento.porcentaje;
+    guardarDescuentosDisponibles();
+    actualizarInterfaz();
+  }
+
+  function eliminarDescuentoActivo() {
+    if (descuentosDisponibles.length <= 1) {
+      descuentosDisponibles = [{ id: 'sin-descuento', nombre: 'Sin descuento', porcentaje: 0 }];
+    } else {
+      descuentosDisponibles = descuentosDisponibles.filter((descuento) => descuento.id !== descuentoActivoId);
+    }
+
+    descuentoActivoId = descuentosDisponibles[0]?.id || 'sin-descuento';
+    sincronizarDescuentoActivo();
+    guardarDescuentosDisponibles();
+    actualizarInterfaz();
+  }
+
+  function mostrarErrorPago(message) {
+    const errorBox = document.getElementById('payment-error');
+
+    if (!errorBox) {
+      return;
+    }
+
+    errorBox.textContent = message;
+    errorBox.classList.toggle('hidden', !message);
+  }
+
+  function actualizarResumenPago() {
+    const paymentSubtotal = document.getElementById('payment-subtotal');
+    const paymentDiscount = document.getElementById('payment-discount');
+    const paymentTax = document.getElementById('payment-tax');
+    const paymentTotal = document.getElementById('payment-total');
+
+    if (paymentSubtotal) {
+      paymentSubtotal.textContent = formatCurrency(totalesActuales.subtotal);
+    }
+
+    if (paymentDiscount) {
+      paymentDiscount.textContent = totalesActuales.descuentoMonto > 0
+        ? `-${formatCurrency(totalesActuales.descuentoMonto)}`
+        : formatCurrency(0);
+    }
+
+    if (paymentTax) {
+      paymentTax.textContent = formatCurrency(totalesActuales.impuestos);
+    }
+
+    if (paymentTotal) {
+      paymentTotal.textContent = formatCurrency(totalesActuales.total);
+    }
+  }
+
+  function actualizarVueltoEfectivo() {
+    const cashReceived = document.getElementById('cash-received');
+    const cashChange = document.getElementById('cash-change');
+    const recibido = Number(cashReceived?.value || 0);
+    const vuelto = Number.isFinite(recibido) ? Math.max(recibido - totalesActuales.total, 0) : 0;
+
+    if (cashChange) {
+      cashChange.textContent = formatCurrency(vuelto);
+    }
+  }
+
+  function actualizarMetodoPagoUI() {
+    document.querySelectorAll('[data-payment-method]').forEach((button) => {
+      const isActive = button.dataset.paymentMethod === metodoPagoActivo;
+      button.classList.toggle('border-primary', isActive);
+      button.classList.toggle('bg-primary-container/15', isActive);
+      button.classList.toggle('shadow-[0px_12px_32px_rgba(0,109,55,0.14)]', isActive);
       button.setAttribute('aria-pressed', String(isActive));
     });
 
-    const discountSummary = document.getElementById('discount-summary-rate');
+    const cashFields = document.getElementById('cash-payment-fields');
+    const nonCashNote = document.getElementById('non-cash-payment-note');
+    const isCash = metodoPagoActivo === 'efectivo';
 
-    if (discountSummary) {
-      discountSummary.textContent = `${descuentoGlobal}%`;
+    cashFields?.classList.toggle('hidden', !isCash);
+    nonCashNote?.classList.toggle('hidden', isCash);
+    actualizarVueltoEfectivo();
+  }
+
+  function abrirModalPago() {
+    const modal = document.getElementById('payment-modal');
+    const cashReceived = document.getElementById('cash-received');
+
+    if (totalesActuales.totalItems <= 0) {
+      return;
     }
+
+    metodoPagoActivo = 'efectivo';
+    mostrarErrorPago('');
+    actualizarResumenPago();
+    actualizarMetodoPagoUI();
+
+    if (cashReceived) {
+      cashReceived.value = '';
+    }
+
+    modal?.classList.remove('hidden');
+    window.setTimeout(() => cashReceived?.focus(), 0);
+  }
+
+  function cerrarModalPago() {
+    document.getElementById('payment-modal')?.classList.add('hidden');
+    mostrarErrorPago('');
+  }
+
+  function seleccionarMetodoPago(method) {
+    metodoPagoActivo = method;
+    mostrarErrorPago('');
+    actualizarMetodoPagoUI();
+
+    if (method === 'efectivo') {
+      window.setTimeout(() => document.getElementById('cash-received')?.focus(), 0);
+    }
+  }
+
+  function obtenerNombreMetodoPago(method) {
+    const labels = {
+      efectivo: 'Efectivo',
+      tarjeta: 'Tarjeta',
+      transferencia: 'Transferencia',
+      qr: 'QR'
+    };
+
+    return labels[method] || 'Pago';
+  }
+
+  function crearRegistroVenta() {
+    const descuentoActivo = obtenerDescuentoActivo();
+    const recibido = metodoPagoActivo === 'efectivo'
+      ? Number(document.getElementById('cash-received')?.value || 0)
+      : null;
+    const vuelto = metodoPagoActivo === 'efectivo'
+      ? Math.max((Number.isFinite(recibido) ? recibido : 0) - totalesActuales.total, 0)
+      : null;
+
+    return {
+      id: Date.now(),
+      fechaISO: new Date().toISOString(),
+      sucursal: SUCURSAL_ACTIVA,
+      metodoPago: metodoPagoActivo,
+      metodoPagoNombre: obtenerNombreMetodoPago(metodoPagoActivo),
+      recibido,
+      vuelto,
+      descuento: {
+        nombre: descuentoActivo.nombre,
+        porcentaje: descuentoActivo.porcentaje,
+        monto: totalesActuales.descuentoMonto
+      },
+      subtotal: totalesActuales.subtotal,
+      impuestos: totalesActuales.impuestos,
+      total: totalesActuales.total,
+      totalItems: totalesActuales.totalItems,
+      items: carrito.map((item) => ({
+        id: item.id,
+        nombre: item.nombre,
+        marca: item.marca,
+        cantidad: item.cantidad,
+        precioUnitario: item.precioEfectivo,
+        total: item.precioEfectivo * item.cantidad
+      }))
+    };
+  }
+
+  function registrarVentaActual() {
+    const venta = crearRegistroVenta();
+
+    historialVentas = [venta, ...historialVentas].slice(0, 100);
+    guardarHistorialVentas();
+    renderizarHistorialVentas();
+  }
+
+  function renderizarHistorialVentas() {
+    const list = document.getElementById('sales-history-list');
+
+    if (!list) {
+      return;
+    }
+
+    if (!historialVentas.length) {
+      list.innerHTML = `
+        <div class="flex min-h-64 flex-col items-center justify-center rounded-xl border border-dashed border-outline-variant/40 px-4 text-center text-secondary">
+          <span class="material-symbols-outlined mb-2 text-4xl">history</span>
+          <p class="font-semibold text-on-surface">Sin ventas registradas</p>
+          <p class="mt-1 text-sm">Cuando confirmes cobros, aparecerán acá con su hora.</p>
+        </div>
+      `;
+      return;
+    }
+
+    list.innerHTML = historialVentas.map((venta) => {
+      const itemsResumen = (venta.items || [])
+        .map((item) => `${escapeHtml(item.cantidad)} x ${escapeHtml(item.nombre)}`)
+        .join(', ');
+
+      return `
+        <article class="mb-3 rounded-xl border border-outline-variant/20 bg-surface-container-low p-4">
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+            <div>
+              <p class="text-sm font-bold text-on-surface">Venta #${escapeHtml(venta.id)}</p>
+              <div class="mt-2 grid gap-1 text-xs font-semibold text-on-surface-variant sm:grid-cols-3">
+                <span>Sucursal: <strong class="text-on-surface">${escapeHtml(venta.sucursal || SUCURSAL_ACTIVA)}</strong></span>
+                <span>Fecha: <strong class="text-on-surface">${escapeHtml(formatDateOnly(venta.fechaISO))}</strong></span>
+                <span>Hora: <strong class="text-on-surface">${escapeHtml(formatTimeOnly(venta.fechaISO))}</strong></span>
+              </div>
+              <p class="mt-2 text-sm text-secondary">${itemsResumen || 'Sin detalle de productos'}</p>
+            </div>
+            <div class="text-left sm:text-right">
+              <span class="rounded-full bg-primary-container px-3 py-1 text-xs font-bold text-on-primary-container">${escapeHtml(venta.metodoPagoNombre || obtenerNombreMetodoPago(venta.metodoPago))}</span>
+              <p class="mt-3 font-headline text-2xl font-extrabold text-primary">${formatCurrency(Number(venta.total) || 0)}</p>
+              <p class="text-xs text-secondary">${escapeHtml(venta.totalItems || 0)} items</p>
+            </div>
+          </div>
+        </article>
+      `;
+    }).join('');
+  }
+
+  function abrirHistorialVentas() {
+    renderizarHistorialVentas();
+    document.getElementById('sales-history-modal')?.classList.remove('hidden');
+  }
+
+  function cerrarHistorialVentas() {
+    document.getElementById('sales-history-modal')?.classList.add('hidden');
+  }
+
+  function calcularResumenCierre(ventas = historialVentas) {
+    return ventas.reduce((resumen, venta) => {
+      const totalVenta = Number(venta.total) || 0;
+      const metodo = venta.metodoPago || 'otro';
+      const subtotalVenta = Number(venta.subtotal);
+      const descuentoVenta = Number(venta.descuento?.monto) || 0;
+      const impuestosVenta = Number(venta.impuestos) || 0;
+
+      resumen.cantidad += 1;
+      resumen.total += totalVenta;
+      resumen.totalBruto += Number.isFinite(subtotalVenta) ? subtotalVenta : totalVenta;
+      resumen.descuentos += descuentoVenta;
+      resumen.impuestos += impuestosVenta;
+      resumen.porMetodo[metodo] = (resumen.porMetodo[metodo] || 0) + totalVenta;
+
+      if (metodo === 'efectivo') {
+        resumen.efectivo += totalVenta;
+      } else {
+        resumen.noEfectivo += totalVenta;
+      }
+
+      return resumen;
+    }, {
+      cantidad: 0,
+      total: 0,
+      totalBruto: 0,
+      descuentos: 0,
+      impuestos: 0,
+      efectivo: 0,
+      noEfectivo: 0,
+      porMetodo: {}
+    });
+  }
+
+  function mostrarErrorCierreCaja(message) {
+    const errorBox = document.getElementById('cash-close-error');
+
+    if (!errorBox) {
+      return;
+    }
+
+    errorBox.textContent = message;
+    errorBox.classList.toggle('hidden', !message);
+  }
+
+  function actualizarDiferenciaCierreCaja() {
+    const resumen = calcularResumenCierre();
+    const datosCierre = obtenerDatosCierreCaja();
+    const differenceBox = document.getElementById('cash-close-difference');
+    const totalEsperado = obtenerTotalEsperadoCierre(resumen, datosCierre);
+    const diferencia = datosCierre.efectivoContado - totalEsperado;
+
+    if (differenceBox) {
+      differenceBox.textContent = formatCurrency(diferencia);
+      differenceBox.classList.toggle('text-error', diferencia < 0);
+      differenceBox.classList.toggle('text-primary', diferencia >= 0);
+    }
+  }
+
+  function actualizarResumenCierreCaja() {
+    const resumen = calcularResumenCierre();
+    const datosCierre = obtenerDatosCierreCaja();
+    const transferenciaQr = (resumen.porMetodo.transferencia || 0) + (resumen.porMetodo.qr || 0);
+    const tarjeta = resumen.porMetodo.tarjeta || 0;
+    const otrosMetodos = Math.max(resumen.noEfectivo - transferenciaQr - tarjeta, 0);
+    const totalEsperado = obtenerTotalEsperadoCierre(resumen, datosCierre);
+
+    asignarTexto('cash-close-start', formatDateTime(datosCierre.fechaInicioISO));
+    asignarTexto('cash-close-end', formatDateTime(datosCierre.fechaFinISO));
+    asignarTexto('cash-close-sales-count', `${resumen.cantidad} ${resumen.cantidad === 1 ? 'venta' : 'ventas'}`);
+    asignarTexto('cash-close-cash-income', formatCurrency(resumen.efectivo));
+    asignarTexto('cash-close-expected', formatCurrency(totalEsperado));
+    asignarTexto('cash-close-method-cash', formatCurrency(resumen.efectivo));
+    asignarTexto('cash-close-method-transfer', formatCurrency(transferenciaQr));
+    asignarTexto('cash-close-method-card', formatCurrency(tarjeta));
+    asignarTexto('cash-close-non-cash', formatCurrency(otrosMetodos));
+    asignarTexto('cash-close-gross', formatCurrency(resumen.totalBruto));
+    asignarTexto('cash-close-discounts', resumen.descuentos > 0 ? `-${formatCurrency(resumen.descuentos)}` : formatCurrency(0));
+    asignarTexto('cash-close-tax', formatCurrency(resumen.impuestos));
+    asignarTexto('cash-close-total', formatCurrency(resumen.total));
+    actualizarDiferenciaCierreCaja();
+  }
+
+  function abrirCierreCaja() {
+    const modal = document.getElementById('cash-close-modal');
+    const countedInput = document.getElementById('cash-close-counted');
+
+    mostrarErrorCierreCaja('');
+    poblarConfiguracionCierreCaja();
+
+    actualizarResumenCierreCaja();
+    modal?.classList.remove('hidden');
+    window.setTimeout(() => countedInput?.focus(), 0);
+  }
+
+  function cerrarCierreCaja() {
+    document.getElementById('cash-close-modal')?.classList.add('hidden');
+    mostrarErrorCierreCaja('');
+  }
+
+  function construirListadoCierreCaja(ventas, resumen, datosCierre) {
+    const transferenciaQr = (resumen.porMetodo.transferencia || 0) + (resumen.porMetodo.qr || 0);
+    const tarjeta = resumen.porMetodo.tarjeta || 0;
+    const otrosMetodos = Math.max(resumen.noEfectivo - transferenciaQr - tarjeta, 0);
+    const totalEsperado = obtenerTotalEsperadoCierre(resumen, datosCierre);
+    const diferencia = datosCierre.efectivoContado - totalEsperado;
+    const ventasOrdenadas = [...ventas].reverse();
+    const filasVentas = ventasOrdenadas.length
+      ? ventasOrdenadas.map((venta) => `
+          <tr>
+            <td>${escapeHtml(formatDateOnly(venta.fechaISO))}</td>
+            <td>${escapeHtml(formatTimeOnly(venta.fechaISO))}</td>
+            <td>${escapeHtml(venta.sucursal || SUCURSAL_ACTIVA)}</td>
+            <td>${escapeHtml(venta.metodoPagoNombre || obtenerNombreMetodoPago(venta.metodoPago))}</td>
+            <td>${escapeHtml(venta.totalItems || 0)}</td>
+            <td>${formatCurrency(Number(venta.subtotal) || Number(venta.total) || 0)}</td>
+            <td>${formatCurrency(Number(venta.descuento?.monto) || 0)}</td>
+            <td>${formatCurrency(Number(venta.impuestos) || 0)}</td>
+            <td>${formatCurrency(Number(venta.total) || 0)}</td>
+          </tr>
+        `).join('')
+      : '<tr><td colspan="9">Sin ventas registradas.</td></tr>';
+    const filasMetodos = [
+      ['Efectivo', resumen.efectivo],
+      ['Transferencia / QR', transferenciaQr],
+      ['Tarjeta crédito / débito', tarjeta],
+      ['Otros métodos', otrosMetodos]
+    ].map(([metodo, total]) => `
+      <tr>
+        <td>${escapeHtml(metodo)}</td>
+        <td>${formatCurrency(Number(total) || 0)}</td>
+      </tr>
+    `).join('');
+
+    return `
+      <section>
+        <h1 style="font-size: 28px; margin: 0 0 6px;">Cierre de caja</h1>
+        <p style="margin: 0 0 18px;">${escapeHtml(SUCURSAL_ACTIVA)} · ${escapeHtml(formatDateOnly(datosCierre.fechaFinISO))} · ${escapeHtml(formatTimeOnly(datosCierre.fechaFinISO))}</p>
+        <h2 style="font-size: 18px; margin: 18px 0 8px;">Encabezado de sesión</h2>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 18px;">
+          <div><strong>Usuario</strong><br>${escapeHtml(datosCierre.usuario)}</div>
+          <div><strong>ID de caja</strong><br>${escapeHtml(datosCierre.cajaId)}</div>
+          <div><strong>Inicio turno</strong><br>${escapeHtml(formatDateTime(datosCierre.fechaInicioISO))}</div>
+          <div><strong>Fin turno</strong><br>${escapeHtml(formatDateTime(datosCierre.fechaFinISO))}</div>
+        </div>
+        <h2 style="font-size: 18px; margin: 18px 0 8px;">Resumen de efectivo</h2>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 18px;">
+          <div><strong>Monto inicial</strong><br>${formatCurrency(datosCierre.montoInicial)}</div>
+          <div><strong>Ingresos en efectivo</strong><br>${formatCurrency(resumen.efectivo)}</div>
+          <div><strong>Egresos / retiros</strong><br>${formatCurrency(datosCierre.egresos)}</div>
+          <div><strong>Total esperado</strong><br>${formatCurrency(totalEsperado)}</div>
+          <div><strong>Efectivo real</strong><br>${formatCurrency(datosCierre.efectivoContado)}</div>
+          <div><strong>Diferencia efectivo</strong><br>${formatCurrency(diferencia)}</div>
+        </div>
+        <h2 style="font-size: 18px; margin: 18px 0 8px;">Desglose por método de pago</h2>
+        <table class="print-table">
+          <thead><tr><th>Método</th><th>Total</th></tr></thead>
+          <tbody>${filasMetodos}</tbody>
+        </table>
+        <h2 style="font-size: 18px; margin: 22px 0 8px;">Métricas de venta</h2>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 18px;">
+          <div><strong>Total bruto</strong><br>${formatCurrency(resumen.totalBruto)}</div>
+          <div><strong>Descuentos aplicados</strong><br>${formatCurrency(resumen.descuentos)}</div>
+          <div><strong>IVA 16%</strong><br>${formatCurrency(resumen.impuestos)}</div>
+          <div><strong>Cantidad de ventas</strong><br>${escapeHtml(resumen.cantidad)}</div>
+        </div>
+        <h2 style="font-size: 18px; margin: 22px 0 8px;">Listado de ventas</h2>
+        <table class="print-table">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Hora</th>
+              <th>Sucursal</th>
+              <th>Método</th>
+              <th>Items</th>
+              <th>Bruto</th>
+              <th>Desc.</th>
+              <th>IVA</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>${filasVentas}</tbody>
+        </table>
+      </section>
+    `;
+  }
+
+  function confirmarCierreCaja() {
+    const userInput = document.getElementById('cash-close-user');
+    const registerInput = document.getElementById('cash-close-register-id');
+    const openingInput = document.getElementById('cash-close-opening');
+    const withdrawalsInput = document.getElementById('cash-close-withdrawals');
+    const countedInput = document.getElementById('cash-close-counted');
+    const usuario = userInput?.value.trim();
+    const cajaId = registerInput?.value.trim();
+    const montoInicial = Number(openingInput?.value || 0);
+    const egresos = Number(withdrawalsInput?.value || 0);
+    const efectivoContado = Number(countedInput?.value);
+
+    if (!usuario || !cajaId) {
+      mostrarErrorCierreCaja('Ingresá el usuario y el ID de caja para cerrar el turno.');
+      (usuario ? registerInput : userInput)?.focus();
+      return;
+    }
+
+    if (!Number.isFinite(montoInicial) || montoInicial < 0 || !Number.isFinite(egresos) || egresos < 0) {
+      mostrarErrorCierreCaja('El monto inicial y los egresos deben ser valores válidos.');
+      (!Number.isFinite(montoInicial) || montoInicial < 0 ? openingInput : withdrawalsInput)?.focus();
+      return;
+    }
+
+    if (!Number.isFinite(efectivoContado) || efectivoContado < 0) {
+      mostrarErrorCierreCaja('Ingresá el efectivo real en caja para cerrar el turno.');
+      countedInput?.focus();
+      return;
+    }
+
+    const ventasParaImprimir = [...historialVentas];
+    const resumen = calcularResumenCierre(ventasParaImprimir);
+    const datosCierre = obtenerDatosCierreCaja(new Date().toISOString());
+    datosCierre.fechaInicioISO = obtenerInicioTurnoParaCierre(ventasParaImprimir);
+    const printArea = document.getElementById('cash-close-print-area');
+
+    if (printArea) {
+      printArea.innerHTML = construirListadoCierreCaja(ventasParaImprimir, resumen, datosCierre);
+    }
+
+    guardarConfiguracionCierreCaja(datosCierre);
+    historialVentas = [];
+    guardarHistorialVentas();
+    renderizarHistorialVentas();
+    reiniciarTurnoInicio();
+    cerrarCierreCaja();
+    window.print();
+  }
+
+  function confirmarCobro() {
+    if (totalesActuales.totalItems <= 0) {
+      mostrarErrorPago('Agregá productos al carrito antes de cobrar.');
+      return;
+    }
+
+    if (metodoPagoActivo === 'efectivo') {
+      const recibido = Number(document.getElementById('cash-received')?.value || 0);
+
+      if (!Number.isFinite(recibido) || recibido < totalesActuales.total) {
+        mostrarErrorPago('El monto recibido debe cubrir el total de la venta.');
+        return;
+      }
+    }
+
+    registrarVentaActual();
+    carrito = [];
+    actualizarInterfaz();
+    cerrarModalPago();
+    document.getElementById('receipt-modal')?.classList.remove('hidden');
+  }
+
+  function finalizarVenta({ imprimir = false } = {}) {
+    if (imprimir) {
+      window.print();
+    }
+
+    document.getElementById('receipt-modal')?.classList.add('hidden');
+    actualizarInterfaz();
   }
 
   function actualizarInterfaz() {
@@ -821,24 +2111,24 @@ Imagen URL
             : `<span class="material-symbols-outlined text-secondary text-2xl">${escapeHtml(item.icono || 'inventory_2')}</span>`;
 
           return `
-          <div class="flex gap-4 items-start group">
-            <div class="w-16 h-16 rounded-lg bg-surface-container-low overflow-hidden flex-shrink-0 flex items-center justify-center">
+          <div class="group flex min-w-0 items-start gap-3 rounded-xl border border-outline-variant/15 bg-surface-container-lowest p-3">
+            <div class="h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg bg-surface-container-low flex items-center justify-center 2xl:h-20 2xl:w-20">
               ${mediaCarrito}
             </div>
-            <div class="flex-1 flex flex-col">
-              <h4 class="font-semibold text-sm leading-tight text-on-surface">${nombreSeguro}</h4>
+            <div class="flex min-w-0 flex-1 flex-col">
+              <h4 class="line-clamp-2 font-semibold text-sm leading-tight text-on-surface">${nombreSeguro}</h4>
               <span class="text-primary font-bold mt-1">${formatCurrency(item.precioEfectivo * item.cantidad)}</span>
-              <div class="flex items-center gap-3 mt-2">
-                <button type="button" onclick="cambiarCantidad(${item.id}, -1)" class="w-6 h-6 rounded-full bg-surface-container-high flex items-center justify-center text-secondary hover:bg-secondary hover:text-on-secondary transition-colors" aria-label="Quitar ${nombreSeguro}">
+              <div class="mt-3 flex flex-wrap items-center gap-2" aria-label="Modificar cantidad de ${nombreSeguro}">
+                <button type="button" onclick="cambiarCantidad(${item.id}, -1)" class="flex h-8 w-8 items-center justify-center rounded-full bg-surface-container-high text-secondary transition-colors hover:bg-secondary hover:text-on-secondary active:scale-95" aria-label="Quitar ${nombreSeguro}">
                   <span class="material-symbols-outlined text-sm">remove</span>
                 </button>
-                <span class="font-medium text-sm w-4 text-center">${item.cantidad}</span>
-                <button type="button" onclick="cambiarCantidad(${item.id}, 1)" class="w-6 h-6 rounded-full bg-surface-container-high flex items-center justify-center text-secondary hover:bg-primary hover:text-on-primary transition-colors" aria-label="Agregar ${nombreSeguro}">
+                <input type="number" min="0" step="1" value="${item.cantidad}" onchange="actualizarCantidadCarrito(${item.id}, this.value)" onkeydown="if (event.key === 'Enter') this.blur()" class="h-8 w-14 rounded-lg border border-outline-variant bg-surface-container-lowest px-2 text-center text-sm font-bold text-on-surface focus:border-primary focus:ring-primary" aria-label="Cantidad de ${nombreSeguro}">
+                <button type="button" onclick="cambiarCantidad(${item.id}, 1)" class="flex h-8 w-8 items-center justify-center rounded-full bg-surface-container-high text-secondary transition-colors hover:bg-primary hover:text-on-primary active:scale-95" aria-label="Agregar ${nombreSeguro}">
                   <span class="material-symbols-outlined text-sm">add</span>
                 </button>
               </div>
             </div>
-            <button type="button" onclick="cambiarCantidad(${item.id}, -${item.cantidad})" class="text-secondary hover:text-error transition-colors mt-1 opacity-0 group-hover:opacity-100" aria-label="Eliminar ${nombreSeguro}">
+            <button type="button" onclick="cambiarCantidad(${item.id}, -${item.cantidad})" class="mt-1 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-secondary opacity-100 transition-colors hover:bg-error-container hover:text-error xl:opacity-0 xl:group-hover:opacity-100" aria-label="Eliminar ${nombreSeguro}">
               <span class="material-symbols-outlined text-xl">delete</span>
             </button>
           </div>
@@ -853,12 +2143,27 @@ Imagen URL
     const impuestos = baseImponible * IVA;
     const total = baseImponible + impuestos;
     const totalItems = carrito.reduce((acc, item) => acc + item.cantidad, 0);
+    totalesActuales = {
+      subtotal,
+      descuentoMonto,
+      impuestos,
+      total,
+      totalItems
+    };
 
     document.getElementById('subtotal-amount').textContent = formatCurrency(subtotal);
-    document.getElementById('discount-amount').textContent = `-${formatCurrency(descuentoMonto)}`;
+    document.getElementById('discount-amount').textContent = descuentoMonto > 0 ? `-${formatCurrency(descuentoMonto)}` : formatCurrency(0);
     document.getElementById('tax-amount').textContent = formatCurrency(impuestos);
     document.getElementById('total-amount').textContent = formatCurrency(total);
     document.getElementById('cart-count').textContent = `${totalItems} Ítems`;
+    const openPaymentModal = document.getElementById('open-payment-modal');
+
+    if (openPaymentModal) {
+      openPaymentModal.disabled = totalItems <= 0;
+    }
+
+    actualizarResumenPago();
+    actualizarVueltoEfectivo();
     actualizarSelectorDescuento();
   }
 
@@ -869,16 +2174,46 @@ Imagen URL
     const closeProductModal = document.getElementById('close-product-modal');
     const cancelProductModal = document.getElementById('cancel-product-modal');
     const productForm = document.getElementById('product-form');
+    const discountOptions = document.getElementById('discount-options');
+    const discountNameInput = document.getElementById('discount-name-input');
+    const discountRateInput = document.getElementById('discount-rate-input');
+    const saveDiscount = document.getElementById('save-discount');
+    const addDiscount = document.getElementById('add-discount');
+    const deleteDiscount = document.getElementById('delete-discount');
+    const openPaymentModal = document.getElementById('open-payment-modal');
+    const paymentModal = document.getElementById('payment-modal');
+    const closePaymentModal = document.getElementById('close-payment-modal');
+    const cancelPaymentModal = document.getElementById('cancel-payment-modal');
+    const confirmPayment = document.getElementById('confirm-payment');
+    const cashReceived = document.getElementById('cash-received');
+    const skipReceipt = document.getElementById('skip-receipt');
+    const printReceipt = document.getElementById('print-receipt');
+    const openSalesHistory = document.getElementById('open-sales-history');
+    const salesHistoryModal = document.getElementById('sales-history-modal');
+    const closeSalesHistory = document.getElementById('close-sales-history');
+    const openCashClose = document.getElementById('open-cash-close');
+    const cashCloseModal = document.getElementById('cash-close-modal');
+    const closeCashClose = document.getElementById('close-cash-close');
+    const cancelCashClose = document.getElementById('cancel-cash-close');
+    const confirmCashClose = document.getElementById('confirm-cash-close');
+    const cashCloseUser = document.getElementById('cash-close-user');
+    const cashCloseRegister = document.getElementById('cash-close-register-id');
+    const cashCloseOpening = document.getElementById('cash-close-opening');
+    const cashCloseWithdrawals = document.getElementById('cash-close-withdrawals');
+    const cashCloseCounted = document.getElementById('cash-close-counted');
 
     productosPersonalizados = cargarProductosPersonalizados()
       .map(normalizarProductoGuardado)
       .filter(Boolean);
+    historialVentas = cargarHistorialVentas();
+    turnoInicioISO = obtenerTurnoInicio();
+    descuentosDisponibles = cargarDescuentosGuardados();
+    sincronizarDescuentoActivo();
     sincronizarProductos();
     renderizarProductos();
-    cargarVentaRapida();
     actualizarInterfaz();
 
-    openProductModal?.addEventListener('click', abrirModalProducto);
+    openProductModal?.addEventListener('click', () => abrirModalProducto());
     closeProductModal?.addEventListener('click', cerrarModalProducto);
     cancelProductModal?.addEventListener('click', cerrarModalProducto);
     productForm?.addEventListener('submit', agregarProductoPersonalizado);
@@ -887,6 +2222,57 @@ Imagen URL
         cerrarModalProducto();
       }
     });
+
+    openPaymentModal?.addEventListener('click', abrirModalPago);
+    closePaymentModal?.addEventListener('click', cerrarModalPago);
+    cancelPaymentModal?.addEventListener('click', cerrarModalPago);
+    paymentModal?.addEventListener('click', (event) => {
+      if (event.target === paymentModal) {
+        cerrarModalPago();
+      }
+    });
+    paymentModal?.querySelectorAll('[data-payment-method]').forEach((button) => {
+      button.addEventListener('click', () => seleccionarMetodoPago(button.dataset.paymentMethod || 'efectivo'));
+    });
+    cashReceived?.addEventListener('input', () => {
+      mostrarErrorPago('');
+      actualizarVueltoEfectivo();
+    });
+    confirmPayment?.addEventListener('click', confirmarCobro);
+    skipReceipt?.addEventListener('click', () => finalizarVenta({ imprimir: false }));
+    printReceipt?.addEventListener('click', () => finalizarVenta({ imprimir: true }));
+    openSalesHistory?.addEventListener('click', (event) => {
+      event.preventDefault();
+      abrirHistorialVentas();
+    });
+    closeSalesHistory?.addEventListener('click', cerrarHistorialVentas);
+    salesHistoryModal?.addEventListener('click', (event) => {
+      if (event.target === salesHistoryModal) {
+        cerrarHistorialVentas();
+      }
+    });
+    openCashClose?.addEventListener('click', abrirCierreCaja);
+    closeCashClose?.addEventListener('click', cerrarCierreCaja);
+    cancelCashClose?.addEventListener('click', cerrarCierreCaja);
+    cashCloseModal?.addEventListener('click', (event) => {
+      if (event.target === cashCloseModal) {
+        cerrarCierreCaja();
+      }
+    });
+    [cashCloseUser, cashCloseRegister].forEach((input) => {
+      input?.addEventListener('input', () => mostrarErrorCierreCaja(''));
+    });
+    [cashCloseOpening, cashCloseWithdrawals, cashCloseCounted].forEach((input) => {
+      input?.addEventListener('input', () => {
+        mostrarErrorCierreCaja('');
+        actualizarResumenCierreCaja();
+      });
+    });
+    cashCloseCounted?.addEventListener('change', () => {
+      mostrarErrorCierreCaja('');
+      actualizarDiferenciaCierreCaja();
+    });
+    confirmCashClose?.addEventListener('click', confirmarCierreCaja);
 
     productSearch?.addEventListener('input', (event) => {
       terminoBusqueda = event.target.value;
@@ -900,21 +2286,51 @@ Imagen URL
       });
     });
 
-    document.querySelectorAll('[data-discount-rate]').forEach((button) => {
-      button.addEventListener('click', () => {
-        descuentoGlobal = Number(button.dataset.discountRate);
-        actualizarInterfaz();
+    discountOptions?.addEventListener('click', (event) => {
+      const button = event.target instanceof Element ? event.target.closest('[data-discount-id]') : null;
+
+      if (button) {
+        seleccionarDescuento(button.dataset.discountId);
+      }
+    });
+
+    saveDiscount?.addEventListener('click', guardarDescuentoActivo);
+    addDiscount?.addEventListener('click', agregarDescuentoDesdeFormulario);
+    deleteDiscount?.addEventListener('click', eliminarDescuentoActivo);
+
+    [discountNameInput, discountRateInput].forEach((input) => {
+      input?.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          guardarDescuentoActivo();
+        }
       });
+    });
+
+    document.addEventListener('click', (event) => {
+      const target = event.target;
+
+      if (!(target instanceof Element) || (!target.closest('[data-product-menu]') && !target.closest('[data-product-menu-button]'))) {
+        cerrarMenusProducto();
+      }
     });
 
     window.addEventListener('keydown', (event) => {
       if (event.key === 'Escape') {
         cerrarModalProducto();
+        cerrarModalPago();
+        cerrarHistorialVentas();
+        cerrarCierreCaja();
+        document.getElementById('receipt-modal')?.classList.add('hidden');
+        cerrarMenusProducto();
       }
     });
   });
 
+  window.abrirModalProducto = abrirModalProducto;
   window.agregarAlCarrito = agregarAlCarrito;
+  window.actualizarCantidadCarrito = actualizarCantidadCarrito;
   window.cambiarCantidad = cambiarCantidad;
+  window.toggleProductMenu = toggleProductMenu;
 </script>
 </body></html>
