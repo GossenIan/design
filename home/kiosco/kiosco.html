@@ -1,2558 +1,773 @@
 <!DOCTYPE html>
-
-<html lang="es"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>SquatGym Kiosk - Carrito</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Manrope:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="../../css/squatgym-header.css">
-<script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    "colors": {
-                        "secondary-fixed": "#e5e2e1",
-                        "surface-container-lowest": "#ffffff",
-                        "on-tertiary-fixed": "#1a1c1c",
-                        "surface-dim": "#dcd9d9",
-                        "surface": "#fcf9f8",
-                        "on-tertiary-container": "#434546",
-                        "surface-bright": "#fcf9f8",
-                        "on-secondary": "#ffffff",
-                        "surface-container-highest": "#e5e2e1",
-                        "surface-container": "#f0eded",
-                        "background": "#fcf9f8",
-                        "error": "#ba1a1a",
-                        "on-secondary-fixed": "#1c1b1b",
-                        "secondary": "#5f5e5e",
-                        "on-surface": "#1c1b1b",
-                        "error-container": "#ffdad6",
-                        "outline-variant": "#bbcbbb",
-                        "on-surface-variant": "#3d4a3e",
-                        "on-error-container": "#93000a",
-                        "on-primary-fixed-variant": "#005228",
-                        "tertiary-fixed": "#e2e2e2",
-                        "inverse-primary": "#4ae183",
-                        "primary-container": "#2ecc71",
-                        "tertiary-fixed-dim": "#c6c6c7",
-                        "surface-tint": "#006d37",
-                        "on-primary-container": "#005027",
-                        "inverse-on-surface": "#f3f0ef",
-                        "primary": "#006d37",
-                        "secondary-container": "#e2dfde",
-                        "on-tertiary-fixed-variant": "#454747",
-                        "on-primary": "#ffffff",
-                        "inverse-surface": "#313030",
-                        "tertiary": "#5d5f5f",
-                        "on-tertiary": "#ffffff",
-                        "surface-container-low": "#f6f3f2",
-                        "secondary-fixed-dim": "#c8c6c5",
-                        "surface-variant": "#e5e2e1",
-                        "surface-container-high": "#eae7e7",
-                        "outline": "#6c7b6d",
-                        "tertiary-container": "#b2b3b3",
-                        "primary-fixed": "#6bfe9c",
-                        "on-secondary-container": "#636262",
-                        "on-secondary-fixed-variant": "#474746",
-                        "on-background": "#1c1b1b",
-                        "on-error": "#ffffff",
-                        "on-primary-fixed": "#00210c",
-                        "primary-fixed-dim": "#4ae183"
-                    },
-                    "borderRadius": {
-                        "DEFAULT": "0.125rem",
-                        "lg": "0.25rem",
-                        "xl": "0.5rem",
-                        "full": "0.75rem"
-                    },
-                    "fontFamily": {
-                        "headline": ["Manrope", "sans-serif"],
-                        "display": ["Manrope", "sans-serif"],
-                        "body": ["Inter", "sans-serif"],
-                        "label": ["Inter", "sans-serif"]
-                    }
-                }
-            }
-        }
-    </script>
-<style>
-        body { font-family: 'Inter', sans-serif; }
-        h1, h2, h3, h4, h5, h6, .font-headline, .font-display { font-family: 'Manrope', sans-serif; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-.discount-option {
-            min-width: 4rem;
-            border: 1px solid rgb(39 174 96 / 0.22);
-            background: #ffffff;
-            color: #006d37;
-            transition: background-color 180ms ease, color 180ms ease, box-shadow 180ms ease, transform 120ms ease;
-        }
-        .discount-option:hover {
-            background: rgb(39 174 96 / 0.10);
-            box-shadow: inset 0 0 0 1px rgb(39 174 96 / 0.22);
-        }
-        .discount-option-active {
-            background: #27ae60;
-            color: #ffffff;
-            box-shadow: 0 8px 20px rgb(39 174 96 / 0.24);
-        }
-        .dark body {
-            background-color: #061f12;
-            color: #f4fbf1;
-        }
-        .dark .bg-background,
-        .dark .bg-surface {
-            background-color: #061f12 !important;
-        }
-        .dark .bg-surface-bright,
-        .dark .bg-surface-container-lowest {
-            background-color: #0f2d1c !important;
-        }
-        .dark .bg-surface-container-low {
-            background-color: #123621 !important;
-        }
-        .dark .bg-surface-container,
-        .dark .bg-surface-container-high,
-        .dark .bg-surface-container-highest,
-        .dark .dark\:bg-zinc-800,
-        .dark .dark\:bg-zinc-900 {
-            background-color: #1a5231 !important;
-        }
-        .dark .dark\:hover\:bg-zinc-800:hover,
-        .dark .hover\:bg-\[\#EAE7E7\]:hover {
-            background-color: #215f39 !important;
-        }
-        .dark .text-on-surface,
-        .dark .dark\:text-zinc-100 {
-            color: #f4fbf1 !important;
-        }
-        .dark .text-on-surface-variant,
-        .dark .text-secondary,
-        .dark .dark\:text-zinc-400 {
-            color: #c7d8c5 !important;
-        }
-        .dark .text-primary,
-        .dark .dark\:text-\[\#2ecc71\] {
-            color: #5cec88 !important;
-        }
-        .dark .border-outline-variant,
-        .dark .border-surface-container-high {
-            border-color: rgb(92 236 136 / 0.24) !important;
-        }
-        .dark .profile-dropdown-panel,
-        .dark .notifications-panel {
-            border-color: rgb(92 236 136 / 0.24);
-        }
-        .dark img.mix-blend-multiply {
-            mix-blend-mode: normal;
-        }
-        .dark .discount-option {
-            background: #0f2d1c;
-            border-color: rgb(92 236 136 / 0.28);
-            color: #5cec88;
-        }
-        .dark .discount-option:hover {
-            background: rgb(92 236 136 / 0.12);
-        }
-        .dark .discount-option-active {
-            background: #5cec88;
-            color: #041f13;
-            box-shadow: 0 8px 20px rgb(92 236 136 / 0.22);
-        }
-        .cash-close-status-balanced {
-            border-color: rgb(0 109 55 / 0.25);
-            background: rgb(45 203 115 / 0.14);
-            color: #006d37;
-        }
-        .cash-close-status-shortage {
-            border-color: rgb(179 38 30 / 0.28);
-            background: #ffdad6;
-            color: #b3261e;
-        }
-        .cash-close-status-surplus {
-            border-color: rgb(226 185 59 / 0.55);
-            background: #fff6d6;
-            color: #7a5700;
-        }
-        .cash-close-difference-balanced {
-            color: #006d37;
-        }
-        .cash-close-difference-shortage {
-            color: #b3261e;
-        }
-        .cash-close-difference-surplus {
-            color: #8a5f00;
-        }
-        .dark .cash-close-status-balanced {
-            background: rgb(92 236 136 / 0.14);
-            color: #5cec88;
-        }
-        .dark .cash-close-status-shortage {
-            background: rgb(255 218 214 / 0.12);
-            color: #ffb4ab;
-        }
-        .dark .cash-close-status-surplus {
-            background: rgb(255 246 214 / 0.12);
-            color: #f2c94c;
-        }
-        @media (max-width: 640px) {
-            .notifications-panel {
-                left: 1rem;
-                right: 1rem;
-                width: auto;
-            }
-        }
-        #cash-close-print-area {
-            display: none;
-        }
-        @media print {
-            @page {
-                margin: 12mm;
-            }
-            body > *:not(#cash-close-print-area) {
-                display: none !important;
-            }
-            #cash-close-print-area {
-                display: block !important;
-                color: #111111;
-                font-family: 'Inter', sans-serif;
-                padding: 0;
-            }
-            #cash-close-print-area h1,
-            #cash-close-print-area h2,
-            #cash-close-print-area h3 {
-                font-family: 'Manrope', sans-serif;
-            }
-            .print-table {
-                width: 100%;
-                border-collapse: collapse;
-                margin-top: 14px;
-                font-size: 12px;
-            }
-            .print-table th,
-            .print-table td {
-                border-bottom: 1px solid #dddddd;
-                padding: 8px 6px;
-                text-align: left;
-                vertical-align: top;
-            }
-            .print-table th {
-                background: #f2f2f2;
-                font-weight: 800;
-            }
-        }
-    </style>
-</head>
-<body class="min-h-screen bg-background text-on-surface font-body antialiased" data-notification-icon="point_of_sale" data-notification-title="Venta pendiente" data-notification-body="Hay una operación de kiosco lista para finalizar.">
-<header class="fixed left-0 top-0 z-50 w-full border-b border-outline-variant bg-surface-container-lowest/95 shadow-sm backdrop-blur-md">
-<div class="flex h-16 w-full items-center justify-between gap-3 px-4 sm:px-6 md:px-10">
-<a class="flex min-w-0 items-center gap-2 sm:gap-3" href="../home.html" aria-label="Ir al inicio">
-<img class="hidden h-10 w-10 shrink-0 rounded-lg border border-outline-variant bg-white object-contain p-1 sm:block" alt="Logo SquatGym" src="../../img/logo.png">
-<span class="whitespace-nowrap font-headline text-lg font-black text-on-surface sm:text-2xl">Squat<span class="brand-gym">Gym</span></span>
-</a>
-<div class="flex shrink-0 items-center justify-end gap-1 sm:gap-2">
-<div class="relative">
-<button type="button" class="flex h-9 w-9 items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-low active:scale-95 sm:h-10 sm:w-10" id="notifications-button" aria-label="Ver notificaciones" aria-expanded="false" aria-controls="notifications-dropdown">
-<span class="relative block">
-<span class="material-symbols-outlined" id="notifications-icon" style="font-variation-settings: 'FILL' 1">notifications</span>
-<span class="absolute right-0.5 top-0 h-2 w-2 rounded-full border border-surface-container-lowest bg-red-500 hidden" id="notification-dot"></span>
-</span>
-</button>
-<div class="notifications-panel z-[100] hidden overflow-hidden rounded-lg border" id="notifications-dropdown" role="menu">
-<div class="flex items-center justify-between gap-4 border-b border-outline-variant p-4">
-<div>
-<p class="text-sm font-bold text-on-surface">Notificaciones</p>
-<p class="text-xs text-on-surface-variant" id="notification-status">Sin novedades pendientes</p>
-</div>
-<button type="button" class="rounded-full p-1 text-on-surface-variant hover:bg-surface-container" id="mark-notifications-read" aria-label="Marcar notificaciones como leídas">
-<span class="material-symbols-outlined text-lg">done_all</span>
-</button>
-</div>
-<div class="max-h-72 overflow-y-auto p-2" id="notifications-list">
-<article class="rounded-md px-3 py-3 hover:bg-surface-container">
-<div class="flex items-start gap-3">
-<span class="material-symbols-outlined mt-0.5 text-lg text-primary">inventory_2</span>
-<div>
-<p class="text-sm font-semibold text-on-surface">Stock bajo</p>
-<p class="text-xs leading-5 text-on-surface-variant">Quedan pocas unidades de proteína whey.</p>
-<p class="mt-1 text-[11px] font-semibold text-primary">Hace 1 min</p>
-</div>
-</div>
-</article>
-<article class="rounded-md px-3 py-3 hover:bg-surface-container">
-<div class="flex items-start gap-3">
-<span class="material-symbols-outlined mt-0.5 text-lg text-primary">event_available</span>
-<div>
-<p class="text-sm font-semibold text-on-surface">Clase por comenzar</p>
-<p class="text-xs leading-5 text-on-surface-variant">Funcional de las 18:00 tiene 12 inscriptos.</p>
-<p class="mt-1 text-[11px] font-semibold text-on-surface-variant">Hace 12 min</p>
-</div>
-</div>
-</article>
-</div>
-</div>
-</div>
-<button type="button" class="flex h-9 w-9 items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-low active:scale-95 sm:h-10 sm:w-10" id="theme-toggle" aria-label="Cambiar a modo oscuro">
-<span class="material-symbols-outlined" id="theme-toggle-dark-icon">dark_mode</span>
-<span class="material-symbols-outlined hidden" id="theme-toggle-light-icon">light_mode</span>
-</button>
-<div class="relative ml-1 flex items-center border-l border-outline-variant pl-2 sm:ml-2 sm:pl-4">
-<button type="button" class="flex h-10 items-center gap-3 rounded-lg px-1 hover:bg-surface-container-low sm:px-2" id="profile-menu-button" aria-expanded="false" aria-controls="profile-dropdown">
-<span class="hidden flex-col items-end sm:flex">
-<span class="text-xs font-bold text-on-surface">Admin Squat</span>
-<span class="text-[10px] uppercase tracking-wider text-on-surface-variant">Super Admin</span>
-</span>
-<span class="flex h-9 w-9 items-center justify-center rounded-lg border border-outline-variant bg-primary-container/15 text-primary shadow-sm">
-<span class="material-symbols-outlined">person</span>
-</span>
-</button>
-<div class="profile-dropdown-panel absolute right-0 top-full z-[100] mt-2 hidden w-56 max-w-[calc(100vw-2rem)] overflow-hidden rounded-lg border" id="profile-dropdown" role="menu">
-<div class="border-b border-outline-variant p-4">
-<p class="text-sm font-bold text-on-surface">Admin Squat</p>
-<p class="text-xs text-on-surface-variant">Super Administrador</p>
-</div>
-<div class="p-2">
-<button type="button" class="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-on-surface hover:bg-surface-container" role="menuitem">
-<span class="material-symbols-outlined text-lg">person</span>
-Mi Perfil
-</button>
-<button type="button" class="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-on-surface hover:bg-surface-container" role="menuitem">
-<span class="material-symbols-outlined text-lg">settings</span>
-Configuración
-</button>
-</div>
-<div class="border-t border-outline-variant p-2">
-<button type="button" class="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-semibold text-error hover:bg-error-container/15" role="menuitem" onclick="window.location.href='../../index.html'">
-<span class="material-symbols-outlined text-lg">logout</span>
-Cerrar sesión
-</button>
-</div>
-</div>
-</div>
-</div>
-</div>
-<nav class="no-scrollbar h-12 w-full overflow-x-auto bg-surface-container-lowest/95" aria-label="Navegación principal">
-<div class="flex h-full w-max min-w-full items-center gap-1 px-4 sm:px-6 md:px-10">
-<a class="nav-tab active:scale-95" href="../home.html">Inicio</a>
-<a class="nav-tab nav-tab-active active:scale-95" href="kiosco.html" aria-current="page">Kiosco</a>
-<a class="nav-tab active:scale-95" href="../inventario/inventario.html">Inventario</a>
-<a class="nav-tab active:scale-95" href="../home.html#asistencias">Asistencias</a>
-<a class="nav-tab active:scale-95" href="../usuarios/gestionroles.html">Usuarios</a>
-</div>
-</nav>
-</header>
-<div class="flex min-h-[calc(100vh-8rem)] flex-1 overflow-hidden pt-32">
-<!-- SideNavBar (Hidden on Mobile) -->
-<nav class="hidden md:flex flex-col h-[calc(100vh-8rem)] py-8 px-4 w-64 fixed left-0 top-32 bg-[#F6F3F2] dark:bg-zinc-900 border-r border-surface-container-high z-40 overflow-y-auto">
-<div class="mb-8 px-4">
-<h2 class="font-['Manrope'] font-extrabold text-[#1C1B1B] dark:text-zinc-100 text-lg">SquatGym Kiosk</h2>
-<p class="text-secondary text-sm font-['Inter']">Management Mode</p>
-</div>
-<div class="flex flex-col gap-2 flex-1">
-<a class="flex items-center gap-3 text-[#5F5E5E] dark:text-zinc-400 px-4 py-3 hover:bg-[#EAE7E7] dark:hover:bg-zinc-800 transition-colors scale-100 active:scale-[0.98] rounded-xl font-['Inter'] text-sm font-semibold" href="kiosco.html">
-<span class="material-symbols-outlined" data-icon="storefront">storefront</span>
-                    Tienda
-                </a>
-<a class="flex items-center gap-3 bg-[#EAE7E7] dark:bg-zinc-800 text-[#006D37] dark:text-[#2ecc71] rounded-xl px-4 py-3 hover:bg-[#EAE7E7] dark:hover:bg-zinc-800 transition-colors scale-100 active:scale-[0.98] font-['Inter'] text-sm font-semibold" href="#carrito">
-<span class="material-symbols-outlined" data-icon="shopping_basket">shopping_basket</span>
-                    Carrito
-                </a>
-<a id="open-sales-history" class="flex items-center gap-3 text-[#5F5E5E] dark:text-zinc-400 px-4 py-3 hover:bg-[#EAE7E7] dark:hover:bg-zinc-800 transition-colors scale-100 active:scale-[0.98] rounded-xl font-['Inter'] text-sm font-semibold" href="#historial">
-<span class="material-symbols-outlined" data-icon="history">history</span>
-                    Historial
-                </a>
-</div>
-<div class="mt-auto px-4 pt-4">
-<button id="open-cash-close" type="button" class="w-full bg-gradient-to-br from-primary to-primary-container text-on-primary font-bold py-3 rounded-xl transition-all active:scale-95 shadow-[0px_4px_14px_rgba(0,109,55,0.2)]">
-                    Cerrar caja
-                </button>
-</div>
-</nav>
-<!-- Main Content Canvas -->
-<main class="flex-1 md:ml-64 p-6 lg:p-10 bg-surface overflow-y-auto">
-<div class="mx-auto flex h-full min-h-0 max-w-[96rem] flex-col gap-8 xl:flex-row xl:gap-10">
-<!-- Left Column: Products -->
-<div class="flex min-w-0 flex-1 flex-col gap-6">
-<!-- Search & Filter -->
-<div class="flex gap-4">
-<div class="relative flex-1">
-<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-secondary">search</span>
-<input id="product-search" class="w-full bg-surface-container-highest border-none rounded-xl py-4 pl-12 pr-4 text-on-surface placeholder:text-secondary focus:ring-0 focus:border-b-2 focus:border-primary transition-all font-body" placeholder="Buscar productos (Ej. Proteína, Creatina...)" type="text"/>
-</div>
-<button id="toggle-filters" type="button" class="bg-surface-container-low text-on-surface px-6 py-4 rounded-xl font-semibold flex items-center gap-2 hover:bg-surface-container-high transition-colors active:scale-95" aria-expanded="false" aria-controls="quick-filters">
-<span class="material-symbols-outlined" data-icon="tune">tune</span>
-                            Filtros
-<span id="toggle-filters-icon" class="material-symbols-outlined text-lg" aria-hidden="true">expand_more</span>
-                        </button>
-<button id="open-product-modal" type="button" class="bg-primary text-on-primary px-6 py-4 rounded-xl font-semibold flex items-center gap-2 hover:bg-primary-container hover:text-on-primary-container transition-colors active:scale-95">
-<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
-                            Nuevo
-                        </button>
-</div>
-<!-- Category Pills -->
-<div id="quick-filters" class="hidden flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
-<button type="button" class="category-filter whitespace-nowrap px-6 py-2 rounded-full bg-primary text-on-primary font-medium text-sm transition-all shadow-[0px_4px_14px_rgba(0,109,55,0.2)]" data-category="Todos">Todos</button>
-<button type="button" class="category-filter whitespace-nowrap px-6 py-2 rounded-full bg-surface-container-low text-secondary font-medium text-sm hover:bg-surface-container-high transition-all" data-category="Suplementos">Suplementos</button>
-<button type="button" class="category-filter whitespace-nowrap px-6 py-2 rounded-full bg-surface-container-low text-secondary font-medium text-sm hover:bg-surface-container-high transition-all" data-category="Bebidas">Bebidas</button>
-<button type="button" class="category-filter whitespace-nowrap px-6 py-2 rounded-full bg-surface-container-low text-secondary font-medium text-sm hover:bg-surface-container-high transition-all" data-category="Alimentos">Alimentos</button>
-<button type="button" class="category-filter whitespace-nowrap px-6 py-2 rounded-full bg-surface-container-low text-secondary font-medium text-sm hover:bg-surface-container-high transition-all" data-category="Indumentaria">Indumentaria</button>
-<button type="button" class="category-filter whitespace-nowrap px-6 py-2 rounded-full bg-surface-container-low text-secondary font-medium text-sm hover:bg-surface-container-high transition-all" data-category="Preparados">Preparados</button>
-</div>
-<!-- Products Grid -->
-<div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 min-[1900px]:grid-cols-4 gap-6">
+<html lang="es">
+  <head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>
+      SquatGym Kiosko - Carrito
+    </title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="../../js/squatgym-theme.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Manrope:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="../../css/squatgym-theme.css">
+    <link rel="stylesheet" href="../../css/squatgym-header.css">
+  </head>
+  <body class="min-h-screen bg-background text-on-surface font-body antialiased" data-notification-icon="point_of_sale" data-notification-title="Venta pendiente" data-notification-body="Hay una operación de kiosco lista para finalizar.">
+    <header class="fixed left-0 top-0 z-50 w-full border-b border-outline-variant bg-surface-container-lowest/95 shadow-sm backdrop-blur-md">
+      <div class="flex h-16 w-full items-center justify-between gap-3 px-4 sm:px-6 md:px-10">
+        <a class="flex min-w-0 items-center gap-2 sm:gap-3" href="../home.html" aria-label="Ir al inicio">
+          <img class="hidden h-10 w-10 shrink-0 rounded-lg border border-outline-variant bg-white object-contain p-1 sm:block" alt="Logo SquatGym" src="../../img/logo.png">
+          <span class="whitespace-nowrap font-headline text-lg font-black text-on-surface sm:text-2xl">
+            Squat<span class="brand-gym">
+              Gym</span></span>
+        </a>
+        <div class="flex shrink-0 items-center justify-end gap-1 sm:gap-2">
+          <div class="relative">
+            <button type="button" class="flex h-9 w-9 items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-low active:scale-95 sm:h-10 sm:w-10" id="notifications-button" aria-label="Ver notificaciones" aria-expanded="false" aria-controls="notifications-dropdown">
+              <span class="relative block">
+                <span class="material-symbols-outlined" id="notifications-icon" style="font-variation-settings: 'FILL' 1">
+                  notifications</span>
+                <span class="absolute right-0.5 top-0 h-2 w-2 rounded-full border border-surface-container-lowest bg-red-500 hidden" id="notification-dot">
+                </span></span></button>
+            <div class="notifications-panel z-[100] hidden overflow-hidden rounded-lg border" id="notifications-dropdown" role="menu">
+              <div class="flex items-center justify-between gap-4 border-b border-outline-variant p-4">
+                <div>
+                  <p class="text-sm font-bold text-on-surface">
+                    Notificaciones
+                  </p>
+                  <p class="text-xs text-on-surface-variant" id="notification-status">
+                    Sin novedades pendientes
+                  </p>
+                </div>
+                <button type="button" class="rounded-full p-1 text-on-surface-variant hover:bg-surface-container" id="mark-notifications-read" aria-label="Marcar notificaciones como leídas">
+                  <span class="material-symbols-outlined text-lg">
+                    done_all</span></button>
+              </div>
+              <div class="max-h-72 overflow-y-auto p-2" id="notifications-list">
+                <article class="rounded-md px-3 py-3 hover:bg-surface-container">
+                  <div class="flex items-start gap-3"><span class="material-symbols-outlined mt-0.5 text-lg text-primary">
+                      inventory_2</span>
+                    <div>
+                      <p class="text-sm font-semibold text-on-surface">
+                        Stock bajo
+                      </p>
+                      <p class="text-xs leading-5 text-on-surface-variant">
+                        Quedan pocas unidades de proteína whey.
+                      </p>
+                      <p class="mt-1 text-[11px] font-semibold text-primary">
+                        Hace 1 min
+                      </p>
+                    </div>
+                  </div>
+                </article>
+                <article class="rounded-md px-3 py-3 hover:bg-surface-container">
+                  <div class="flex items-start gap-3"><span class="material-symbols-outlined mt-0.5 text-lg text-primary">
+                      event_available</span>
+                    <div>
+                      <p class="text-sm font-semibold text-on-surface">
+                        Clase por comenzar
+                      </p>
+                      <p class="text-xs leading-5 text-on-surface-variant">
+                        Funcional de las 18:00 tiene 12 inscriptos.
+                      </p>
+                      <p class="mt-1 text-[11px] font-semibold text-on-surface-variant">
+                        Hace 12 min
+                      </p>
+                    </div>
+                  </div>
+                </article>
+              </div>
+            </div>
+          </div>
+          <button type="button" class="flex h-9 w-9 items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-low active:scale-95 sm:h-10 sm:w-10" id="theme-toggle" aria-label="Cambiar a modo oscuro">
+            <span class="material-symbols-outlined" id="theme-toggle-dark-icon">
+              dark_mode</span><span class="material-symbols-outlined hidden" id="theme-toggle-light-icon">
+              light_mode</span></button>
+          <div class="relative ml-1 flex items-center border-l border-outline-variant pl-2 sm:ml-2 sm:pl-4">
+            <button type="button" class="flex h-10 items-center gap-3 rounded-lg px-1 hover:bg-surface-container-low sm:px-2" id="profile-menu-button" aria-expanded="false" aria-controls="profile-dropdown">
+              <span class="hidden flex-col items-end sm:flex"><span class="text-xs font-bold text-on-surface">
+                  Admin Squat</span><span class="text-[10px] uppercase tracking-wider text-on-surface-variant">
+                  Super Admin</span></span>
+              <span class="flex h-9 w-9 items-center justify-center rounded-lg border border-outline-variant bg-primary-container/15 text-primary shadow-sm">
+                <span class="material-symbols-outlined">
+                  person</span></span></button>
+            <div class="profile-dropdown-panel absolute right-0 top-full z-[100] mt-2 hidden w-56 max-w-[calc(100vw-2rem)] overflow-hidden rounded-lg border" id="profile-dropdown" role="menu">
+              <div class="border-b border-outline-variant p-4">
+                <p class="text-sm font-bold text-on-surface">
+                  Admin Squat
+                </p>
+                <p class="text-xs text-on-surface-variant">
+                  Super Administrador
+                </p>
+              </div>
+              <div class="p-2">
+                <button type="button" class="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-on-surface hover:bg-surface-container" role="menuitem">
+                  <span class="material-symbols-outlined text-lg">
+                    person</span>
+                  Mi Perfil</button>
+                <button type="button" class="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-on-surface hover:bg-surface-container" role="menuitem">
+                  <span class="material-symbols-outlined text-lg">
+                    settings</span>
+                  Configuración</button>
+              </div>
+              <div class="border-t border-outline-variant p-2">
+                <button type="button" class="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-semibold text-error hover:bg-error-container/15" role="menuitem" onclick="window.location.href='../../index.html'">
+                  <span class="material-symbols-outlined text-lg">
+                    logout</span>
+                  Cerrar sesión</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <nav class="no-scrollbar h-12 w-full overflow-x-auto bg-surface-container-lowest/95" aria-label="Navegación principal">
+        <div class="flex h-full w-max min-w-full items-center gap-1 px-4 sm:px-6 md:px-10">
+          <a class="nav-tab active:scale-95" href="../home.html">
+            Inicio
+          </a>
+          <a class="nav-tab nav-tab-active active:scale-95" href="kiosco.html" aria-current="page">
+            Kiosco
+          </a>
+          <a class="nav-tab active:scale-95" href="../inventario/inventario.html">
+            Inventario
+          </a>
+          <a class="nav-tab active:scale-95" href="../home.html#asistencias">
+            Asistencias
+          </a>
+          <a class="nav-tab active:scale-95" href="../usuarios/gestionroles.html">
+            Usuarios
+          </a>
+        </div>
+      </nav>
+    </header>
+    <div class="flex min-h-[calc(100vh-8rem)] flex-1 overflow-hidden pt-32">
+      <!-- SideNavBar (Hidden on Mobile) -->
+      <nav class="hidden md:flex flex-col h-[calc(100vh-8rem)] py-8 px-4 w-64 fixed left-0 top-32 bg-[#F6F3F2] dark:bg-zinc-900 border-r border-surface-container-high z-40 overflow-y-auto">
+        <div class="mb-8 px-4">
+          <h2 class="font-['Manrope'] font-extrabold text-[#1C1B1B] dark:text-zinc-100 text-lg">
+            SquatGym Kiosko
+          </h2>
+          <p class="text-secondary text-sm font-['Inter']">
+            Management Mode
+          </p>
+        </div>
+        <div class="flex flex-col gap-2 flex-1">
+          <a class="flex items-center gap-3 bg-[#EAE7E7] dark:bg-zinc-800 text-[#006D37] dark:text-[#2ecc71] rounded-xl px-4 py-3 hover:bg-[#EAE7E7] dark:hover:bg-zinc-800 transition-colors scale-100 active:scale-[0.98] font-['Inter'] text-sm font-semibold" href="kiosco.html" aria-current="page">
+            <span class="material-symbols-outlined" data-icon="storefront">
+              storefront</span>
+            Tienda
+          </a>
+          <a class="flex items-center gap-3 text-[#5F5E5E] dark:text-zinc-400 px-4 py-3 hover:bg-[#EAE7E7] dark:hover:bg-zinc-800 transition-colors scale-100 active:scale-[0.98] rounded-xl font-['Inter'] text-sm font-semibold" href="../inventario/inventario.html">
+            <span class="material-symbols-outlined" data-icon="inventory_2">
+              inventory_2</span>
+            Inventario
+          </a>
+          <a id="open-sales-history" class="flex items-center gap-3 text-[#5F5E5E] dark:text-zinc-400 px-4 py-3 hover:bg-[#EAE7E7] dark:hover:bg-zinc-800 transition-colors scale-100 active:scale-[0.98] rounded-xl font-['Inter'] text-sm font-semibold" href="#historial">
+            <span class="material-symbols-outlined" data-icon="history">
+              history</span>
+            Historial
+          </a>
+        </div>
+        <div class="mt-auto px-4 pt-4">
+          <button id="open-cash-close" type="button" class="w-full bg-gradient-to-br from-primary to-primary-container text-on-primary font-bold py-3 rounded-xl transition-all active:scale-95 shadow-[0px_4px_14px_rgba(0,109,55,0.2)]">
+            Cerrar caja</button>
+        </div>
+      </nav>
+      <!-- Main Content Canvas -->
+      <main class="flex-1 md:ml-64 p-6 lg:p-10 bg-surface overflow-y-auto">
+        <div class="mx-auto flex h-full min-h-0 max-w-[96rem] flex-col gap-8 xl:flex-row xl:gap-10">
+          <!-- Left Column: Products -->
+          <div class="flex min-w-0 flex-1 flex-col gap-6">
+            <section class="flex flex-col gap-3 rounded-xl border border-outline-variant/15 bg-surface-container-lowest p-4 shadow-[0px_10px_24px_rgba(28,27,27,0.04)] sm:flex-row sm:items-center sm:justify-between">
+              <div class="flex items-center gap-3">
+                <span class="material-symbols-outlined flex h-11 w-11 items-center justify-center rounded-xl bg-primary-container/20 text-primary" data-icon="storefront">
+                  storefront</span>
+                <div>
+                  <p class="text-xs font-bold uppercase tracking-wider text-secondary">
+                    Tienda vinculada
+                  </p>
+                  <h1 id="active-branch-title" class="font-headline text-xl font-black text-on-surface">
+                    SquatGym Central
+                  </h1>
+                </div>
+              </div>
+              <label class="flex min-w-0 flex-col gap-1 text-xs font-bold uppercase tracking-wider text-secondary sm:w-64">
+                Cambiar sucursal
+                <select id="branch-select" class="rounded-lg border-none bg-surface-container-highest px-3 py-3 text-sm font-bold normal-case tracking-normal text-on-surface focus:ring-2 focus:ring-primary">
+                </select>
+              </label>
+            </section>
+            <!-- Search & Filter -->
+            <div class="flex gap-4">
+              <div class="relative flex-1"><span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-secondary">
+                  search</span>
+                <input id="product-search" class="w-full bg-surface-container-highest border-none rounded-xl py-4 pl-12 pr-4 text-on-surface placeholder:text-secondary focus:ring-0 focus:border-b-2 focus:border-primary transition-all font-body" placeholder="Buscar productos (Ej. Proteína, Creatina...)" type="text"/>
+              </div>
+              <button id="toggle-filters" type="button" class="bg-surface-container-low text-on-surface px-6 py-4 rounded-xl font-semibold flex items-center gap-2 hover:bg-surface-container-high transition-colors active:scale-95" aria-expanded="false" aria-controls="quick-filters">
+                <span class="material-symbols-outlined" data-icon="tune">
+                  tune</span>
+                Filtros<span id="toggle-filters-icon" class="material-symbols-outlined text-lg" aria-hidden="true">
+                  expand_more</span></button>
+              <a href="../inventario/inventario.html" class="bg-primary text-on-primary px-6 py-4 rounded-xl font-semibold flex items-center gap-2 hover:bg-primary-container hover:text-on-primary-container transition-colors active:scale-95">
+                <span class="material-symbols-outlined" data-icon="inventory_2">
+                  inventory_2</span>
+                Inventario
+              </a>
+            </div>
+            <!-- Category Pills -->
+            <div id="quick-filters" class="hidden flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+              <button type="button" class="category-filter whitespace-nowrap px-6 py-2 rounded-full bg-primary text-on-primary font-medium text-sm transition-all shadow-[0px_4px_14px_rgba(0,109,55,0.2)]" data-category="Todos">
+                Todos</button>
+              <button type="button" class="category-filter whitespace-nowrap px-6 py-2 rounded-full bg-surface-container-low text-secondary font-medium text-sm hover:bg-surface-container-high transition-all" data-category="Suplementos">
+                Suplementos</button>
+              <button type="button" class="category-filter whitespace-nowrap px-6 py-2 rounded-full bg-surface-container-low text-secondary font-medium text-sm hover:bg-surface-container-high transition-all" data-category="Bebidas">
+                Bebidas</button>
+              <button type="button" class="category-filter whitespace-nowrap px-6 py-2 rounded-full bg-surface-container-low text-secondary font-medium text-sm hover:bg-surface-container-high transition-all" data-category="Alimentos">
+                Alimentos</button>
+              <button type="button" class="category-filter whitespace-nowrap px-6 py-2 rounded-full bg-surface-container-low text-secondary font-medium text-sm hover:bg-surface-container-high transition-all" data-category="Indumentaria">
+                Indumentaria</button>
+              <button type="button" class="category-filter whitespace-nowrap px-6 py-2 rounded-full bg-surface-container-low text-secondary font-medium text-sm hover:bg-surface-container-high transition-all" data-category="Preparados">
+                Preparados</button>
+            </div>
+            <!-- Products Grid -->
+            <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 min-[1900px]:grid-cols-4 gap-6">
+            </div>
+          </div>
+          <!-- Right Column: Cart / Checkout -->
+          <div class="flex w-full flex-col xl:h-fit xl:w-[25rem] xl:shrink-0 2xl:w-[30rem]" id="carrito">
+            <div class="flex min-h-[34rem] flex-col overflow-hidden rounded-2xl border border-outline-variant/15 bg-surface-container-lowest shadow-[0px_12px_32px_rgba(28,27,27,0.06)] xl:max-h-[calc(100vh-10rem)] xl:overflow-y-auto">
+              <!-- Cart Header -->
+              <div class="shrink-0 p-6 pb-4 border-b border-surface-container-low flex justify-between items-center bg-surface-bright">
+                <div class="flex items-center gap-3">
+                  <span class="material-symbols-outlined text-primary text-2xl" data-icon="shopping_basket">
+                    shopping_basket</span>
+                  <h2 class="font-headline font-bold text-xl text-on-surface">
+                    Carrito actual
+                  </h2>
+                </div>
+                <span class="bg-primary-container text-on-primary-container text-xs font-bold px-3 py-1 rounded-full" id="cart-count">
+                  0 Ítems</span>
+              </div>
+              <!-- Cart Items List -->
+              <div id="cart-items" class="flex min-h-[10rem] max-h-72 shrink-0 flex-col gap-4 overflow-y-auto p-5 2xl:max-h-96 2xl:p-6">
+              </div>
+              <!-- Cart Footer / Totals -->
+              <div class="shrink-0 bg-surface-container-low p-4 2xl:p-5 flex flex-col gap-3">
+                <!-- Discount selector -->
+                <div class="bg-surface-container-highest p-3 rounded-xl border border-outline-variant/20">
+                  <div class="flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-3"><span class="material-symbols-outlined text-primary" data-icon="sell">
+                        sell</span>
+                      <div class="flex flex-col"><span class="text-xs text-secondary font-medium uppercase tracking-wider">
+                          Descuento</span><span id="discount-active-name" class="font-semibold text-sm text-on-surface">
+                          Venta rápida</span>
+                      </div>
+                    </div><span class="text-xs font-bold text-primary" id="discount-summary-rate">
+                      10%</span>
+                  </div>
+                  <div id="discount-options" class="mt-4 grid grid-cols-2 gap-2" aria-label="Seleccionar descuento">
+                  </div>
+                  <div class="mt-3 grid gap-2">
+                    <label class="text-xs font-bold uppercase tracking-wider text-secondary">
+                      Tipo de descuento
+                      <input id="discount-name-input" class="mt-1 w-full rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-2 text-sm font-semibold normal-case tracking-normal text-on-surface focus:border-primary focus:ring-primary" type="text" value="Venta rápida" aria-label="Nombre del tipo de descuento">
+                    </label>
+                    <div class="grid grid-cols-[1fr_auto_auto_auto] items-end gap-2">
+                      <label class="text-xs font-bold uppercase tracking-wider text-secondary">
+                        Porcentaje
+                        <div class="relative mt-1">
+                          <input id="discount-rate-input" class="w-full rounded-lg border border-outline-variant bg-surface-container-lowest py-2 pl-3 pr-8 text-sm font-bold text-on-surface focus:border-primary focus:ring-primary" type="number" min="0" max="90" step="1" value="10" aria-label="Porcentaje del descuento">
+                          <span class="absolute right-3 top-1/2 -translate-y-1/2 text-sm font-bold text-secondary">
+                            %</span>
+                        </div>
+                      </label>
+                      <button id="save-discount" type="button" class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-on-primary hover:bg-primary-container hover:text-on-primary-container active:scale-95" aria-label="Guardar cambios del descuento" title="Guardar cambios">
+                        <span class="material-symbols-outlined text-xl">
+                          save</span></button>
+                      <button id="add-discount" type="button" class="flex h-10 w-10 items-center justify-center rounded-lg bg-surface-container-lowest text-primary hover:bg-primary hover:text-on-primary active:scale-95" aria-label="Agregar descuento" title="Agregar descuento">
+                        <span class="material-symbols-outlined text-xl">
+                          add</span></button>
+                      <button id="delete-discount" type="button" class="flex h-10 w-10 items-center justify-center rounded-lg bg-surface-container text-secondary hover:bg-error-container hover:text-error active:scale-95" aria-label="Eliminar descuento" title="Eliminar descuento">
+                        <span class="material-symbols-outlined text-xl">
+                          delete</span></button>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex flex-col gap-2 mt-2">
+                  <div class="flex justify-between text-sm text-secondary"><span>
+                      Subtotal</span><span id="subtotal-amount">
+                      $0.00</span>
+                  </div>
+                  <div class="flex justify-between text-sm text-secondary"><span>
+                      Descuentos</span><span class="text-primary" id="discount-amount">
+                      $0.00</span>
+                  </div>
+                  <div class="flex justify-between text-sm text-secondary"><span>
+                      Impuestos (IVA 16%)</span><span id="tax-amount">
+                      $0.00</span>
+                  </div>
+                  <div class="flex justify-between items-end mt-4 pt-4 border-t border-outline-variant/20">
+                    <span class="font-headline font-bold text-lg text-on-surface">
+                      Total</span><span class="font-headline font-extrabold text-3xl text-primary leading-none" id="total-amount">
+                      $0.00</span>
+                  </div>
+                </div>
+                <button id="open-payment-modal" type="button" class="w-full bg-gradient-to-br from-primary to-primary-container text-on-primary font-bold text-lg py-4 rounded-xl mt-4 flex items-center justify-center gap-2 transition-all active:scale-95 shadow-[0px_8px_24px_rgba(0,109,55,0.25)] hover:shadow-[0px_12px_32px_rgba(0,109,55,0.35)] disabled:cursor-not-allowed disabled:opacity-50">
+                  <span class="material-symbols-outlined" data-icon="payments">
+                    payments</span>
+                  Cobrar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
     </div>
-</div>
-<!-- Right Column: Cart / Checkout -->
-<div class="flex w-full flex-col xl:h-fit xl:w-[25rem] xl:shrink-0 2xl:w-[30rem]" id="carrito">
-<div class="flex min-h-[34rem] flex-col overflow-hidden rounded-2xl border border-outline-variant/15 bg-surface-container-lowest shadow-[0px_12px_32px_rgba(28,27,27,0.06)] xl:max-h-[calc(100vh-10rem)] xl:overflow-y-auto">
-<!-- Cart Header -->
-<div class="shrink-0 p-6 pb-4 border-b border-surface-container-low flex justify-between items-center bg-surface-bright">
-<div class="flex items-center gap-3">
-<span class="material-symbols-outlined text-primary text-2xl" data-icon="shopping_basket">shopping_basket</span>
-<h2 class="font-headline font-bold text-xl text-on-surface">Carrito actual</h2>
-</div>
-<span class="bg-primary-container text-on-primary-container text-xs font-bold px-3 py-1 rounded-full" id="cart-count">0 Ítems</span>
-</div>
-<!-- Cart Items List -->
-<div id="cart-items" class="flex min-h-[10rem] max-h-72 shrink-0 flex-col gap-4 overflow-y-auto p-5 2xl:max-h-96 2xl:p-6">
+    <div id="payment-modal" class="fixed inset-0 z-[130] hidden flex items-center justify-center bg-black/45 px-4 py-8">
+      <div class="max-h-[calc(100vh-4rem)] w-full max-w-5xl overflow-y-auto rounded-xl border border-outline-variant bg-background shadow-2xl">
+        <div class="relative px-6 pb-6 pt-8 text-center sm:px-10">
+          <button id="close-payment-modal" type="button" class="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full text-secondary hover:bg-surface-container" aria-label="Cerrar cobro">
+            <span class="material-symbols-outlined">
+              close</span></button>
+          <h2 class="font-headline text-3xl font-black uppercase tracking-tight text-on-surface sm:text-5xl">
+            Seleccionar medio de pago
+          </h2>
+          <p class="mx-auto mt-3 max-w-xl text-sm leading-6 text-on-surface-variant sm:text-base">
+            Elija el método preferido por el cliente para completar la transacción de forma segura.
+          </p>
+          <div class="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4" aria-label="Métodos de pago">
+            <button type="button" class="payment-method-option group flex min-h-48 flex-col items-center justify-center rounded-xl border border-outline-variant/10 bg-surface-container-lowest p-6 text-center transition hover:border-primary-container hover:bg-primary-container/10 active:scale-[0.99]" data-payment-method="efectivo">
+              <span class="mb-5 flex h-16 w-16 items-center justify-center rounded-xl bg-primary-fixed text-primary transition-transform group-hover:scale-105">
+                <span class="material-symbols-outlined text-4xl">
+                  payments</span></span><span class="font-headline text-lg font-extrabold uppercase text-on-surface">
+                Efectivo</span><span class="mt-2 text-sm leading-5 text-on-surface-variant">
+                Pago en caja con cálculo automático de vuelto</span></button>
+            <button type="button" class="payment-method-option group flex min-h-48 flex-col items-center justify-center rounded-xl border border-outline-variant/10 bg-surface-container-lowest p-6 text-center transition hover:border-primary-container hover:bg-primary-container/10 active:scale-[0.99]" data-payment-method="transferencia">
+              <span class="mb-5 flex h-16 w-16 items-center justify-center rounded-xl bg-primary-fixed text-primary transition-transform group-hover:scale-105">
+                <span class="material-symbols-outlined text-4xl">
+                  account_balance</span></span><span class="font-headline text-lg font-extrabold uppercase text-on-surface">
+                Transferencia</span><span class="mt-2 text-sm leading-5 text-on-surface-variant">
+                Depósito bancario o transferencia inmediata</span></button>
+            <button type="button" class="payment-method-option group flex min-h-48 flex-col items-center justify-center rounded-xl border border-outline-variant/10 bg-surface-container-lowest p-6 text-center transition hover:border-primary-container hover:bg-primary-container/10 active:scale-[0.99]" data-payment-method="qr">
+              <span class="mb-5 flex h-16 w-16 items-center justify-center rounded-xl bg-primary-fixed text-primary transition-transform group-hover:scale-105">
+                <span class="material-symbols-outlined text-4xl">
+                  qr_code_2</span></span><span class="font-headline text-lg font-extrabold uppercase text-on-surface">
+                QR</span><span class="mt-2 text-sm leading-5 text-on-surface-variant">
+                Escaneo rápido desde cualquier billetera virtual</span></button>
+            <button type="button" class="payment-method-option group flex min-h-48 flex-col items-center justify-center rounded-xl border border-outline-variant/10 bg-surface-container-lowest p-6 text-center transition hover:border-primary-container hover:bg-primary-container/10 active:scale-[0.99]" data-payment-method="tarjeta">
+              <span class="mb-5 flex h-16 w-16 items-center justify-center rounded-xl bg-primary-fixed text-primary transition-transform group-hover:scale-105">
+                <span class="material-symbols-outlined text-4xl">
+                  credit_card</span></span><span class="font-headline text-lg font-extrabold uppercase text-on-surface">
+                Tarjeta</span><span class="mt-2 text-sm leading-5 text-on-surface-variant">
+                Crédito o Débito vía terminal bancaria</span></button>
+          </div>
+          <div class="mx-auto mt-8 grid w-full max-w-3xl gap-4 rounded-xl border border-outline-variant/10 bg-surface-container-lowest p-4 text-left shadow-sm md:grid-cols-[1fr_1.2fr]">
+            <section class="rounded-xl bg-surface-container-low p-4">
+              <span class="text-xs font-bold uppercase tracking-wider text-secondary">
+                Resumen</span>
+              <div class="mt-4 flex flex-col gap-3 text-sm text-secondary">
+                <div class="flex justify-between"><span>
+                    Subtotal</span><span id="payment-subtotal">
+                    $0.00</span>
+                </div>
+                <div class="flex justify-between"><span>
+                    Descuento</span><span class="text-primary" id="payment-discount">
+                    $0.00</span>
+                </div>
+                <div class="flex justify-between"><span>
+                    IVA 16%</span><span id="payment-tax">
+                    $0.00</span>
+                </div>
+                <div class="mt-2 flex items-end justify-between border-t border-outline-variant/20 pt-4">
+                  <span class="font-headline text-lg font-bold text-on-surface">
+                    Total</span><span class="font-headline text-3xl font-extrabold text-primary" id="payment-total">
+                    $0.00</span>
+                </div>
+              </div>
+            </section>
+            <section class="flex flex-col gap-4">
+              <div id="cash-payment-fields" class="rounded-xl border border-outline-variant/20 bg-surface-container-highest p-4">
+                <label class="flex flex-col gap-2 text-sm font-semibold text-on-surface">
+                  Monto recibido
+                  <input id="cash-received" class="rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-3 text-lg font-bold text-on-surface focus:border-primary focus:ring-primary" type="number" min="0" step="0.01" placeholder="0.00">
+                </label>
+                <div class="mt-4 flex items-center justify-between rounded-lg bg-surface-container-lowest px-3 py-3">
+                  <span class="text-sm font-semibold text-secondary">
+                    Vuelto</span><span id="cash-change" class="font-headline text-2xl font-extrabold text-primary">
+                    $0.00</span>
+                </div>
+              </div>
+              <div id="non-cash-payment-note" class="hidden rounded-xl border border-outline-variant/20 bg-surface-container-highest p-4 text-sm text-on-surface-variant">
+                Confirma el pago cuando la operación figure aprobada en la terminal o billetera.
+              </div>
+              <p id="payment-error" class="hidden rounded-lg bg-error-container px-3 py-2 text-sm font-semibold text-error">
+              </p>
+              <div class="flex justify-end gap-3">
+                <button id="cancel-payment-modal" type="button" class="rounded-lg bg-surface-container px-5 py-3 font-bold text-on-surface hover:bg-surface-container-high">
+                  Cancelar</button>
+                <button id="confirm-payment" type="button" class="rounded-lg bg-primary px-5 py-3 font-bold text-on-primary hover:bg-primary-container hover:text-on-primary-container">
+                  Confirmar cobro</button>
+              </div>
+            </section>
+          </div>
+          <div class="mx-auto mt-6 flex w-fit items-center gap-2 rounded-full border border-outline-variant/10 bg-surface-container-low px-5 py-3 text-sm font-medium text-on-surface-variant">
+            <span class="material-symbols-outlined text-lg">
+              security</span>
+            Transacción cifrada y gestionada por SquatGym Central
+          </div>
+        </div>
+      </div>
     </div>
-<!-- Cart Footer / Totals -->
-<div class="shrink-0 bg-surface-container-low p-4 2xl:p-5 flex flex-col gap-3">
-<!-- Discount selector -->
-<div class="bg-surface-container-highest p-3 rounded-xl border border-outline-variant/20">
-<div class="flex items-center justify-between gap-3">
-<div class="flex items-center gap-3">
-<span class="material-symbols-outlined text-primary" data-icon="sell">sell</span>
-<div class="flex flex-col">
-<span class="text-xs text-secondary font-medium uppercase tracking-wider">Descuento</span>
-<span id="discount-active-name" class="font-semibold text-sm text-on-surface">Venta rápida</span>
-</div>
-</div>
-<span class="text-xs font-bold text-primary" id="discount-summary-rate">10%</span>
-</div>
-<div id="discount-options" class="mt-4 grid grid-cols-2 gap-2" aria-label="Seleccionar descuento">
-</div>
-<div class="mt-3 grid gap-2">
-<label class="text-xs font-bold uppercase tracking-wider text-secondary">
-Tipo de descuento
-<input id="discount-name-input" class="mt-1 w-full rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-2 text-sm font-semibold normal-case tracking-normal text-on-surface focus:border-primary focus:ring-primary" type="text" value="Venta rápida" aria-label="Nombre del tipo de descuento">
-</label>
-<div class="grid grid-cols-[1fr_auto_auto_auto] items-end gap-2">
-<label class="text-xs font-bold uppercase tracking-wider text-secondary">
-Porcentaje
-<div class="relative mt-1">
-<input id="discount-rate-input" class="w-full rounded-lg border border-outline-variant bg-surface-container-lowest py-2 pl-3 pr-8 text-sm font-bold text-on-surface focus:border-primary focus:ring-primary" type="number" min="0" max="90" step="1" value="10" aria-label="Porcentaje del descuento">
-<span class="absolute right-3 top-1/2 -translate-y-1/2 text-sm font-bold text-secondary">%</span>
-</div>
-</label>
-<button id="save-discount" type="button" class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-on-primary hover:bg-primary-container hover:text-on-primary-container active:scale-95" aria-label="Guardar cambios del descuento" title="Guardar cambios">
-<span class="material-symbols-outlined text-xl">save</span>
-</button>
-<button id="add-discount" type="button" class="flex h-10 w-10 items-center justify-center rounded-lg bg-surface-container-lowest text-primary hover:bg-primary hover:text-on-primary active:scale-95" aria-label="Agregar descuento" title="Agregar descuento">
-<span class="material-symbols-outlined text-xl">add</span>
-</button>
-<button id="delete-discount" type="button" class="flex h-10 w-10 items-center justify-center rounded-lg bg-surface-container text-secondary hover:bg-error-container hover:text-error active:scale-95" aria-label="Eliminar descuento" title="Eliminar descuento">
-<span class="material-symbols-outlined text-xl">delete</span>
-</button>
-</div>
-</div>
-</div>
-<div class="flex flex-col gap-2 mt-2">
-<div class="flex justify-between text-sm text-secondary">
-<span>Subtotal</span>
-<span id="subtotal-amount">$0.00</span>
-</div>
-<div class="flex justify-between text-sm text-secondary">
-<span>Descuentos</span>
-<span class="text-primary" id="discount-amount">$0.00</span>
-</div>
-<div class="flex justify-between text-sm text-secondary">
-<span>Impuestos (IVA 16%)</span>
-<span id="tax-amount">$0.00</span>
-</div>
-<div class="flex justify-between items-end mt-4 pt-4 border-t border-outline-variant/20">
-<span class="font-headline font-bold text-lg text-on-surface">Total</span>
-<span class="font-headline font-extrabold text-3xl text-primary leading-none" id="total-amount">$0.00</span>
-</div>
-</div>
-<button id="open-payment-modal" type="button" class="w-full bg-gradient-to-br from-primary to-primary-container text-on-primary font-bold text-lg py-4 rounded-xl mt-4 flex items-center justify-center gap-2 transition-all active:scale-95 shadow-[0px_8px_24px_rgba(0,109,55,0.25)] hover:shadow-[0px_12px_32px_rgba(0,109,55,0.35)] disabled:cursor-not-allowed disabled:opacity-50">
-<span class="material-symbols-outlined" data-icon="payments">payments</span>
-                                Cobrar
-                            </button>
-</div>
-</div>
-</div>
-</div>
-</main>
-</div>
-<div id="payment-modal" class="fixed inset-0 z-[130] hidden flex items-center justify-center bg-black/45 px-4 py-8">
-<div class="max-h-[calc(100vh-4rem)] w-full max-w-5xl overflow-y-auto rounded-xl border border-outline-variant bg-background shadow-2xl">
-<div class="relative px-6 pb-6 pt-8 text-center sm:px-10">
-<button id="close-payment-modal" type="button" class="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full text-secondary hover:bg-surface-container" aria-label="Cerrar cobro">
-<span class="material-symbols-outlined">close</span>
-</button>
-<h2 class="font-headline text-3xl font-black uppercase tracking-tight text-on-surface sm:text-5xl">Seleccionar medio de pago</h2>
-<p class="mx-auto mt-3 max-w-xl text-sm leading-6 text-on-surface-variant sm:text-base">Elija el método preferido por el cliente para completar la transacción de forma segura.</p>
-<div class="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4" aria-label="Métodos de pago">
-<button type="button" class="payment-method-option group flex min-h-48 flex-col items-center justify-center rounded-xl border border-outline-variant/10 bg-surface-container-lowest p-6 text-center transition hover:border-primary-container hover:bg-primary-container/10 active:scale-[0.99]" data-payment-method="efectivo">
-<span class="mb-5 flex h-16 w-16 items-center justify-center rounded-xl bg-primary-fixed text-primary transition-transform group-hover:scale-105">
-<span class="material-symbols-outlined text-4xl">payments</span>
-</span>
-<span class="font-headline text-lg font-extrabold uppercase text-on-surface">Efectivo</span>
-<span class="mt-2 text-sm leading-5 text-on-surface-variant">Pago en caja con cálculo automático de vuelto</span>
-</button>
-<button type="button" class="payment-method-option group flex min-h-48 flex-col items-center justify-center rounded-xl border border-outline-variant/10 bg-surface-container-lowest p-6 text-center transition hover:border-primary-container hover:bg-primary-container/10 active:scale-[0.99]" data-payment-method="transferencia">
-<span class="mb-5 flex h-16 w-16 items-center justify-center rounded-xl bg-primary-fixed text-primary transition-transform group-hover:scale-105">
-<span class="material-symbols-outlined text-4xl">account_balance</span>
-</span>
-<span class="font-headline text-lg font-extrabold uppercase text-on-surface">Transferencia</span>
-<span class="mt-2 text-sm leading-5 text-on-surface-variant">Depósito bancario o transferencia inmediata</span>
-</button>
-<button type="button" class="payment-method-option group flex min-h-48 flex-col items-center justify-center rounded-xl border border-outline-variant/10 bg-surface-container-lowest p-6 text-center transition hover:border-primary-container hover:bg-primary-container/10 active:scale-[0.99]" data-payment-method="qr">
-<span class="mb-5 flex h-16 w-16 items-center justify-center rounded-xl bg-primary-fixed text-primary transition-transform group-hover:scale-105">
-<span class="material-symbols-outlined text-4xl">qr_code_2</span>
-</span>
-<span class="font-headline text-lg font-extrabold uppercase text-on-surface">QR</span>
-<span class="mt-2 text-sm leading-5 text-on-surface-variant">Escaneo rápido desde cualquier billetera virtual</span>
-</button>
-<button type="button" class="payment-method-option group flex min-h-48 flex-col items-center justify-center rounded-xl border border-outline-variant/10 bg-surface-container-lowest p-6 text-center transition hover:border-primary-container hover:bg-primary-container/10 active:scale-[0.99]" data-payment-method="tarjeta">
-<span class="mb-5 flex h-16 w-16 items-center justify-center rounded-xl bg-primary-fixed text-primary transition-transform group-hover:scale-105">
-<span class="material-symbols-outlined text-4xl">credit_card</span>
-</span>
-<span class="font-headline text-lg font-extrabold uppercase text-on-surface">Tarjeta</span>
-<span class="mt-2 text-sm leading-5 text-on-surface-variant">Crédito o Débito vía terminal bancaria</span>
-</button>
-</div>
-<div class="mx-auto mt-8 grid w-full max-w-3xl gap-4 rounded-xl border border-outline-variant/10 bg-surface-container-lowest p-4 text-left shadow-sm md:grid-cols-[1fr_1.2fr]">
-<section class="rounded-xl bg-surface-container-low p-4">
-<span class="text-xs font-bold uppercase tracking-wider text-secondary">Resumen</span>
-<div class="mt-4 flex flex-col gap-3 text-sm text-secondary">
-<div class="flex justify-between"><span>Subtotal</span><span id="payment-subtotal">$0.00</span></div>
-<div class="flex justify-between"><span>Descuento</span><span class="text-primary" id="payment-discount">$0.00</span></div>
-<div class="flex justify-between"><span>IVA 16%</span><span id="payment-tax">$0.00</span></div>
-<div class="mt-2 flex items-end justify-between border-t border-outline-variant/20 pt-4">
-<span class="font-headline text-lg font-bold text-on-surface">Total</span>
-<span class="font-headline text-3xl font-extrabold text-primary" id="payment-total">$0.00</span>
-</div>
-</div>
-</section>
-<section class="flex flex-col gap-4">
-<div id="cash-payment-fields" class="rounded-xl border border-outline-variant/20 bg-surface-container-highest p-4">
-<label class="flex flex-col gap-2 text-sm font-semibold text-on-surface">
-Monto recibido
-<input id="cash-received" class="rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-3 text-lg font-bold text-on-surface focus:border-primary focus:ring-primary" type="number" min="0" step="0.01" placeholder="0.00">
-</label>
-<div class="mt-4 flex items-center justify-between rounded-lg bg-surface-container-lowest px-3 py-3">
-<span class="text-sm font-semibold text-secondary">Vuelto</span>
-<span id="cash-change" class="font-headline text-2xl font-extrabold text-primary">$0.00</span>
-</div>
-</div>
-<div id="non-cash-payment-note" class="hidden rounded-xl border border-outline-variant/20 bg-surface-container-highest p-4 text-sm text-on-surface-variant">
-Confirma el pago cuando la operación figure aprobada en la terminal o billetera.
-</div>
-<p id="payment-error" class="hidden rounded-lg bg-error-container px-3 py-2 text-sm font-semibold text-error"></p>
-<div class="flex justify-end gap-3">
-<button id="cancel-payment-modal" type="button" class="rounded-lg bg-surface-container px-5 py-3 font-bold text-on-surface hover:bg-surface-container-high">Cancelar</button>
-<button id="confirm-payment" type="button" class="rounded-lg bg-primary px-5 py-3 font-bold text-on-primary hover:bg-primary-container hover:text-on-primary-container">Confirmar cobro</button>
-</div>
-</section>
-</div>
-<div class="mx-auto mt-6 flex w-fit items-center gap-2 rounded-full border border-outline-variant/10 bg-surface-container-low px-5 py-3 text-sm font-medium text-on-surface-variant">
-<span class="material-symbols-outlined text-lg">security</span>
-Transacción cifrada y gestionada por SquatGym Central
-</div>
-</div>
-</div>
-</div>
-<div id="receipt-modal" class="fixed inset-0 z-[140] hidden flex items-center justify-center bg-black/45 px-4 py-8">
-<div class="w-full max-w-md rounded-xl border border-outline-variant bg-surface-container-lowest p-6 text-center shadow-2xl">
-<span class="material-symbols-outlined text-5xl text-primary">receipt_long</span>
-<h2 class="mt-3 font-headline text-xl font-bold text-on-surface">Venta registrada</h2>
-<p class="mt-2 text-sm text-secondary">¿Querés imprimir el comprobante o ticket?</p>
-<div class="mt-6 flex justify-center gap-3">
-<button id="skip-receipt" type="button" class="rounded-lg bg-surface-container px-5 py-3 font-bold text-on-surface hover:bg-surface-container-high">No imprimir</button>
-<button id="print-receipt" type="button" class="rounded-lg bg-primary px-5 py-3 font-bold text-on-primary hover:bg-primary-container hover:text-on-primary-container">Imprimir</button>
-</div>
-</div>
-</div>
-<div id="sales-history-modal" class="fixed inset-0 z-[130] hidden flex items-center justify-center bg-black/45 px-4 py-8">
-<div class="max-h-[calc(100vh-4rem)] w-full max-w-4xl overflow-hidden rounded-xl border border-outline-variant bg-surface-container-lowest shadow-2xl">
-<div class="flex items-center justify-between border-b border-outline-variant p-5">
-<div>
-<h2 class="font-headline text-xl font-bold text-on-surface">Historial de ventas</h2>
-<p class="text-sm text-secondary">Ventas registradas con fecha y hora</p>
-</div>
-<button id="close-sales-history" type="button" class="flex h-10 w-10 items-center justify-center rounded-full text-secondary hover:bg-surface-container" aria-label="Cerrar historial">
-<span class="material-symbols-outlined">close</span>
-</button>
-</div>
-<div id="sales-history-list" class="max-h-[70vh] overflow-y-auto p-5">
-</div>
-</div>
-</div>
-<div id="cash-close-modal" class="fixed inset-0 z-[135] hidden flex items-center justify-center bg-black/45 px-4 py-8">
-<div class="max-h-[calc(100vh-4rem)] w-full max-w-5xl overflow-y-auto rounded-xl border border-outline-variant bg-surface-container-lowest shadow-2xl">
-<div class="flex items-center justify-between border-b border-outline-variant p-5">
-<div>
-<h2 class="font-headline text-xl font-bold text-on-surface">Informe de cierre de caja</h2>
-<p class="text-sm text-secondary">Resumen del turno, control de efectivo y listado imprimible de ventas</p>
-</div>
-<button id="close-cash-close" type="button" class="flex h-10 w-10 items-center justify-center rounded-full text-secondary hover:bg-surface-container" aria-label="Cerrar cierre de caja">
-<span class="material-symbols-outlined">close</span>
-</button>
-</div>
-<div class="grid gap-5 p-5 xl:grid-cols-[1.05fr_0.95fr]">
-<section class="rounded-xl border border-outline-variant/20 bg-surface-container-low p-4 xl:col-span-2">
-<span class="text-xs font-bold uppercase tracking-wider text-secondary">Encabezado de sesión</span>
-<div class="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
-<label class="flex flex-col gap-2 text-sm font-semibold text-on-surface">
-Usuario
-<input id="cash-close-user" class="rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-3 text-sm font-normal text-on-surface focus:border-primary focus:ring-primary" type="text" value="Admin Squat">
-</label>
-<label class="flex flex-col gap-2 text-sm font-semibold text-on-surface">
-ID de caja
-<input id="cash-close-register-id" class="rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-3 text-sm font-normal text-on-surface focus:border-primary focus:ring-primary" type="text" value="Caja 01">
-</label>
-<div class="rounded-lg bg-surface-container-lowest px-3 py-3">
-<span class="text-xs font-bold uppercase tracking-wider text-secondary">Inicio turno</span>
-<p id="cash-close-start" class="mt-2 text-sm font-bold text-on-surface">--</p>
-</div>
-<div class="rounded-lg bg-surface-container-lowest px-3 py-3">
-<span class="text-xs font-bold uppercase tracking-wider text-secondary">Fin turno</span>
-<p id="cash-close-end" class="mt-2 text-sm font-bold text-on-surface">--</p>
-</div>
-</div>
-</section>
-<section class="rounded-xl border border-outline-variant/20 bg-surface-container-highest p-4">
-<span class="text-xs font-bold uppercase tracking-wider text-secondary">Control de efectivo</span>
-<div id="cash-close-status-banner" class="cash-close-status-balanced mt-4 flex items-start gap-3 rounded-lg border px-3 py-3 transition-colors">
-<span id="cash-close-status-icon" class="material-symbols-outlined text-xl">check_circle</span>
-<div>
-<p id="cash-close-status-title" class="text-sm font-extrabold">Caja cuadrada</p>
-<p id="cash-close-status-message" class="text-xs font-medium">El efectivo real coincide con el total esperado.</p>
-</div>
-</div>
-<div class="mt-4 grid gap-3 sm:grid-cols-2">
-<label class="flex flex-col gap-2 text-sm font-semibold text-on-surface">
-Monto inicial
-<input id="cash-close-opening" class="rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-3 text-sm font-bold text-on-surface focus:border-primary focus:ring-primary" type="number" min="0" step="0.01" placeholder="0.00">
-</label>
-<label class="flex flex-col gap-2 text-sm font-semibold text-on-surface">
-Egresos / retiros
-<input id="cash-close-withdrawals" class="rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-3 text-sm font-bold text-on-surface focus:border-primary focus:ring-primary" type="number" min="0" step="0.01" placeholder="0.00">
-</label>
-</div>
-<div class="mt-4 grid gap-3 text-sm text-secondary sm:grid-cols-2">
-<div class="rounded-lg bg-surface-container-lowest px-3 py-3">
-<span class="font-semibold">Ingresos en efectivo</span>
-<p id="cash-close-cash-income" class="mt-1 font-headline text-xl font-extrabold text-on-surface">$0.00</p>
-</div>
-<div class="rounded-lg bg-surface-container-lowest px-3 py-3">
-<span class="font-semibold">Total esperado</span>
-<p id="cash-close-expected" class="mt-1 font-headline text-xl font-extrabold text-on-surface">$0.00</p>
-</div>
-</div>
-<label class="mt-4 flex flex-col gap-2 text-sm font-semibold text-on-surface">
-Efectivo real en caja
-<input id="cash-close-counted" class="rounded-lg border-2 border-primary/70 bg-primary-container/10 px-3 py-3 text-lg font-extrabold text-on-surface shadow-[0px_0px_0px_3px_rgba(0,109,55,0.08)] focus:border-primary focus:ring-2 focus:ring-primary/30" type="number" min="0" step="0.01" placeholder="0.00">
-</label>
-<div class="mt-4 flex items-center justify-between rounded-lg bg-surface-container-lowest px-3 py-3">
-<span class="text-sm font-semibold text-secondary">Diferencia</span>
-<span id="cash-close-difference" class="font-headline text-2xl font-extrabold text-primary">$0.00</span>
-</div>
-<div id="cash-close-observations-wrap" class="mt-4 hidden">
-<label class="flex flex-col gap-2 text-sm font-semibold text-on-surface">
-Observaciones del descuadre
-<textarea id="cash-close-observations" class="min-h-24 resize-y rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-3 text-sm font-normal text-on-surface focus:border-primary focus:ring-primary" placeholder="Ej. Revisión de ticket, retiro no registrado, pago manual..."></textarea>
-</label>
-<p class="mt-2 text-xs font-semibold text-secondary">Si hay sobrante o faltante, esta observación es requerida para cerrar.</p>
-</div>
-</section>
-<section class="rounded-xl border border-outline-variant/20 bg-surface-container-low p-4">
-<div class="flex items-center justify-between gap-3">
-<span class="text-xs font-bold uppercase tracking-wider text-secondary">Desglose del cierre</span>
-<span id="cash-close-sales-count" class="rounded-full bg-primary-container px-3 py-1 text-xs font-bold text-on-primary-container">0 ventas</span>
-</div>
-<p class="mt-4 text-xs font-bold uppercase tracking-wider text-secondary">Métodos de pago</p>
-<div class="mt-4 grid gap-2 sm:grid-cols-2">
-<div class="rounded-lg bg-surface-container-lowest px-3 py-3"><span class="text-xs font-bold uppercase text-secondary">Efectivo</span><p id="cash-close-method-cash" class="mt-1 text-lg font-extrabold text-on-surface">$0.00</p></div>
-<div class="rounded-lg bg-surface-container-lowest px-3 py-3"><span class="text-xs font-bold uppercase text-secondary">Transferencia / QR</span><p id="cash-close-method-transfer" class="mt-1 text-lg font-extrabold text-on-surface">$0.00</p></div>
-<div class="rounded-lg bg-surface-container-lowest px-3 py-3"><span class="text-xs font-bold uppercase text-secondary">Tarjeta crédito / débito</span><p id="cash-close-method-card" class="mt-1 text-lg font-extrabold text-on-surface">$0.00</p></div>
-<div class="rounded-lg bg-surface-container-lowest px-3 py-3"><span class="text-xs font-bold uppercase text-secondary">Otros métodos</span><p id="cash-close-non-cash" class="mt-1 text-lg font-extrabold text-on-surface">$0.00</p></div>
-</div>
-<p class="mt-4 text-xs font-bold uppercase tracking-wider text-secondary">Totales e impuestos</p>
-<div class="mt-4 grid gap-2 sm:grid-cols-2">
-<div class="rounded-lg bg-surface-container-lowest px-3 py-3"><span class="text-xs font-bold uppercase text-secondary">Total bruto</span><p id="cash-close-gross" class="mt-1 text-lg font-extrabold text-on-surface">$0.00</p></div>
-<div class="rounded-lg bg-surface-container-lowest px-3 py-3"><span class="text-xs font-bold uppercase text-secondary">Descuentos</span><p id="cash-close-discounts" class="mt-1 text-lg font-extrabold text-primary">$0.00</p></div>
-<div class="rounded-lg bg-surface-container-lowest px-3 py-3"><span class="text-xs font-bold uppercase text-secondary">IVA 16%</span><p id="cash-close-tax" class="mt-1 text-lg font-extrabold text-on-surface">$0.00</p></div>
-<div class="rounded-lg bg-surface-container-lowest px-3 py-3"><span class="text-xs font-bold uppercase text-secondary">Total neto</span><p id="cash-close-total" class="mt-1 text-lg font-extrabold text-primary">$0.00</p></div>
-</div>
-</section>
-<div class="xl:col-span-2">
-<p id="cash-close-error" class="hidden rounded-lg bg-error-container px-3 py-2 text-sm font-semibold text-error"></p>
-<div class="mt-4 flex justify-end gap-3">
-<button id="cancel-cash-close" type="button" class="rounded-lg bg-surface-container px-5 py-3 font-bold text-on-surface hover:bg-surface-container-high">Cancelar</button>
-<button id="confirm-cash-close" type="button" class="rounded-lg bg-primary px-5 py-3 font-bold text-on-primary hover:bg-primary-container hover:text-on-primary-container disabled:cursor-not-allowed disabled:opacity-50">Cerrar caja e imprimir</button>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div id="cash-close-confirm-modal" class="fixed inset-0 z-[145] hidden flex items-center justify-center bg-black/55 px-4 py-8">
-<div class="w-full max-w-md rounded-xl border border-outline-variant bg-surface-container-lowest p-5 shadow-2xl">
-<div class="flex items-start gap-3">
-<span class="material-symbols-outlined rounded-full bg-primary-container p-2 text-primary">verified</span>
-<div>
-<h3 class="font-headline text-xl font-extrabold text-on-surface">Vuelve a confirmar</h3>
-<p class="mt-1 text-sm text-secondary">El cierre vaciará el historial del turno y abrirá el informe para imprimir.</p>
-</div>
-</div>
-<div class="mt-4 rounded-lg bg-surface-container-low px-3 py-3 text-sm text-secondary">
-<div class="flex justify-between"><span>Ventas</span><strong id="cash-close-confirm-sales" class="text-on-surface">0</strong></div>
-<div class="mt-2 flex justify-between"><span>Total neto</span><strong id="cash-close-confirm-total" class="text-on-surface">$0.00</strong></div>
-<div class="mt-2 flex justify-between"><span>Diferencia</span><strong id="cash-close-confirm-difference" class="text-on-surface">$0.00</strong></div>
-</div>
-<div class="mt-5 flex justify-end gap-3">
-<button id="cancel-cash-close-confirm" type="button" class="rounded-lg bg-surface-container px-5 py-3 font-bold text-on-surface hover:bg-surface-container-high">Revisar</button>
-<button id="execute-cash-close" type="button" class="rounded-lg bg-primary px-5 py-3 font-bold text-on-primary hover:bg-primary-container hover:text-on-primary-container">Confirmar cierre</button>
-</div>
-</div>
-</div>
-<div id="product-modal" class="fixed inset-0 z-[120] hidden flex items-center justify-center bg-black/45 px-4 py-8">
-<div class="w-full max-w-2xl rounded-xl border border-outline-variant bg-surface-container-lowest shadow-2xl">
-<div class="flex items-center justify-between border-b border-outline-variant p-5">
-<div>
-<h2 id="product-modal-title" class="font-headline text-xl font-bold text-on-surface">Nuevo producto</h2>
-<p id="product-modal-description" class="text-sm text-secondary">Catálogo de kiosco</p>
-</div>
-<button id="close-product-modal" type="button" class="flex h-10 w-10 items-center justify-center rounded-full text-secondary hover:bg-surface-container" aria-label="Cerrar">
-<span class="material-symbols-outlined">close</span>
-</button>
-</div>
-<form id="product-form" class="grid gap-4 p-5 sm:grid-cols-2">
-<input id="editing-product-id" type="hidden">
-<label class="flex flex-col gap-2 text-sm font-semibold text-on-surface">
-Nombre
-<input id="new-product-name" class="rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-3 text-sm font-normal text-on-surface focus:border-primary focus:ring-primary" type="text" required>
-</label>
-<label class="flex flex-col gap-2 text-sm font-semibold text-on-surface">
-Marca
-<input id="new-product-brand" class="rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-3 text-sm font-normal text-on-surface focus:border-primary focus:ring-primary" type="text" required>
-</label>
-<label class="flex flex-col gap-2 text-sm font-semibold text-on-surface">
-Categoría
-<select id="new-product-category" class="rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-3 text-sm font-normal text-on-surface focus:border-primary focus:ring-primary" required>
-<option value="Suplementos">Suplementos</option>
-<option value="Bebidas">Bebidas</option>
-<option value="Alimentos">Alimentos</option>
-<option value="Indumentaria">Indumentaria</option>
-<option value="Preparados">Preparados</option>
-</select>
-</label>
-<label class="flex flex-col gap-2 text-sm font-semibold text-on-surface">
-Precio
-<input id="new-product-price" class="rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-3 text-sm font-normal text-on-surface focus:border-primary focus:ring-primary" type="number" min="0.01" step="0.01" required>
-</label>
-<label class="flex flex-col gap-2 text-sm font-semibold text-on-surface">
-Descuento
-<input id="new-product-discount" class="rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-3 text-sm font-normal text-on-surface focus:border-primary focus:ring-primary" type="number" min="0" max="90" step="1" value="0">
-</label>
-<label class="flex flex-col gap-2 text-sm font-semibold text-on-surface">
-Imagen URL
-<input id="new-product-image" class="rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-3 text-sm font-normal text-on-surface focus:border-primary focus:ring-primary" type="url" placeholder="https://...">
-</label>
-<p id="product-form-error" class="hidden rounded-lg bg-error-container px-3 py-2 text-sm font-semibold text-error sm:col-span-2"></p>
-<div class="flex justify-end gap-3 sm:col-span-2">
-<button id="cancel-product-modal" type="button" class="rounded-lg bg-surface-container px-5 py-3 font-bold text-on-surface hover:bg-surface-container-high">Cancelar</button>
-<button id="product-submit-button" type="submit" class="rounded-lg bg-primary px-5 py-3 font-bold text-on-primary hover:bg-primary-container hover:text-on-primary-container">Guardar</button>
-</div>
-</form>
-</div>
-</div>
-<script src="../../js/squatgym-header.js"></script>
-<div id="cash-close-print-area" aria-hidden="true"></div>
-<script>
-  const PRODUCTOS_STORAGE_KEY = 'squatgym-kiosco-products';
-  const DESCUENTOS_STORAGE_KEY = 'squatgym-kiosco-discounts';
-  const HISTORIAL_VENTAS_STORAGE_KEY = 'squatgym-kiosco-sales-history';
-  const CAJA_CONFIG_STORAGE_KEY = 'squatgym-kiosco-cash-close-config';
-  const TURNO_INICIO_STORAGE_KEY = 'squatgym-kiosco-shift-start';
-  const SUCURSAL_ACTIVA = 'SquatGym Central';
-  const USUARIO_ACTIVO = 'Admin Squat';
-  const CAJA_DEFAULT_ID = 'Caja 01';
-  const CATEGORIAS_KIOSCO = ['Suplementos', 'Bebidas', 'Alimentos', 'Indumentaria', 'Preparados'];
-  const CATEGORIA_ALIASES = {
-    proteinas: 'Suplementos',
-    aminoacidos: 'Suplementos',
-    'pre-entrenos': 'Suplementos',
-    accesorios: 'Bebidas',
-    comestibles: 'Alimentos',
-    equipo: 'Indumentaria'
-  };
-
-  const descuentosBase = [
-    { id: 'sin-descuento', nombre: 'Sin descuento', porcentaje: 0 },
-    { id: 'venta-rapida', nombre: 'Venta rápida', porcentaje: 10 },
-    { id: 'promo-socio', nombre: 'Promo socio', porcentaje: 15 },
-    { id: 'mayorista', nombre: 'Mayorista', porcentaje: 20 }
-  ];
-
-  const productosBase = [
-    {
-      id: 1,
-      nombre: 'Gold Standard 100% Whey',
-      marca: 'Optimum Nutrition',
-      precio: 45.00,
-      descuento: 15,
-      img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAZe1qJ5tvQvqdz1O1tKulwx4oc3dW_d3hln0r67XL6k1ySLv3VWblO_2960LjqrKXFcm3VOVwhgIFdF-hv8CFnubrL6tzTnpmvF3CoFelFLm4OkPyDEheIcECeqW5DqEddHBocLbJ6269w9Tg945mI2bz-ysyZtRkNlxRmjKmx85BkF2o-S-0usyG9qN-2yBxcatAlqzB-z3Td4cdAncXNmlqfKNerhnG9sPsYf2DE-kuKSHU3ZwZ9ktcwD2HFEhybnJhX7lr5fw',
-      categoria: 'Suplementos'
-    },
-    {
-      id: 2,
-      nombre: 'Platinum Creatine 400g',
-      marca: 'MuscleTech',
-      precio: 22.50,
-      descuento: 0,
-      img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBnmb2_pU2BGAsOrSukg8jBXG2tjLO8bAnDrHWtMH0dL6uAq0yVenf6Uq8X5nhN9wDsu13HzBgqnudTndy7g8ZyASZiTNTQNAgb0pZG7rfk3VchyNJUlO6HJG70UArlfY8UHOqQrtaZLCFKg1DSk639aMEqMMZUGX6EalDxkyptIi0909zr_NUyORwP_2D2jnSOK11xKY_l4sAuT86r4apjWy7QLPoXjj2cXk7ReKA5MjbOo9Vd0tGtBpQe2fVEE_ro1UGnb-KxTw',
-      categoria: 'Suplementos'
-    },
-    {
-      id: 3,
-      nombre: 'Original BCAA - Fresa Kiwi',
-      marca: 'Xtend',
-      precio: 30.00,
-      descuento: 0,
-      img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBN6ljKm4E3r51_4gQAJU4mMU_1X05Nl903Zakxpuc4ya5qEDb03om371edVpAOBu6sTV3fyj9y9E48sT6GeB4W6wX45PE0b2KYEdFDNRpRHUSv6bPnLU_uqv8xnCWt5_floGKGoVAeCYg1dduoJGwExTsa-CT7wzHOQmzsgMdqRZY5ws_caxhnzyjU6DUtBjbBQkcx32Xoj8iPoRm3N9J1IBNYBzAhUq13xorIUWTqYLhXK3VpDmRD9TUMDqFMqvUJW1R1VZbXuA',
-      categoria: 'Suplementos'
-    },
-    {
-      id: 4,
-      nombre: 'C4 Original Pre-Workout',
-      marca: 'Cellucor',
-      precio: 28.99,
-      descuento: 0,
-      img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCr20_qcQM1WvJ-yV6pa0HahbQgE3iX4iGoKiiRTvvwud2twpOe1WFj6YrJGgNhh1zNVmm3ORyWc9R06XP2QqDZZkRptfxkkiMQrL6-fO21f71k7It8PDyQuEdJqk-ErEsVmuvikp-pH2mA3N1lvKNH-o6STWZjVLinlvTj4wcBtxSqSdsrmgboPnQnTG36ciWes5e7cA-11UjOf7rlhM9XQyMmsBFIE4VGSyGmEmEK6OCgkR0IX2Jr_NBpdyuUy3QWE-yHcvbaLg',
-      categoria: 'Suplementos'
-    },
-    {
-      id: 5,
-      nombre: 'Shaker SquatGym Pro 700ml',
-      marca: 'SquatGym',
-      precio: 12.50,
-      descuento: 0,
-      img: '',
-      icono: 'water_bottle',
-      categoria: 'Bebidas'
-    }
-  ];
-
-  let productosPersonalizados = [];
-  let productos = [...productosBase];
-  let carrito = [];
-  let historialVentas = [];
-  let totalesActuales = {
-    subtotal: 0,
-    descuentoMonto: 0,
-    impuestos: 0,
-    total: 0,
-    totalItems: 0
-  };
-  let metodoPagoActivo = 'efectivo';
-  let descuentosDisponibles = [...descuentosBase];
-  let descuentoActivoId = 'venta-rapida';
-  let descuentoGlobal = 10;
-  let categoriaActiva = 'Todos';
-  let terminoBusqueda = '';
-  let productoEnEdicionId = null;
-  let turnoInicioISO = null;
-  const IVA = 0.16;
-  const DIFERENCIA_CIERRE_EPSILON = 0.005;
-
-  function escapeHtml(value) {
-    return String(value ?? '')
-      .replaceAll('&', '&amp;')
-      .replaceAll('<', '&lt;')
-      .replaceAll('>', '&gt;')
-      .replaceAll('"', '&quot;')
-      .replaceAll("'", '&#039;');
-  }
-
-  function formatCurrency(value) {
-    return `$${value.toFixed(2)}`;
-  }
-
-  function formatDateTime(value) {
-    try {
-      return new Intl.DateTimeFormat('es-AR', {
-        dateStyle: 'short',
-        timeStyle: 'short'
-      }).format(new Date(value));
-    } catch (error) {
-      return String(value || '');
-    }
-  }
-
-  function formatDateOnly(value) {
-    try {
-      return new Intl.DateTimeFormat('es-AR', {
-        dateStyle: 'short'
-      }).format(new Date(value));
-    } catch (error) {
-      return String(value || '');
-    }
-  }
-
-  function formatTimeOnly(value) {
-    try {
-      return new Intl.DateTimeFormat('es-AR', {
-        hour: '2-digit',
-        minute: '2-digit'
-      }).format(new Date(value));
-    } catch (error) {
-      return String(value || '');
-    }
-  }
-
-  function leerMonto(value) {
-    const monto = Number(value);
-    return Number.isFinite(monto) ? monto : 0;
-  }
-
-  function normalizarMontoCaja(value) {
-    return Math.max(leerMonto(value), 0);
-  }
-
-  function obtenerTurnoInicio() {
-    try {
-      const savedStart = localStorage.getItem(TURNO_INICIO_STORAGE_KEY);
-
-      if (savedStart && !Number.isNaN(new Date(savedStart).getTime())) {
-        return savedStart;
-      }
-
-      const nextStart = new Date().toISOString();
-      localStorage.setItem(TURNO_INICIO_STORAGE_KEY, nextStart);
-      return nextStart;
-    } catch (error) {
-      return new Date().toISOString();
-    }
-  }
-
-  function reiniciarTurnoInicio() {
-    turnoInicioISO = new Date().toISOString();
-
-    try {
-      localStorage.setItem(TURNO_INICIO_STORAGE_KEY, turnoInicioISO);
-    } catch (error) {
-      return false;
-    }
-
-    return true;
-  }
-
-  function obtenerInicioTurnoParaCierre(ventas = historialVentas) {
-    const inicioGuardado = turnoInicioISO || obtenerTurnoInicio();
-    const fechasVentas = ventas
-      .map((venta) => new Date(venta.fechaISO).getTime())
-      .filter((fecha) => Number.isFinite(fecha));
-
-    if (!fechasVentas.length) {
-      return inicioGuardado;
-    }
-
-    const primeraVenta = new Date(Math.min(...fechasVentas)).toISOString();
-
-    return new Date(inicioGuardado).getTime() <= new Date(primeraVenta).getTime()
-      ? inicioGuardado
-      : primeraVenta;
-  }
-
-  function cargarConfiguracionCierreCaja() {
-    try {
-      const savedConfig = JSON.parse(localStorage.getItem(CAJA_CONFIG_STORAGE_KEY) || '{}');
-
-      return {
-        usuario: String(savedConfig.usuario || USUARIO_ACTIVO),
-        cajaId: String(savedConfig.cajaId || CAJA_DEFAULT_ID),
-        montoInicial: normalizarMontoCaja(savedConfig.montoInicial)
-      };
-    } catch (error) {
-      return {
-        usuario: USUARIO_ACTIVO,
-        cajaId: CAJA_DEFAULT_ID,
-        montoInicial: 0
-      };
-    }
-  }
-
-  function guardarConfiguracionCierreCaja(config) {
-    try {
-      localStorage.setItem(CAJA_CONFIG_STORAGE_KEY, JSON.stringify({
-        usuario: config.usuario || USUARIO_ACTIVO,
-        cajaId: config.cajaId || CAJA_DEFAULT_ID,
-        montoInicial: normalizarMontoCaja(config.montoInicial)
-      }));
-      return true;
-    } catch (error) {
-      return false;
-    }
-  }
-
-  function poblarConfiguracionCierreCaja() {
-    const config = cargarConfiguracionCierreCaja();
-    const userInput = document.getElementById('cash-close-user');
-    const registerInput = document.getElementById('cash-close-register-id');
-    const openingInput = document.getElementById('cash-close-opening');
-    const withdrawalsInput = document.getElementById('cash-close-withdrawals');
-    const countedInput = document.getElementById('cash-close-counted');
-    const observationsInput = document.getElementById('cash-close-observations');
-
-    if (userInput) {
-      userInput.value = config.usuario;
-    }
-
-    if (registerInput) {
-      registerInput.value = config.cajaId;
-    }
-
-    if (openingInput) {
-      openingInput.value = config.montoInicial > 0 ? String(config.montoInicial) : '';
-    }
-
-    if (withdrawalsInput) {
-      withdrawalsInput.value = '';
-    }
-
-    if (countedInput) {
-      countedInput.value = '';
-    }
-
-    if (observationsInput) {
-      observationsInput.value = '';
-    }
-  }
-
-  function obtenerDatosCierreCaja(fechaFinISO = new Date().toISOString()) {
-    const usuario = document.getElementById('cash-close-user')?.value.trim() || USUARIO_ACTIVO;
-    const cajaId = document.getElementById('cash-close-register-id')?.value.trim() || CAJA_DEFAULT_ID;
-    const montoInicial = normalizarMontoCaja(document.getElementById('cash-close-opening')?.value);
-    const egresos = normalizarMontoCaja(document.getElementById('cash-close-withdrawals')?.value);
-    const efectivoContado = normalizarMontoCaja(document.getElementById('cash-close-counted')?.value);
-    const observaciones = document.getElementById('cash-close-observations')?.value.trim() || '';
-
-    return {
-      usuario,
-      cajaId,
-      montoInicial,
-      egresos,
-      efectivoContado,
-      observaciones,
-      fechaInicioISO: obtenerInicioTurnoParaCierre(),
-      fechaFinISO
-    };
-  }
-
-  function obtenerTotalEsperadoCierre(resumen, datosCierre) {
-    return datosCierre.montoInicial + resumen.efectivo - datosCierre.egresos;
-  }
-
-  function esDiferenciaCierreSignificativa(diferencia) {
-    return Math.abs(diferencia) >= DIFERENCIA_CIERRE_EPSILON;
-  }
-
-  function asignarTexto(id, value) {
-    const element = document.getElementById(id);
-
-    if (element) {
-      element.textContent = value;
-    }
-  }
-
-  function cargarHistorialVentas() {
-    try {
-      const savedSales = JSON.parse(localStorage.getItem(HISTORIAL_VENTAS_STORAGE_KEY) || '[]');
-
-      return Array.isArray(savedSales) ? savedSales : [];
-    } catch (error) {
-      return [];
-    }
-  }
-
-  function guardarHistorialVentas() {
-    try {
-      localStorage.setItem(HISTORIAL_VENTAS_STORAGE_KEY, JSON.stringify(historialVentas));
-      return true;
-    } catch (error) {
-      return false;
-    }
-  }
-
-  function normalizarClaveCategoria(value) {
-    return String(value ?? '')
-      .trim()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .toLowerCase();
-  }
-
-  function normalizarCategoria(value) {
-    const clave = normalizarClaveCategoria(value);
-    const categoriaPermitida = CATEGORIAS_KIOSCO.find((categoria) => normalizarClaveCategoria(categoria) === clave);
-
-    return categoriaPermitida || CATEGORIA_ALIASES[clave] || 'Suplementos';
-  }
-
-  function normalizarDescuento(value) {
-    const descuento = Number(value);
-
-    if (!Number.isFinite(descuento)) {
-      return 0;
-    }
-
-    return Math.min(Math.max(Math.round(descuento), 0), 90);
-  }
-
-  function normalizarDescuentoGuardado(descuento) {
-    const id = String(descuento?.id || '').trim();
-    const nombre = String(descuento?.nombre || '').trim();
-
-    if (!id || !nombre) {
-      return null;
-    }
-
-    return {
-      id,
-      nombre,
-      porcentaje: normalizarDescuento(descuento.porcentaje)
-    };
-  }
-
-  function cargarDescuentosGuardados() {
-    try {
-      const savedDiscounts = JSON.parse(localStorage.getItem(DESCUENTOS_STORAGE_KEY) || '[]');
-      const descuentosNormalizados = Array.isArray(savedDiscounts)
-        ? savedDiscounts.map(normalizarDescuentoGuardado).filter(Boolean)
-        : [];
-
-      return descuentosNormalizados.length ? descuentosNormalizados : descuentosBase.map((descuento) => ({ ...descuento }));
-    } catch (error) {
-      return descuentosBase.map((descuento) => ({ ...descuento }));
-    }
-  }
-
-  function guardarDescuentosDisponibles() {
-    try {
-      localStorage.setItem(DESCUENTOS_STORAGE_KEY, JSON.stringify(descuentosDisponibles));
-      return true;
-    } catch (error) {
-      return false;
-    }
-  }
-
-  function obtenerDescuentoActivo() {
-    return descuentosDisponibles.find((descuento) => descuento.id === descuentoActivoId)
-      || descuentosDisponibles[0]
-      || { id: 'sin-descuento', nombre: 'Sin descuento', porcentaje: 0 };
-  }
-
-  function sincronizarDescuentoActivo() {
-    const descuentoActivo = obtenerDescuentoActivo();
-
-    descuentoActivoId = descuentoActivo.id;
-    descuentoGlobal = descuentoActivo.porcentaje;
-  }
-
-  function crearIdDescuento(nombre) {
-    const base = normalizarClaveCategoria(nombre)
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-+|-+$/g, '') || 'descuento';
-
-    return `${base}-${Date.now()}`;
-  }
-
-  function cargarProductosPersonalizados() {
-    try {
-      const savedProducts = JSON.parse(localStorage.getItem(PRODUCTOS_STORAGE_KEY) || '[]');
-      return Array.isArray(savedProducts) ? savedProducts : [];
-    } catch (error) {
-      return [];
-    }
-  }
-
-  function guardarProductosPersonalizados() {
-    try {
-      localStorage.setItem(PRODUCTOS_STORAGE_KEY, JSON.stringify(productosPersonalizados));
-      return true;
-    } catch (error) {
-      mostrarErrorProducto('No se pudo guardar el producto en este navegador.');
-      return false;
-    }
-  }
-
-  function sincronizarProductos() {
-    const productosGuardadosPorId = new Map(productosPersonalizados.map((producto) => [producto.id, producto]));
-    const idsBase = new Set(productosBase.map((producto) => producto.id));
-    const productosBaseActualizados = productosBase.map((producto) => productosGuardadosPorId.get(producto.id) || producto);
-    const productosCreados = productosPersonalizados.filter((producto) => !idsBase.has(producto.id));
-
-    productos = [...productosBaseActualizados, ...productosCreados];
-  }
-
-  function normalizarProductoGuardado(producto) {
-    const id = Number(producto.id);
-    const precio = Number(producto.precio);
-    const descuento = Number(producto.descuento) || 0;
-
-    if (!id || !producto.nombre || !producto.marca || !producto.categoria || !Number.isFinite(precio) || precio <= 0) {
-      return null;
-    }
-
-    return {
-      id,
-      nombre: String(producto.nombre).trim(),
-      marca: String(producto.marca).trim(),
-      precio,
-      descuento: Math.min(Math.max(descuento, 0), 90),
-      img: String(producto.img || '').trim(),
-      icono: String(producto.icono || 'inventory_2').trim(),
-      categoria: normalizarCategoria(producto.categoria),
-      personalizado: true
-    };
-  }
-
-  function obtenerProductoPorId(id) {
-    const productId = Number(id);
-
-    return productos.find((producto) => producto.id === productId) || null;
-  }
-
-  function guardarProductoEditado(productoActualizado) {
-    const index = productosPersonalizados.findIndex((producto) => producto.id === productoActualizado.id);
-
-    if (index >= 0) {
-      productosPersonalizados[index] = productoActualizado;
-      return;
-    }
-
-    productosPersonalizados.push(productoActualizado);
-  }
-
-  function actualizarProductoEnCarrito(productoActualizado) {
-    carrito = carrito.map((item) => {
-      if (item.id !== productoActualizado.id) {
-        return item;
-      }
-
-      return {
-        ...productoActualizado,
-        cantidad: item.cantidad,
-        precioEfectivo: obtenerPrecioFinal(productoActualizado)
-      };
-    });
-  }
-
-  function obtenerPrecioFinal(producto) {
-    return producto.descuento > 0
-      ? producto.precio * (1 - producto.descuento / 100)
-      : producto.precio;
-  }
-
-  function renderizarImagenProducto(producto, sizeClass) {
-    if (producto.img) {
-      return `<img src="${escapeHtml(producto.img)}" alt="${escapeHtml(producto.nombre)}" class="w-full h-full object-cover mix-blend-multiply group-hover:scale-105 transition-transform duration-500">`;
-    }
-
-    return `<div class="${sizeClass} flex items-center justify-center bg-surface-container-high"><span class="material-symbols-outlined text-secondary text-3xl">${escapeHtml(producto.icono || 'inventory_2')}</span></div>`;
-  }
-
-  function asignarTextoProducto(id, value) {
-    const element = document.getElementById(id);
-
-    if (element) {
-      element.textContent = value;
-    }
-  }
-
-  function asignarValorProducto(id, value) {
-    const input = document.getElementById(id);
-
-    if (input) {
-      input.value = value;
-    }
-  }
-
-  function abrirModalProducto(id = null) {
-    const modal = document.getElementById('product-modal');
-    const form = document.getElementById('product-form');
-    const nameInput = document.getElementById('new-product-name');
-    const producto = id !== null ? obtenerProductoPorId(id) : null;
-
-    if (id !== null && !producto) {
-      return;
-    }
-
-    form?.reset();
-    productoEnEdicionId = producto ? producto.id : null;
-    asignarValorProducto('editing-product-id', productoEnEdicionId || '');
-
-    if (producto) {
-      asignarTextoProducto('product-modal-title', 'Editar producto');
-      asignarTextoProducto('product-modal-description', 'Actualizá los datos del catálogo de kiosco');
-      asignarTextoProducto('product-submit-button', 'Guardar cambios');
-      asignarValorProducto('new-product-name', producto.nombre);
-      asignarValorProducto('new-product-brand', producto.marca);
-      asignarValorProducto('new-product-category', producto.categoria);
-      asignarValorProducto('new-product-price', producto.precio);
-      asignarValorProducto('new-product-discount', producto.descuento || 0);
-      asignarValorProducto('new-product-image', producto.img || '');
-    } else {
-      asignarTextoProducto('product-modal-title', 'Nuevo producto');
-      asignarTextoProducto('product-modal-description', 'Catálogo de kiosco');
-      asignarTextoProducto('product-submit-button', 'Guardar');
-      asignarValorProducto('new-product-discount', 0);
-    }
-
-    cerrarMenusProducto();
-    modal?.classList.remove('hidden');
-    mostrarErrorProducto('');
-    window.setTimeout(() => nameInput?.focus(), 0);
-  }
-
-  function cerrarModalProducto() {
-    const modal = document.getElementById('product-modal');
-    const form = document.getElementById('product-form');
-
-    modal?.classList.add('hidden');
-    form?.reset();
-    productoEnEdicionId = null;
-    asignarValorProducto('editing-product-id', '');
-    mostrarErrorProducto('');
-  }
-
-  function mostrarErrorProducto(message) {
-    const errorBox = document.getElementById('product-form-error');
-
-    if (!errorBox) {
-      return;
-    }
-
-    errorBox.textContent = message;
-    errorBox.classList.toggle('hidden', !message);
-  }
-
-  function agregarProductoPersonalizado(event) {
-    event.preventDefault();
-
-    const nombre = document.getElementById('new-product-name')?.value.trim();
-    const marca = document.getElementById('new-product-brand')?.value.trim();
-    const categoria = document.getElementById('new-product-category')?.value;
-    const precio = Number(document.getElementById('new-product-price')?.value);
-    const descuento = Number(document.getElementById('new-product-discount')?.value || 0);
-    const img = document.getElementById('new-product-image')?.value.trim() || '';
-    const productoExistente = productoEnEdicionId ? obtenerProductoPorId(productoEnEdicionId) : null;
-
-    if (!nombre || !marca || !categoria || !Number.isFinite(precio) || precio <= 0) {
-      mostrarErrorProducto('Completá nombre, marca, categoría y precio.');
-      return;
-    }
-
-    if (!Number.isFinite(descuento) || descuento < 0 || descuento > 90) {
-      mostrarErrorProducto('El descuento debe estar entre 0 y 90.');
-      return;
-    }
-
-    if (img && !/^https?:\/\//i.test(img)) {
-      mostrarErrorProducto('La imagen debe ser una URL que empiece con http o https.');
-      return;
-    }
-
-    const productoGuardado = normalizarProductoGuardado({
-      id: productoExistente?.id || Date.now(),
-      nombre,
-      marca,
-      categoria,
-      precio,
-      descuento,
-      img,
-      icono: productoExistente?.icono || 'inventory_2'
-    });
-
-    if (!productoGuardado) {
-      mostrarErrorProducto('No se pudo guardar el producto.');
-      return;
-    }
-
-    const productosPrevios = [...productosPersonalizados];
-    guardarProductoEditado(productoGuardado);
-
-    if (!guardarProductosPersonalizados()) {
-      productosPersonalizados = productosPrevios;
-      return;
-    }
-
-    sincronizarProductos();
-
-    if (productoExistente) {
-      actualizarProductoEnCarrito(productoGuardado);
-      actualizarInterfaz();
-    } else {
-      categoriaActiva = 'Todos';
-      terminoBusqueda = '';
-
-      const productSearch = document.getElementById('product-search');
-
-      if (productSearch) {
-        productSearch.value = '';
-      }
-    }
-
-    renderizarProductos();
-    cerrarModalProducto();
-  }
-
-  function obtenerProductosFiltrados() {
-    const busqueda = terminoBusqueda.trim().toLowerCase();
-
-    return productos.filter((producto) => {
-      const coincideCategoria = categoriaActiva === 'Todos' || producto.categoria === categoriaActiva;
-      const coincideBusqueda = !busqueda
-        || producto.nombre.toLowerCase().includes(busqueda)
-        || producto.marca.toLowerCase().includes(busqueda)
-        || producto.categoria.toLowerCase().includes(busqueda);
-
-      return coincideCategoria && coincideBusqueda;
-    });
-  }
-
-  function actualizarFiltrosCategoria() {
-    document.querySelectorAll('[data-category]').forEach((button) => {
-      const isActive = button.dataset.category === categoriaActiva;
-      button.className = isActive
-        ? 'category-filter whitespace-nowrap px-6 py-2 rounded-full bg-primary text-on-primary font-medium text-sm transition-all shadow-[0px_4px_14px_rgba(0,109,55,0.2)]'
-        : 'category-filter whitespace-nowrap px-6 py-2 rounded-full bg-surface-container-low text-secondary font-medium text-sm hover:bg-surface-container-high transition-all';
-    });
-  }
-
-  function cerrarMenusProducto() {
-    document.querySelectorAll('[data-product-menu]').forEach((menu) => {
-      menu.classList.add('hidden');
-    });
-
-    document.querySelectorAll('[data-product-menu-button]').forEach((button) => {
-      button.setAttribute('aria-expanded', 'false');
-    });
-  }
-
-  function toggleProductMenu(event, id) {
-    event.stopPropagation();
-
-    const menu = document.querySelector(`[data-product-menu="${id}"]`);
-    const button = document.querySelector(`[data-product-menu-button="${id}"]`);
-    const estabaAbierto = menu ? !menu.classList.contains('hidden') : false;
-
-    cerrarMenusProducto();
-
-    if (menu && !estabaAbierto) {
-      menu.classList.remove('hidden');
-      button?.setAttribute('aria-expanded', 'true');
-    }
-  }
-
-  function renderizarProductos() {
-    const grid = document.getElementById('product-grid');
-
-    if (!grid) {
-      return;
-    }
-
-    const productosFiltrados = obtenerProductosFiltrados();
-
-    grid.innerHTML = productosFiltrados.length ? productosFiltrados.map((producto) => {
-      const precioFinal = obtenerPrecioFinal(producto);
-      const mediaProducto = renderizarImagenProducto(producto, 'w-full h-full');
-      const nombreSeguro = escapeHtml(producto.nombre);
-      const marcaSegura = escapeHtml(producto.marca);
-      const badgeDescuento = producto.descuento > 0
-        ? `<span class="absolute top-3 left-3 bg-primary-container text-on-primary-container text-xs font-bold px-2 py-1 rounded-md">-${producto.descuento}%</span>`
-        : '';
-      const precioAnterior = producto.descuento > 0
-        ? `<span class="text-sm text-secondary line-through">${formatCurrency(producto.precio)}</span>`
-        : '';
-      const botonColor = producto.descuento > 0
-        ? 'bg-primary text-on-primary hover:bg-primary-container hover:text-on-primary-container'
-        : 'bg-surface-container-high text-on-surface hover:bg-primary hover:text-on-primary';
-      const menuProducto = `
-          <div class="absolute right-3 top-3 z-20">
-            <button type="button" onclick="toggleProductMenu(event, ${producto.id})" class="flex h-9 w-9 items-center justify-center rounded-full bg-surface-container-lowest/90 text-secondary shadow-sm ring-1 ring-outline-variant/30 backdrop-blur hover:bg-surface-container hover:text-on-surface active:scale-95" aria-label="Opciones de ${nombreSeguro}" aria-haspopup="menu" aria-expanded="false" data-product-menu-button="${producto.id}">
-              <span class="material-symbols-outlined text-xl">more_vert</span>
-            </button>
-            <div class="absolute right-0 top-11 hidden w-40 overflow-hidden rounded-lg border border-outline-variant/30 bg-surface-container-lowest shadow-xl" data-product-menu="${producto.id}" role="menu">
-              <button type="button" onclick="abrirModalProducto(${producto.id})" class="flex w-full items-center gap-2 px-3 py-2 text-left text-sm font-semibold text-on-surface hover:bg-surface-container" role="menuitem">
-                <span class="material-symbols-outlined text-lg">edit</span>
-                Editar
-              </button>
-            </div>
-          </div>`;
-
-      return `
-        <div class="bg-surface-container-lowest rounded-xl p-4 flex flex-col gap-4 relative group hover:bg-surface-container-low transition-colors border border-outline-variant/15">
-          ${menuProducto}
-          <div class="h-48 rounded-lg bg-surface-container-highest overflow-hidden relative">
-            ${mediaProducto}
-            ${badgeDescuento}
+    <div id="receipt-modal" class="fixed inset-0 z-[140] hidden flex items-center justify-center bg-black/45 px-4 py-8">
+      <div class="w-full max-w-md rounded-xl border border-outline-variant bg-surface-container-lowest p-6 text-center shadow-2xl">
+        <span class="material-symbols-outlined text-5xl text-primary">
+          receipt_long</span>
+        <h2 class="mt-3 font-headline text-xl font-bold text-on-surface">
+          Venta registrada
+        </h2>
+        <p class="mt-2 text-sm text-secondary">
+          ¿Querés imprimir el comprobante o ticket?
+        </p>
+        <div class="mt-6 flex justify-center gap-3">
+          <button id="skip-receipt" type="button" class="rounded-lg bg-surface-container px-5 py-3 font-bold text-on-surface hover:bg-surface-container-high">
+            No imprimir</button>
+          <button id="print-receipt" type="button" class="rounded-lg bg-primary px-5 py-3 font-bold text-on-primary hover:bg-primary-container hover:text-on-primary-container">
+            Imprimir</button>
+        </div>
+      </div>
+    </div>
+    <div id="sales-history-modal" class="fixed inset-0 z-[130] hidden flex items-center justify-center bg-black/45 px-4 py-8">
+      <div class="max-h-[calc(100vh-4rem)] w-full max-w-4xl overflow-hidden rounded-xl border border-outline-variant bg-surface-container-lowest shadow-2xl">
+        <div class="flex items-center justify-between border-b border-outline-variant p-5">
+          <div>
+            <h2 class="font-headline text-xl font-bold text-on-surface">
+              Historial de ventas
+            </h2>
+            <p class="text-sm text-secondary">
+              Ventas registradas con fecha y hora
+            </p>
           </div>
-          <div class="flex flex-col gap-1">
-            <span class="text-xs text-secondary font-medium uppercase tracking-wider">${marcaSegura}</span>
-            <h3 class="font-headline font-semibold text-lg leading-tight line-clamp-2">${nombreSeguro}</h3>
-            <div class="flex justify-between items-end mt-2">
-              <div class="flex flex-col">
-                ${precioAnterior}
-                <span class="font-headline font-bold text-xl text-primary">${formatCurrency(precioFinal)}</span>
+          <button id="close-sales-history" type="button" class="flex h-10 w-10 items-center justify-center rounded-full text-secondary hover:bg-surface-container" aria-label="Cerrar historial">
+            <span class="material-symbols-outlined">
+              close</span></button>
+        </div>
+        <div id="sales-history-list" class="max-h-[70vh] overflow-y-auto p-5">
+        </div>
+      </div>
+    </div>
+    <div id="cash-close-modal" class="fixed inset-0 z-[135] hidden flex items-center justify-center bg-black/45 px-4 py-8">
+      <div class="max-h-[calc(100vh-4rem)] w-full max-w-5xl overflow-y-auto rounded-xl border border-outline-variant bg-surface-container-lowest shadow-2xl">
+        <div class="flex items-center justify-between border-b border-outline-variant p-5">
+          <div>
+            <h2 class="font-headline text-xl font-bold text-on-surface">
+              Informe de cierre de caja
+            </h2>
+            <p class="text-sm text-secondary">
+              Resumen del turno, control de efectivo y listado imprimible de ventas
+            </p>
+          </div>
+          <button id="close-cash-close" type="button" class="flex h-10 w-10 items-center justify-center rounded-full text-secondary hover:bg-surface-container" aria-label="Cerrar cierre de caja">
+            <span class="material-symbols-outlined">
+              close</span></button>
+        </div>
+        <div class="grid gap-5 p-5 xl:grid-cols-[1.05fr_0.95fr]">
+          <section class="rounded-xl border border-outline-variant/20 bg-surface-container-low p-4 xl:col-span-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-secondary">
+              Encabezado de sesión</span>
+            <div class="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+              <label class="flex flex-col gap-2 text-sm font-semibold text-on-surface">
+                Usuario
+                <input id="cash-close-user" class="rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-3 text-sm font-normal text-on-surface focus:border-primary focus:ring-primary" type="text" value="Admin Squat">
+              </label>
+              <label class="flex flex-col gap-2 text-sm font-semibold text-on-surface">
+                ID de caja
+                <input id="cash-close-register-id" class="rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-3 text-sm font-normal text-on-surface focus:border-primary focus:ring-primary" type="text" value="Caja 01">
+              </label>
+              <div class="rounded-lg bg-surface-container-lowest px-3 py-3">
+                <span class="text-xs font-bold uppercase tracking-wider text-secondary">
+                  Inicio turno</span>
+                <p id="cash-close-start" class="mt-2 text-sm font-bold text-on-surface">
+                  --
+                </p>
               </div>
-              <button type="button" onclick="agregarAlCarrito(${producto.id})" class="${botonColor} w-10 h-10 rounded-full flex items-center justify-center transition-colors active:scale-95" aria-label="Agregar ${nombreSeguro}">
-                <span class="material-symbols-outlined">add</span>
-              </button>
-            </div>
-          </div>
-        </div>`;
-    }).join('') : '<div class="col-span-full rounded-xl border border-dashed border-outline-variant/40 bg-surface-container-lowest p-10 text-center text-secondary"><span class="material-symbols-outlined mb-2 text-3xl">search_off</span><p class="font-semibold text-on-surface">No hay productos para mostrar</p><p class="mt-1 text-sm">Probá con otra búsqueda o categoría.</p></div>';
-
-    actualizarFiltrosCategoria();
-  }
-
-  function agregarAlCarrito(id) {
-    const producto = productos.find((item) => item.id === id);
-
-    if (!producto) {
-      return;
-    }
-
-    const itemEnCarrito = carrito.find((item) => item.id === id);
-
-    if (itemEnCarrito) {
-      itemEnCarrito.cantidad += 1;
-    } else {
-      carrito.push({
-        ...producto,
-        cantidad: 1,
-        precioEfectivo: obtenerPrecioFinal(producto)
-      });
-    }
-
-    actualizarInterfaz();
-  }
-
-  function cambiarCantidad(id, delta) {
-    const item = carrito.find((producto) => producto.id === id);
-
-    if (!item) {
-      return;
-    }
-
-    item.cantidad += delta;
-
-    if (item.cantidad <= 0) {
-      carrito = carrito.filter((producto) => producto.id !== id);
-    }
-
-    actualizarInterfaz();
-  }
-
-  function actualizarCantidadCarrito(id, value) {
-    const item = carrito.find((producto) => producto.id === id);
-    const cantidad = Math.floor(Number(value));
-
-    if (!item) {
-      return;
-    }
-
-    if (!Number.isFinite(cantidad)) {
-      actualizarInterfaz();
-      return;
-    }
-
-    if (cantidad <= 0) {
-      carrito = carrito.filter((producto) => producto.id !== id);
-    } else {
-      item.cantidad = cantidad;
-    }
-
-    actualizarInterfaz();
-  }
-
-  function seleccionarDescuento(id) {
-    const descuento = descuentosDisponibles.find((item) => item.id === id);
-
-    if (!descuento) {
-      return;
-    }
-
-    descuentoActivoId = descuento.id;
-    descuentoGlobal = descuento.porcentaje;
-    actualizarInterfaz();
-  }
-
-  function renderizarOpcionesDescuento() {
-    const discountOptions = document.getElementById('discount-options');
-
-    if (!discountOptions) {
-      return;
-    }
-
-    discountOptions.innerHTML = descuentosDisponibles.map((descuento) => {
-      const isActive = descuento.id === descuentoActivoId;
-      const nombreSeguro = escapeHtml(descuento.nombre);
-      const activeClass = isActive ? ' discount-option-active' : '';
-
-      return `
-        <button type="button" class="discount-option${activeClass} min-h-14 rounded-lg px-3 py-2 text-left active:scale-95" data-discount-id="${escapeHtml(descuento.id)}" aria-pressed="${isActive}">
-          <span class="block truncate text-[11px] font-semibold leading-tight">${nombreSeguro}</span>
-          <span class="block text-sm font-black">${descuento.porcentaje}%</span>
-        </button>
-      `;
-    }).join('');
-  }
-
-  function actualizarFormularioDescuento(descuento) {
-    const discountNameInput = document.getElementById('discount-name-input');
-    const discountRateInput = document.getElementById('discount-rate-input');
-
-    if (discountNameInput) {
-      discountNameInput.value = descuento.nombre;
-    }
-
-    if (discountRateInput) {
-      discountRateInput.value = descuento.porcentaje;
-    }
-  }
-
-  function actualizarSelectorDescuento() {
-    sincronizarDescuentoActivo();
-    renderizarOpcionesDescuento();
-
-    const descuentoActivo = obtenerDescuentoActivo();
-    const discountActiveName = document.getElementById('discount-active-name');
-    const discountSummary = document.getElementById('discount-summary-rate');
-
-    if (discountActiveName) {
-      discountActiveName.textContent = descuentoActivo.nombre;
-    }
-
-    if (discountSummary) {
-      discountSummary.textContent = descuentoActivo.porcentaje > 0 ? `${descuentoActivo.porcentaje}%` : 'Sin descuento';
-    }
-
-    actualizarFormularioDescuento(descuentoActivo);
-  }
-
-  function guardarDescuentoActivo() {
-    const descuentoActivo = obtenerDescuentoActivo();
-    const discountNameInput = document.getElementById('discount-name-input');
-    const discountRateInput = document.getElementById('discount-rate-input');
-    const nombre = discountNameInput?.value.trim();
-    const porcentaje = normalizarDescuento(discountRateInput?.value);
-
-    if (!nombre) {
-      discountNameInput?.focus();
-      return;
-    }
-
-    descuentoActivo.nombre = nombre;
-    descuentoActivo.porcentaje = porcentaje;
-    descuentoGlobal = porcentaje;
-    guardarDescuentosDisponibles();
-    actualizarInterfaz();
-  }
-
-  function agregarDescuentoDesdeFormulario() {
-    const discountNameInput = document.getElementById('discount-name-input');
-    const discountRateInput = document.getElementById('discount-rate-input');
-    const nombre = discountNameInput?.value.trim();
-    const porcentaje = normalizarDescuento(discountRateInput?.value);
-
-    if (!nombre) {
-      discountNameInput?.focus();
-      return;
-    }
-
-    const nuevoDescuento = {
-      id: crearIdDescuento(nombre),
-      nombre,
-      porcentaje
-    };
-
-    descuentosDisponibles.push(nuevoDescuento);
-    descuentoActivoId = nuevoDescuento.id;
-    descuentoGlobal = nuevoDescuento.porcentaje;
-    guardarDescuentosDisponibles();
-    actualizarInterfaz();
-  }
-
-  function eliminarDescuentoActivo() {
-    if (descuentosDisponibles.length <= 1) {
-      descuentosDisponibles = [{ id: 'sin-descuento', nombre: 'Sin descuento', porcentaje: 0 }];
-    } else {
-      descuentosDisponibles = descuentosDisponibles.filter((descuento) => descuento.id !== descuentoActivoId);
-    }
-
-    descuentoActivoId = descuentosDisponibles[0]?.id || 'sin-descuento';
-    sincronizarDescuentoActivo();
-    guardarDescuentosDisponibles();
-    actualizarInterfaz();
-  }
-
-  function mostrarErrorPago(message) {
-    const errorBox = document.getElementById('payment-error');
-
-    if (!errorBox) {
-      return;
-    }
-
-    errorBox.textContent = message;
-    errorBox.classList.toggle('hidden', !message);
-  }
-
-  function actualizarResumenPago() {
-    const paymentSubtotal = document.getElementById('payment-subtotal');
-    const paymentDiscount = document.getElementById('payment-discount');
-    const paymentTax = document.getElementById('payment-tax');
-    const paymentTotal = document.getElementById('payment-total');
-
-    if (paymentSubtotal) {
-      paymentSubtotal.textContent = formatCurrency(totalesActuales.subtotal);
-    }
-
-    if (paymentDiscount) {
-      paymentDiscount.textContent = totalesActuales.descuentoMonto > 0
-        ? `-${formatCurrency(totalesActuales.descuentoMonto)}`
-        : formatCurrency(0);
-    }
-
-    if (paymentTax) {
-      paymentTax.textContent = formatCurrency(totalesActuales.impuestos);
-    }
-
-    if (paymentTotal) {
-      paymentTotal.textContent = formatCurrency(totalesActuales.total);
-    }
-  }
-
-  function actualizarVueltoEfectivo() {
-    const cashReceived = document.getElementById('cash-received');
-    const cashChange = document.getElementById('cash-change');
-    const recibido = Number(cashReceived?.value || 0);
-    const vuelto = Number.isFinite(recibido) ? Math.max(recibido - totalesActuales.total, 0) : 0;
-
-    if (cashChange) {
-      cashChange.textContent = formatCurrency(vuelto);
-    }
-  }
-
-  function actualizarMetodoPagoUI() {
-    document.querySelectorAll('[data-payment-method]').forEach((button) => {
-      const isActive = button.dataset.paymentMethod === metodoPagoActivo;
-      button.classList.toggle('border-primary', isActive);
-      button.classList.toggle('bg-primary-container/15', isActive);
-      button.classList.toggle('shadow-[0px_12px_32px_rgba(0,109,55,0.14)]', isActive);
-      button.setAttribute('aria-pressed', String(isActive));
-    });
-
-    const cashFields = document.getElementById('cash-payment-fields');
-    const nonCashNote = document.getElementById('non-cash-payment-note');
-    const isCash = metodoPagoActivo === 'efectivo';
-
-    cashFields?.classList.toggle('hidden', !isCash);
-    nonCashNote?.classList.toggle('hidden', isCash);
-    actualizarVueltoEfectivo();
-  }
-
-  function abrirModalPago() {
-    const modal = document.getElementById('payment-modal');
-    const cashReceived = document.getElementById('cash-received');
-
-    if (totalesActuales.totalItems <= 0) {
-      return;
-    }
-
-    metodoPagoActivo = 'efectivo';
-    mostrarErrorPago('');
-    actualizarResumenPago();
-    actualizarMetodoPagoUI();
-
-    if (cashReceived) {
-      cashReceived.value = '';
-    }
-
-    modal?.classList.remove('hidden');
-    window.setTimeout(() => cashReceived?.focus(), 0);
-  }
-
-  function cerrarModalPago() {
-    document.getElementById('payment-modal')?.classList.add('hidden');
-    mostrarErrorPago('');
-  }
-
-  function seleccionarMetodoPago(method) {
-    metodoPagoActivo = method;
-    mostrarErrorPago('');
-    actualizarMetodoPagoUI();
-
-    if (method === 'efectivo') {
-      window.setTimeout(() => document.getElementById('cash-received')?.focus(), 0);
-    }
-  }
-
-  function obtenerNombreMetodoPago(method) {
-    const labels = {
-      efectivo: 'Efectivo',
-      tarjeta: 'Tarjeta',
-      transferencia: 'Transferencia',
-      qr: 'QR'
-    };
-
-    return labels[method] || 'Pago';
-  }
-
-  function crearRegistroVenta() {
-    const descuentoActivo = obtenerDescuentoActivo();
-    const recibido = metodoPagoActivo === 'efectivo'
-      ? Number(document.getElementById('cash-received')?.value || 0)
-      : null;
-    const vuelto = metodoPagoActivo === 'efectivo'
-      ? Math.max((Number.isFinite(recibido) ? recibido : 0) - totalesActuales.total, 0)
-      : null;
-
-    return {
-      id: Date.now(),
-      fechaISO: new Date().toISOString(),
-      sucursal: SUCURSAL_ACTIVA,
-      metodoPago: metodoPagoActivo,
-      metodoPagoNombre: obtenerNombreMetodoPago(metodoPagoActivo),
-      recibido,
-      vuelto,
-      descuento: {
-        nombre: descuentoActivo.nombre,
-        porcentaje: descuentoActivo.porcentaje,
-        monto: totalesActuales.descuentoMonto
-      },
-      subtotal: totalesActuales.subtotal,
-      impuestos: totalesActuales.impuestos,
-      total: totalesActuales.total,
-      totalItems: totalesActuales.totalItems,
-      items: carrito.map((item) => ({
-        id: item.id,
-        nombre: item.nombre,
-        marca: item.marca,
-        cantidad: item.cantidad,
-        precioUnitario: item.precioEfectivo,
-        total: item.precioEfectivo * item.cantidad
-      }))
-    };
-  }
-
-  function registrarVentaActual() {
-    const venta = crearRegistroVenta();
-
-    historialVentas = [venta, ...historialVentas].slice(0, 100);
-    guardarHistorialVentas();
-    renderizarHistorialVentas();
-  }
-
-  function renderizarHistorialVentas() {
-    const list = document.getElementById('sales-history-list');
-
-    if (!list) {
-      return;
-    }
-
-    if (!historialVentas.length) {
-      list.innerHTML = `
-        <div class="flex min-h-64 flex-col items-center justify-center rounded-xl border border-dashed border-outline-variant/40 px-4 text-center text-secondary">
-          <span class="material-symbols-outlined mb-2 text-4xl">history</span>
-          <p class="font-semibold text-on-surface">Sin ventas registradas</p>
-          <p class="mt-1 text-sm">Cuando confirmes cobros, aparecerán acá con su hora.</p>
-        </div>
-      `;
-      return;
-    }
-
-    list.innerHTML = historialVentas.map((venta) => {
-      const itemsResumen = (venta.items || [])
-        .map((item) => `${escapeHtml(item.cantidad)} x ${escapeHtml(item.nombre)}`)
-        .join(', ');
-
-      return `
-        <article class="mb-3 rounded-xl border border-outline-variant/20 bg-surface-container-low p-4">
-          <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-            <div>
-              <p class="text-sm font-bold text-on-surface">Venta #${escapeHtml(venta.id)}</p>
-              <div class="mt-2 grid gap-1 text-xs font-semibold text-on-surface-variant sm:grid-cols-3">
-                <span>Sucursal: <strong class="text-on-surface">${escapeHtml(venta.sucursal || SUCURSAL_ACTIVA)}</strong></span>
-                <span>Fecha: <strong class="text-on-surface">${escapeHtml(formatDateOnly(venta.fechaISO))}</strong></span>
-                <span>Hora: <strong class="text-on-surface">${escapeHtml(formatTimeOnly(venta.fechaISO))}</strong></span>
-              </div>
-              <p class="mt-2 text-sm text-secondary">${itemsResumen || 'Sin detalle de productos'}</p>
-            </div>
-            <div class="text-left sm:text-right">
-              <span class="rounded-full bg-primary-container px-3 py-1 text-xs font-bold text-on-primary-container">${escapeHtml(venta.metodoPagoNombre || obtenerNombreMetodoPago(venta.metodoPago))}</span>
-              <p class="mt-3 font-headline text-2xl font-extrabold text-primary">${formatCurrency(Number(venta.total) || 0)}</p>
-              <p class="text-xs text-secondary">${escapeHtml(venta.totalItems || 0)} items</p>
-            </div>
-          </div>
-        </article>
-      `;
-    }).join('');
-  }
-
-  function abrirHistorialVentas() {
-    renderizarHistorialVentas();
-    document.getElementById('sales-history-modal')?.classList.remove('hidden');
-  }
-
-  function cerrarHistorialVentas() {
-    document.getElementById('sales-history-modal')?.classList.add('hidden');
-  }
-
-  function calcularResumenCierre(ventas = historialVentas) {
-    return ventas.reduce((resumen, venta) => {
-      const totalVenta = Number(venta.total) || 0;
-      const metodo = venta.metodoPago || 'otro';
-      const subtotalVenta = Number(venta.subtotal);
-      const descuentoVenta = Number(venta.descuento?.monto) || 0;
-      const impuestosVenta = Number(venta.impuestos) || 0;
-
-      resumen.cantidad += 1;
-      resumen.total += totalVenta;
-      resumen.totalBruto += Number.isFinite(subtotalVenta) ? subtotalVenta : totalVenta;
-      resumen.descuentos += descuentoVenta;
-      resumen.impuestos += impuestosVenta;
-      resumen.porMetodo[metodo] = (resumen.porMetodo[metodo] || 0) + totalVenta;
-
-      if (metodo === 'efectivo') {
-        resumen.efectivo += totalVenta;
-      } else {
-        resumen.noEfectivo += totalVenta;
-      }
-
-      return resumen;
-    }, {
-      cantidad: 0,
-      total: 0,
-      totalBruto: 0,
-      descuentos: 0,
-      impuestos: 0,
-      efectivo: 0,
-      noEfectivo: 0,
-      porMetodo: {}
-    });
-  }
-
-  function mostrarErrorCierreCaja(message) {
-    const errorBox = document.getElementById('cash-close-error');
-
-    if (!errorBox) {
-      return;
-    }
-
-    errorBox.textContent = message;
-    errorBox.classList.toggle('hidden', !message);
-  }
-
-  function actualizarDiferenciaCierreCaja() {
-    const resumen = calcularResumenCierre();
-    const datosCierre = obtenerDatosCierreCaja();
-    const differenceBox = document.getElementById('cash-close-difference');
-    const statusBanner = document.getElementById('cash-close-status-banner');
-    const statusIcon = document.getElementById('cash-close-status-icon');
-    const statusTitle = document.getElementById('cash-close-status-title');
-    const statusMessage = document.getElementById('cash-close-status-message');
-    const observationsWrap = document.getElementById('cash-close-observations-wrap');
-    const confirmButton = document.getElementById('confirm-cash-close');
-    const totalEsperado = obtenerTotalEsperadoCierre(resumen, datosCierre);
-    const diferencia = datosCierre.efectivoContado - totalEsperado;
-    const tieneDiferencia = esDiferenciaCierreSignificativa(diferencia);
-    const requiereObservacion = tieneDiferencia && !datosCierre.observaciones;
-
-    if (differenceBox) {
-      differenceBox.textContent = formatCurrency(diferencia);
-      differenceBox.className = `font-headline text-2xl font-extrabold ${!tieneDiferencia ? 'cash-close-difference-balanced' : diferencia < 0 ? 'cash-close-difference-shortage' : 'cash-close-difference-surplus'}`;
-    }
-
-    if (statusBanner && statusIcon && statusTitle && statusMessage) {
-      if (!tieneDiferencia) {
-        statusBanner.className = 'cash-close-status-balanced mt-4 flex items-start gap-3 rounded-lg border px-3 py-3 transition-colors';
-        statusIcon.textContent = 'check_circle';
-        statusTitle.textContent = 'Caja cuadrada';
-        statusMessage.textContent = 'El efectivo real coincide con el total esperado.';
-      } else if (diferencia < 0) {
-        statusBanner.className = 'cash-close-status-shortage mt-4 flex items-start gap-3 rounded-lg border px-3 py-3 transition-colors';
-        statusIcon.textContent = 'warning';
-        statusTitle.textContent = 'Faltante detectado';
-        statusMessage.textContent = 'Revisá tickets, cobros manuales y retiros antes de cerrar.';
-      } else {
-        statusBanner.className = 'cash-close-status-surplus mt-4 flex items-start gap-3 rounded-lg border px-3 py-3 transition-colors';
-        statusIcon.textContent = 'priority_high';
-        statusTitle.textContent = 'Sobrante detectado';
-        statusMessage.textContent = 'Verificá registros manuales o ingresos no cargados.';
-      }
-    }
-
-    if (observationsWrap) {
-      observationsWrap.classList.toggle('hidden', !tieneDiferencia);
-    }
-
-    if (confirmButton) {
-      confirmButton.disabled = requiereObservacion;
-    }
-  }
-
-  function actualizarResumenCierreCaja() {
-    const resumen = calcularResumenCierre();
-    const datosCierre = obtenerDatosCierreCaja();
-    const transferenciaQr = (resumen.porMetodo.transferencia || 0) + (resumen.porMetodo.qr || 0);
-    const tarjeta = resumen.porMetodo.tarjeta || 0;
-    const otrosMetodos = Math.max(resumen.noEfectivo - transferenciaQr - tarjeta, 0);
-    const totalEsperado = obtenerTotalEsperadoCierre(resumen, datosCierre);
-
-    asignarTexto('cash-close-start', formatDateTime(datosCierre.fechaInicioISO));
-    asignarTexto('cash-close-end', formatDateTime(datosCierre.fechaFinISO));
-    asignarTexto('cash-close-sales-count', `${resumen.cantidad} ${resumen.cantidad === 1 ? 'venta' : 'ventas'}`);
-    asignarTexto('cash-close-cash-income', formatCurrency(resumen.efectivo));
-    asignarTexto('cash-close-expected', formatCurrency(totalEsperado));
-    asignarTexto('cash-close-method-cash', formatCurrency(resumen.efectivo));
-    asignarTexto('cash-close-method-transfer', formatCurrency(transferenciaQr));
-    asignarTexto('cash-close-method-card', formatCurrency(tarjeta));
-    asignarTexto('cash-close-non-cash', formatCurrency(otrosMetodos));
-    asignarTexto('cash-close-gross', formatCurrency(resumen.totalBruto));
-    asignarTexto('cash-close-discounts', resumen.descuentos > 0 ? `-${formatCurrency(resumen.descuentos)}` : formatCurrency(0));
-    asignarTexto('cash-close-tax', formatCurrency(resumen.impuestos));
-    asignarTexto('cash-close-total', formatCurrency(resumen.total));
-    actualizarDiferenciaCierreCaja();
-  }
-
-  function abrirCierreCaja() {
-    const modal = document.getElementById('cash-close-modal');
-    const countedInput = document.getElementById('cash-close-counted');
-
-    mostrarErrorCierreCaja('');
-    poblarConfiguracionCierreCaja();
-
-    actualizarResumenCierreCaja();
-    modal?.classList.remove('hidden');
-    window.setTimeout(() => countedInput?.focus(), 0);
-  }
-
-  function cerrarCierreCaja() {
-    document.getElementById('cash-close-modal')?.classList.add('hidden');
-    cerrarConfirmacionCierreCaja();
-    mostrarErrorCierreCaja('');
-  }
-
-  function construirListadoCierreCaja(ventas, resumen, datosCierre) {
-    const transferenciaQr = (resumen.porMetodo.transferencia || 0) + (resumen.porMetodo.qr || 0);
-    const tarjeta = resumen.porMetodo.tarjeta || 0;
-    const otrosMetodos = Math.max(resumen.noEfectivo - transferenciaQr - tarjeta, 0);
-    const totalEsperado = obtenerTotalEsperadoCierre(resumen, datosCierre);
-    const diferencia = datosCierre.efectivoContado - totalEsperado;
-    const observacionesCierre = datosCierre.observaciones
-      ? `<h2 style="font-size: 18px; margin: 18px 0 8px;">Observaciones</h2><p style="border: 1px solid #dddddd; padding: 10px; margin: 0 0 18px;">${escapeHtml(datosCierre.observaciones)}</p>`
-      : '';
-    const ventasOrdenadas = [...ventas].reverse();
-    const filasVentas = ventasOrdenadas.length
-      ? ventasOrdenadas.map((venta) => `
-          <tr>
-            <td>${escapeHtml(formatDateOnly(venta.fechaISO))}</td>
-            <td>${escapeHtml(formatTimeOnly(venta.fechaISO))}</td>
-            <td>${escapeHtml(venta.sucursal || SUCURSAL_ACTIVA)}</td>
-            <td>${escapeHtml(venta.metodoPagoNombre || obtenerNombreMetodoPago(venta.metodoPago))}</td>
-            <td>${escapeHtml(venta.totalItems || 0)}</td>
-            <td>${formatCurrency(Number(venta.subtotal) || Number(venta.total) || 0)}</td>
-            <td>${formatCurrency(Number(venta.descuento?.monto) || 0)}</td>
-            <td>${formatCurrency(Number(venta.impuestos) || 0)}</td>
-            <td>${formatCurrency(Number(venta.total) || 0)}</td>
-          </tr>
-        `).join('')
-      : '<tr><td colspan="9">Sin ventas registradas.</td></tr>';
-    const filasMetodos = [
-      ['Efectivo', resumen.efectivo],
-      ['Transferencia / QR', transferenciaQr],
-      ['Tarjeta crédito / débito', tarjeta],
-      ['Otros métodos', otrosMetodos]
-    ].map(([metodo, total]) => `
-      <tr>
-        <td>${escapeHtml(metodo)}</td>
-        <td>${formatCurrency(Number(total) || 0)}</td>
-      </tr>
-    `).join('');
-
-    return `
-      <section>
-        <h1 style="font-size: 28px; margin: 0 0 6px;">Cierre de caja</h1>
-        <p style="margin: 0 0 18px;">${escapeHtml(SUCURSAL_ACTIVA)} · ${escapeHtml(formatDateOnly(datosCierre.fechaFinISO))} · ${escapeHtml(formatTimeOnly(datosCierre.fechaFinISO))}</p>
-        <h2 style="font-size: 18px; margin: 18px 0 8px;">Encabezado de sesión</h2>
-        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 18px;">
-          <div><strong>Usuario</strong><br>${escapeHtml(datosCierre.usuario)}</div>
-          <div><strong>ID de caja</strong><br>${escapeHtml(datosCierre.cajaId)}</div>
-          <div><strong>Inicio turno</strong><br>${escapeHtml(formatDateTime(datosCierre.fechaInicioISO))}</div>
-          <div><strong>Fin turno</strong><br>${escapeHtml(formatDateTime(datosCierre.fechaFinISO))}</div>
-        </div>
-        <h2 style="font-size: 18px; margin: 18px 0 8px;">Resumen de efectivo</h2>
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 18px;">
-          <div><strong>Monto inicial</strong><br>${formatCurrency(datosCierre.montoInicial)}</div>
-          <div><strong>Ingresos en efectivo</strong><br>${formatCurrency(resumen.efectivo)}</div>
-          <div><strong>Egresos / retiros</strong><br>${formatCurrency(datosCierre.egresos)}</div>
-          <div><strong>Total esperado</strong><br>${formatCurrency(totalEsperado)}</div>
-          <div><strong>Efectivo real</strong><br>${formatCurrency(datosCierre.efectivoContado)}</div>
-          <div><strong>Diferencia efectivo</strong><br>${formatCurrency(diferencia)}</div>
-        </div>
-        ${observacionesCierre}
-        <h2 style="font-size: 18px; margin: 18px 0 8px;">Desglose por método de pago</h2>
-        <table class="print-table">
-          <thead><tr><th>Método</th><th>Total</th></tr></thead>
-          <tbody>${filasMetodos}</tbody>
-        </table>
-        <h2 style="font-size: 18px; margin: 22px 0 8px;">Métricas de venta</h2>
-        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 18px;">
-          <div><strong>Total bruto</strong><br>${formatCurrency(resumen.totalBruto)}</div>
-          <div><strong>Descuentos aplicados</strong><br>${formatCurrency(resumen.descuentos)}</div>
-          <div><strong>IVA 16%</strong><br>${formatCurrency(resumen.impuestos)}</div>
-          <div><strong>Cantidad de ventas</strong><br>${escapeHtml(resumen.cantidad)}</div>
-        </div>
-        <h2 style="font-size: 18px; margin: 22px 0 8px;">Listado de ventas</h2>
-        <table class="print-table">
-          <thead>
-            <tr>
-              <th>Fecha</th>
-              <th>Hora</th>
-              <th>Sucursal</th>
-              <th>Método</th>
-              <th>Items</th>
-              <th>Bruto</th>
-              <th>Desc.</th>
-              <th>IVA</th>
-              <th>Total</th>
-            </tr>
-          </thead>
-          <tbody>${filasVentas}</tbody>
-        </table>
-      </section>
-    `;
-  }
-
-  function prepararCierreCaja() {
-    const userInput = document.getElementById('cash-close-user');
-    const registerInput = document.getElementById('cash-close-register-id');
-    const openingInput = document.getElementById('cash-close-opening');
-    const withdrawalsInput = document.getElementById('cash-close-withdrawals');
-    const countedInput = document.getElementById('cash-close-counted');
-    const observationsInput = document.getElementById('cash-close-observations');
-    const usuario = userInput?.value.trim();
-    const cajaId = registerInput?.value.trim();
-    const montoInicial = Number(openingInput?.value || 0);
-    const egresos = Number(withdrawalsInput?.value || 0);
-    const efectivoContadoRaw = countedInput?.value.trim() || '';
-    const efectivoContado = Number(efectivoContadoRaw);
-
-    if (!usuario || !cajaId) {
-      mostrarErrorCierreCaja('Ingresá el usuario y el ID de caja para cerrar el turno.');
-      (usuario ? registerInput : userInput)?.focus();
-      return null;
-    }
-
-    if (!Number.isFinite(montoInicial) || montoInicial < 0 || !Number.isFinite(egresos) || egresos < 0) {
-      mostrarErrorCierreCaja('El monto inicial y los egresos deben ser valores válidos.');
-      (!Number.isFinite(montoInicial) || montoInicial < 0 ? openingInput : withdrawalsInput)?.focus();
-      return null;
-    }
-
-    if (!efectivoContadoRaw || !Number.isFinite(efectivoContado) || efectivoContado < 0) {
-      mostrarErrorCierreCaja('Ingresá el efectivo real en caja para cerrar el turno.');
-      countedInput?.focus();
-      return null;
-    }
-
-    const ventasParaImprimir = [...historialVentas];
-    const resumen = calcularResumenCierre(ventasParaImprimir);
-    const datosCierre = obtenerDatosCierreCaja(new Date().toISOString());
-    datosCierre.fechaInicioISO = obtenerInicioTurnoParaCierre(ventasParaImprimir);
-    datosCierre.efectivoContado = efectivoContado;
-    const totalEsperado = obtenerTotalEsperadoCierre(resumen, datosCierre);
-    const diferencia = efectivoContado - totalEsperado;
-
-    if (esDiferenciaCierreSignificativa(diferencia) && !datosCierre.observaciones) {
-      mostrarErrorCierreCaja('Justificá el sobrante o faltante en observaciones antes de cerrar.');
-      observationsInput?.focus();
-      actualizarResumenCierreCaja();
-      return null;
-    }
-
-    return {
-      ventasParaImprimir,
-      resumen,
-      datosCierre,
-      diferencia
-    };
-  }
-
-  function abrirConfirmacionCierreCaja(detalle) {
-    const differenceSummary = document.getElementById('cash-close-confirm-difference');
-
-    asignarTexto('cash-close-confirm-sales', `${detalle.resumen.cantidad}`);
-    asignarTexto('cash-close-confirm-total', formatCurrency(detalle.resumen.total));
-    asignarTexto('cash-close-confirm-difference', formatCurrency(detalle.diferencia));
-
-    if (differenceSummary) {
-      differenceSummary.className = !esDiferenciaCierreSignificativa(detalle.diferencia)
-        ? 'cash-close-difference-balanced'
-        : detalle.diferencia < 0
-          ? 'cash-close-difference-shortage'
-          : 'cash-close-difference-surplus';
-    }
-
-    document.getElementById('cash-close-confirm-modal')?.classList.remove('hidden');
-  }
-
-  function cerrarConfirmacionCierreCaja() {
-    document.getElementById('cash-close-confirm-modal')?.classList.add('hidden');
-  }
-
-  function confirmarCierreCaja() {
-    const detalle = prepararCierreCaja();
-
-    if (!detalle) {
-      return;
-    }
-
-    mostrarErrorCierreCaja('');
-    abrirConfirmacionCierreCaja(detalle);
-  }
-
-  function ejecutarCierreCaja() {
-    const detalle = prepararCierreCaja();
-
-    if (!detalle) {
-      cerrarConfirmacionCierreCaja();
-      return;
-    }
-
-    const printArea = document.getElementById('cash-close-print-area');
-
-    if (printArea) {
-      printArea.innerHTML = construirListadoCierreCaja(detalle.ventasParaImprimir, detalle.resumen, detalle.datosCierre);
-    }
-
-    guardarConfiguracionCierreCaja(detalle.datosCierre);
-    historialVentas = [];
-    guardarHistorialVentas();
-    renderizarHistorialVentas();
-    reiniciarTurnoInicio();
-    cerrarConfirmacionCierreCaja();
-    cerrarCierreCaja();
-    window.print();
-  }
-
-  function confirmarCobro() {
-    if (totalesActuales.totalItems <= 0) {
-      mostrarErrorPago('Agregá productos al carrito antes de cobrar.');
-      return;
-    }
-
-    if (metodoPagoActivo === 'efectivo') {
-      const recibido = Number(document.getElementById('cash-received')?.value || 0);
-
-      if (!Number.isFinite(recibido) || recibido < totalesActuales.total) {
-        mostrarErrorPago('El monto recibido debe cubrir el total de la venta.');
-        return;
-      }
-    }
-
-    registrarVentaActual();
-    carrito = [];
-    actualizarInterfaz();
-    cerrarModalPago();
-    document.getElementById('receipt-modal')?.classList.remove('hidden');
-  }
-
-  function finalizarVenta({ imprimir = false } = {}) {
-    if (imprimir) {
-      window.print();
-    }
-
-    document.getElementById('receipt-modal')?.classList.add('hidden');
-    actualizarInterfaz();
-  }
-
-  function actualizarInterfaz() {
-    const contenedor = document.getElementById('cart-items');
-
-    if (contenedor) {
-      contenedor.innerHTML = carrito.length
-        ? carrito.map((item) => {
-          const nombreSeguro = escapeHtml(item.nombre);
-          const mediaCarrito = item.img
-            ? `<img src="${escapeHtml(item.img)}" alt="${nombreSeguro}" class="w-full h-full object-cover mix-blend-multiply">`
-            : `<span class="material-symbols-outlined text-secondary text-2xl">${escapeHtml(item.icono || 'inventory_2')}</span>`;
-
-          return `
-          <div class="group flex min-w-0 items-start gap-3 rounded-xl border border-outline-variant/15 bg-surface-container-lowest p-3">
-            <div class="h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg bg-surface-container-low flex items-center justify-center 2xl:h-20 2xl:w-20">
-              ${mediaCarrito}
-            </div>
-            <div class="flex min-w-0 flex-1 flex-col">
-              <h4 class="line-clamp-2 font-semibold text-sm leading-tight text-on-surface">${nombreSeguro}</h4>
-              <span class="text-primary font-bold mt-1">${formatCurrency(item.precioEfectivo * item.cantidad)}</span>
-              <div class="mt-3 flex flex-wrap items-center gap-2" aria-label="Modificar cantidad de ${nombreSeguro}">
-                <button type="button" onclick="cambiarCantidad(${item.id}, -1)" class="flex h-8 w-8 items-center justify-center rounded-full bg-surface-container-high text-secondary transition-colors hover:bg-secondary hover:text-on-secondary active:scale-95" aria-label="Quitar ${nombreSeguro}">
-                  <span class="material-symbols-outlined text-sm">remove</span>
-                </button>
-                <input type="number" min="0" step="1" value="${item.cantidad}" onchange="actualizarCantidadCarrito(${item.id}, this.value)" onkeydown="if (event.key === 'Enter') this.blur()" class="h-8 w-14 rounded-lg border border-outline-variant bg-surface-container-lowest px-2 text-center text-sm font-bold text-on-surface focus:border-primary focus:ring-primary" aria-label="Cantidad de ${nombreSeguro}">
-                <button type="button" onclick="cambiarCantidad(${item.id}, 1)" class="flex h-8 w-8 items-center justify-center rounded-full bg-surface-container-high text-secondary transition-colors hover:bg-primary hover:text-on-primary active:scale-95" aria-label="Agregar ${nombreSeguro}">
-                  <span class="material-symbols-outlined text-sm">add</span>
-                </button>
+              <div class="rounded-lg bg-surface-container-lowest px-3 py-3">
+                <span class="text-xs font-bold uppercase tracking-wider text-secondary">
+                  Fin turno</span>
+                <p id="cash-close-end" class="mt-2 text-sm font-bold text-on-surface">
+                  --
+                </p>
               </div>
             </div>
-            <button type="button" onclick="cambiarCantidad(${item.id}, -${item.cantidad})" class="mt-1 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-secondary opacity-100 transition-colors hover:bg-error-container hover:text-error xl:opacity-0 xl:group-hover:opacity-100" aria-label="Eliminar ${nombreSeguro}">
-              <span class="material-symbols-outlined text-xl">delete</span>
-            </button>
+          </section>
+          <section class="rounded-xl border border-outline-variant/20 bg-surface-container-highest p-4">
+            <span class="text-xs font-bold uppercase tracking-wider text-secondary">
+              Control de efectivo</span>
+            <div id="cash-close-status-banner" class="cash-close-status-balanced mt-4 flex items-start gap-3 rounded-lg border px-3 py-3 transition-colors">
+              <span id="cash-close-status-icon" class="material-symbols-outlined text-xl">
+                check_circle</span>
+              <div>
+                <p id="cash-close-status-title" class="text-sm font-extrabold">
+                  Caja cuadrada
+                </p>
+                <p id="cash-close-status-message" class="text-xs font-medium">
+                  El efectivo real coincide con el total esperado.
+                </p>
+              </div>
+            </div>
+            <div class="mt-4 grid gap-3 sm:grid-cols-2">
+              <label class="flex flex-col gap-2 text-sm font-semibold text-on-surface">
+                Monto inicial
+                <input id="cash-close-opening" class="rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-3 text-sm font-bold text-on-surface focus:border-primary focus:ring-primary" type="number" min="0" step="0.01" placeholder="0.00">
+              </label>
+              <label class="flex flex-col gap-2 text-sm font-semibold text-on-surface">
+                Egresos / retiros
+                <input id="cash-close-withdrawals" class="rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-3 text-sm font-bold text-on-surface focus:border-primary focus:ring-primary" type="number" min="0" step="0.01" placeholder="0.00">
+              </label>
+            </div>
+            <div class="mt-4 grid gap-3 text-sm text-secondary sm:grid-cols-2">
+              <div class="rounded-lg bg-surface-container-lowest px-3 py-3"><span class="font-semibold">
+                  Ingresos en efectivo</span>
+                <p id="cash-close-cash-income" class="mt-1 font-headline text-xl font-extrabold text-on-surface">
+                  $0.00
+                </p>
+              </div>
+              <div class="rounded-lg bg-surface-container-lowest px-3 py-3"><span class="font-semibold">
+                  Total esperado</span>
+                <p id="cash-close-expected" class="mt-1 font-headline text-xl font-extrabold text-on-surface">
+                  $0.00
+                </p>
+              </div>
+            </div>
+            <label class="mt-4 flex flex-col gap-2 text-sm font-semibold text-on-surface">
+              Efectivo real en caja
+              <input id="cash-close-counted" class="rounded-lg border-2 border-primary/70 bg-primary-container/10 px-3 py-3 text-lg font-extrabold text-on-surface shadow-[0px_0px_0px_3px_rgba(0,109,55,0.08)] focus:border-primary focus:ring-2 focus:ring-primary/30" type="number" min="0" step="0.01" placeholder="0.00">
+            </label>
+            <div class="mt-4 flex items-center justify-between rounded-lg bg-surface-container-lowest px-3 py-3">
+              <span class="text-sm font-semibold text-secondary">
+                Diferencia</span><span id="cash-close-difference" class="font-headline text-2xl font-extrabold text-primary">
+                $0.00</span>
+            </div>
+            <div id="cash-close-observations-wrap" class="mt-4 hidden">
+              <label class="flex flex-col gap-2 text-sm font-semibold text-on-surface">
+                Observaciones del descuadre
+                <textarea id="cash-close-observations" class="min-h-24 resize-y rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-3 text-sm font-normal text-on-surface focus:border-primary focus:ring-primary" placeholder="Ej. Revisión de ticket, retiro no registrado, pago manual..."></textarea>
+              </label>
+              <p class="mt-2 text-xs font-semibold text-secondary">
+                Si hay sobrante o faltante, esta observación es requerida para cerrar.
+              </p>
+            </div>
+          </section>
+          <section class="rounded-xl border border-outline-variant/20 bg-surface-container-low p-4">
+            <div class="flex items-center justify-between gap-3"><span class="text-xs font-bold uppercase tracking-wider text-secondary">
+                Desglose del cierre</span>
+              <span id="cash-close-sales-count" class="rounded-full bg-primary-container px-3 py-1 text-xs font-bold text-on-primary-container">
+                0 ventas</span>
+            </div>
+            <p class="mt-4 text-xs font-bold uppercase tracking-wider text-secondary">
+              Métodos de pago
+            </p>
+            <div class="mt-4 grid gap-2 sm:grid-cols-2">
+              <div class="rounded-lg bg-surface-container-lowest px-3 py-3"><span class="text-xs font-bold uppercase text-secondary">
+                  Efectivo</span>
+                <p id="cash-close-method-cash" class="mt-1 text-lg font-extrabold text-on-surface">
+                  $0.00
+                </p>
+              </div>
+              <div class="rounded-lg bg-surface-container-lowest px-3 py-3"><span class="text-xs font-bold uppercase text-secondary">
+                  Transferencia / QR</span>
+                <p id="cash-close-method-transfer" class="mt-1 text-lg font-extrabold text-on-surface">
+                  $0.00
+                </p>
+              </div>
+              <div class="rounded-lg bg-surface-container-lowest px-3 py-3"><span class="text-xs font-bold uppercase text-secondary">
+                  Tarjeta crédito / débito</span>
+                <p id="cash-close-method-card" class="mt-1 text-lg font-extrabold text-on-surface">
+                  $0.00
+                </p>
+              </div>
+              <div class="rounded-lg bg-surface-container-lowest px-3 py-3"><span class="text-xs font-bold uppercase text-secondary">
+                  Otros métodos</span>
+                <p id="cash-close-non-cash" class="mt-1 text-lg font-extrabold text-on-surface">
+                  $0.00
+                </p>
+              </div>
+            </div>
+            <p class="mt-4 text-xs font-bold uppercase tracking-wider text-secondary">
+              Totales e impuestos
+            </p>
+            <div class="mt-4 grid gap-2 sm:grid-cols-2">
+              <div class="rounded-lg bg-surface-container-lowest px-3 py-3"><span class="text-xs font-bold uppercase text-secondary">
+                  Total bruto</span>
+                <p id="cash-close-gross" class="mt-1 text-lg font-extrabold text-on-surface">
+                  $0.00
+                </p>
+              </div>
+              <div class="rounded-lg bg-surface-container-lowest px-3 py-3"><span class="text-xs font-bold uppercase text-secondary">
+                  Descuentos</span>
+                <p id="cash-close-discounts" class="mt-1 text-lg font-extrabold text-primary">
+                  $0.00
+                </p>
+              </div>
+              <div class="rounded-lg bg-surface-container-lowest px-3 py-3"><span class="text-xs font-bold uppercase text-secondary">
+                  IVA 16%</span>
+                <p id="cash-close-tax" class="mt-1 text-lg font-extrabold text-on-surface">
+                  $0.00
+                </p>
+              </div>
+              <div class="rounded-lg bg-surface-container-lowest px-3 py-3"><span class="text-xs font-bold uppercase text-secondary">
+                  Total neto</span>
+                <p id="cash-close-total" class="mt-1 text-lg font-extrabold text-primary">
+                  $0.00
+                </p>
+              </div>
+            </div>
+          </section>
+          <div class="xl:col-span-2">
+            <p id="cash-close-error" class="hidden rounded-lg bg-error-container px-3 py-2 text-sm font-semibold text-error">
+            </p>
+            <div class="mt-4 flex justify-end gap-3">
+              <button id="cancel-cash-close" type="button" class="rounded-lg bg-surface-container px-5 py-3 font-bold text-on-surface hover:bg-surface-container-high">
+                Cancelar</button>
+              <button id="confirm-cash-close" type="button" class="rounded-lg bg-primary px-5 py-3 font-bold text-on-primary hover:bg-primary-container hover:text-on-primary-container disabled:cursor-not-allowed disabled:opacity-50">
+                Cerrar caja e imprimir</button>
+            </div>
           </div>
-        `;
-        }).join('')
-        : '<div class="flex h-full min-h-40 flex-col items-center justify-center rounded-xl border border-dashed border-outline-variant/40 px-4 text-center text-secondary"><span class="material-symbols-outlined mb-2 text-3xl">shopping_cart</span><p class="text-sm font-semibold">Carrito vacío</p><p class="mt-1 text-xs">Agregue productos para iniciar la venta.</p></div>';
-    }
-
-    const subtotal = carrito.reduce((acc, item) => acc + (item.precioEfectivo * item.cantidad), 0);
-    const descuentoMonto = subtotal * (descuentoGlobal / 100);
-    const baseImponible = subtotal - descuentoMonto;
-    const impuestos = baseImponible * IVA;
-    const total = baseImponible + impuestos;
-    const totalItems = carrito.reduce((acc, item) => acc + item.cantidad, 0);
-    totalesActuales = {
-      subtotal,
-      descuentoMonto,
-      impuestos,
-      total,
-      totalItems
-    };
-
-    document.getElementById('subtotal-amount').textContent = formatCurrency(subtotal);
-    document.getElementById('discount-amount').textContent = descuentoMonto > 0 ? `-${formatCurrency(descuentoMonto)}` : formatCurrency(0);
-    document.getElementById('tax-amount').textContent = formatCurrency(impuestos);
-    document.getElementById('total-amount').textContent = formatCurrency(total);
-    document.getElementById('cart-count').textContent = `${totalItems} Ítems`;
-    const openPaymentModal = document.getElementById('open-payment-modal');
-
-    if (openPaymentModal) {
-      openPaymentModal.disabled = totalItems <= 0;
-    }
-
-    actualizarResumenPago();
-    actualizarVueltoEfectivo();
-    actualizarSelectorDescuento();
-  }
-
-  function actualizarEstadoFiltrosRapidos(abierto) {
-    const filtersContainer = document.getElementById('quick-filters');
-    const toggleButton = document.getElementById('toggle-filters');
-    const toggleIcon = document.getElementById('toggle-filters-icon');
-
-    filtersContainer?.classList.toggle('hidden', !abierto);
-    toggleButton?.setAttribute('aria-expanded', String(abierto));
-
-    if (toggleIcon) {
-      toggleIcon.textContent = abierto ? 'expand_less' : 'expand_more';
-    }
-  }
-
-  document.addEventListener('DOMContentLoaded', () => {
-    const productSearch = document.getElementById('product-search');
-    const toggleFilters = document.getElementById('toggle-filters');
-    const quickFilters = document.getElementById('quick-filters');
-    const productModal = document.getElementById('product-modal');
-    const openProductModal = document.getElementById('open-product-modal');
-    const closeProductModal = document.getElementById('close-product-modal');
-    const cancelProductModal = document.getElementById('cancel-product-modal');
-    const productForm = document.getElementById('product-form');
-    const discountOptions = document.getElementById('discount-options');
-    const discountNameInput = document.getElementById('discount-name-input');
-    const discountRateInput = document.getElementById('discount-rate-input');
-    const saveDiscount = document.getElementById('save-discount');
-    const addDiscount = document.getElementById('add-discount');
-    const deleteDiscount = document.getElementById('delete-discount');
-    const openPaymentModal = document.getElementById('open-payment-modal');
-    const paymentModal = document.getElementById('payment-modal');
-    const closePaymentModal = document.getElementById('close-payment-modal');
-    const cancelPaymentModal = document.getElementById('cancel-payment-modal');
-    const confirmPayment = document.getElementById('confirm-payment');
-    const cashReceived = document.getElementById('cash-received');
-    const skipReceipt = document.getElementById('skip-receipt');
-    const printReceipt = document.getElementById('print-receipt');
-    const openSalesHistory = document.getElementById('open-sales-history');
-    const salesHistoryModal = document.getElementById('sales-history-modal');
-    const closeSalesHistory = document.getElementById('close-sales-history');
-    const openCashClose = document.getElementById('open-cash-close');
-    const cashCloseModal = document.getElementById('cash-close-modal');
-    const closeCashClose = document.getElementById('close-cash-close');
-    const cancelCashClose = document.getElementById('cancel-cash-close');
-    const confirmCashClose = document.getElementById('confirm-cash-close');
-    const cashCloseUser = document.getElementById('cash-close-user');
-    const cashCloseRegister = document.getElementById('cash-close-register-id');
-    const cashCloseOpening = document.getElementById('cash-close-opening');
-    const cashCloseWithdrawals = document.getElementById('cash-close-withdrawals');
-    const cashCloseCounted = document.getElementById('cash-close-counted');
-    const cashCloseObservations = document.getElementById('cash-close-observations');
-    const cashCloseConfirmModal = document.getElementById('cash-close-confirm-modal');
-    const cancelCashCloseConfirm = document.getElementById('cancel-cash-close-confirm');
-    const executeCashClose = document.getElementById('execute-cash-close');
-
-    productosPersonalizados = cargarProductosPersonalizados()
-      .map(normalizarProductoGuardado)
-      .filter(Boolean);
-    historialVentas = cargarHistorialVentas();
-    turnoInicioISO = obtenerTurnoInicio();
-    descuentosDisponibles = cargarDescuentosGuardados();
-    sincronizarDescuentoActivo();
-    sincronizarProductos();
-    renderizarProductos();
-    actualizarInterfaz();
-
-    openProductModal?.addEventListener('click', () => abrirModalProducto());
-    closeProductModal?.addEventListener('click', cerrarModalProducto);
-    cancelProductModal?.addEventListener('click', cerrarModalProducto);
-    productForm?.addEventListener('submit', agregarProductoPersonalizado);
-    productModal?.addEventListener('click', (event) => {
-      if (event.target === productModal) {
-        cerrarModalProducto();
-      }
-    });
-
-    openPaymentModal?.addEventListener('click', abrirModalPago);
-    closePaymentModal?.addEventListener('click', cerrarModalPago);
-    cancelPaymentModal?.addEventListener('click', cerrarModalPago);
-    paymentModal?.addEventListener('click', (event) => {
-      if (event.target === paymentModal) {
-        cerrarModalPago();
-      }
-    });
-    paymentModal?.querySelectorAll('[data-payment-method]').forEach((button) => {
-      button.addEventListener('click', () => seleccionarMetodoPago(button.dataset.paymentMethod || 'efectivo'));
-    });
-    cashReceived?.addEventListener('input', () => {
-      mostrarErrorPago('');
-      actualizarVueltoEfectivo();
-    });
-    confirmPayment?.addEventListener('click', confirmarCobro);
-    skipReceipt?.addEventListener('click', () => finalizarVenta({ imprimir: false }));
-    printReceipt?.addEventListener('click', () => finalizarVenta({ imprimir: true }));
-    openSalesHistory?.addEventListener('click', (event) => {
-      event.preventDefault();
-      abrirHistorialVentas();
-    });
-    closeSalesHistory?.addEventListener('click', cerrarHistorialVentas);
-    salesHistoryModal?.addEventListener('click', (event) => {
-      if (event.target === salesHistoryModal) {
-        cerrarHistorialVentas();
-      }
-    });
-    openCashClose?.addEventListener('click', abrirCierreCaja);
-    closeCashClose?.addEventListener('click', cerrarCierreCaja);
-    cancelCashClose?.addEventListener('click', cerrarCierreCaja);
-    cashCloseModal?.addEventListener('click', (event) => {
-      if (event.target === cashCloseModal) {
-        cerrarCierreCaja();
-      }
-    });
-    [cashCloseUser, cashCloseRegister].forEach((input) => {
-      input?.addEventListener('input', () => mostrarErrorCierreCaja(''));
-    });
-    [cashCloseOpening, cashCloseWithdrawals, cashCloseCounted].forEach((input) => {
-      input?.addEventListener('input', () => {
-        mostrarErrorCierreCaja('');
-        actualizarResumenCierreCaja();
-      });
-    });
-    cashCloseCounted?.addEventListener('change', () => {
-      mostrarErrorCierreCaja('');
-      actualizarDiferenciaCierreCaja();
-    });
-    cashCloseObservations?.addEventListener('input', () => {
-      mostrarErrorCierreCaja('');
-      actualizarResumenCierreCaja();
-    });
-    confirmCashClose?.addEventListener('click', confirmarCierreCaja);
-    cancelCashCloseConfirm?.addEventListener('click', cerrarConfirmacionCierreCaja);
-    executeCashClose?.addEventListener('click', ejecutarCierreCaja);
-    cashCloseConfirmModal?.addEventListener('click', (event) => {
-      if (event.target === cashCloseConfirmModal) {
-        cerrarConfirmacionCierreCaja();
-      }
-    });
-
-    toggleFilters?.addEventListener('click', () => {
-      const shouldOpen = quickFilters ? quickFilters.classList.contains('hidden') : false;
-      actualizarEstadoFiltrosRapidos(shouldOpen);
-    });
-
-    productSearch?.addEventListener('input', (event) => {
-      terminoBusqueda = event.target.value;
-      renderizarProductos();
-    });
-
-    document.querySelectorAll('[data-category]').forEach((button) => {
-      button.addEventListener('click', () => {
-        categoriaActiva = button.dataset.category || 'Todos';
-        renderizarProductos();
-      });
-    });
-
-    discountOptions?.addEventListener('click', (event) => {
-      const button = event.target instanceof Element ? event.target.closest('[data-discount-id]') : null;
-
-      if (button) {
-        seleccionarDescuento(button.dataset.discountId);
-      }
-    });
-
-    saveDiscount?.addEventListener('click', guardarDescuentoActivo);
-    addDiscount?.addEventListener('click', agregarDescuentoDesdeFormulario);
-    deleteDiscount?.addEventListener('click', eliminarDescuentoActivo);
-
-    [discountNameInput, discountRateInput].forEach((input) => {
-      input?.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter') {
-          event.preventDefault();
-          guardarDescuentoActivo();
-        }
-      });
-    });
-
-    document.addEventListener('click', (event) => {
-      const target = event.target;
-
-      if (!(target instanceof Element) || (!target.closest('[data-product-menu]') && !target.closest('[data-product-menu-button]'))) {
-        cerrarMenusProducto();
-      }
-    });
-
-    window.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape') {
-        cerrarModalProducto();
-        cerrarModalPago();
-        cerrarHistorialVentas();
-        cerrarCierreCaja();
-        document.getElementById('receipt-modal')?.classList.add('hidden');
-        cerrarMenusProducto();
-      }
-    });
-  });
-
-  window.abrirModalProducto = abrirModalProducto;
-  window.agregarAlCarrito = agregarAlCarrito;
-  window.actualizarCantidadCarrito = actualizarCantidadCarrito;
-  window.cambiarCantidad = cambiarCantidad;
-  window.toggleProductMenu = toggleProductMenu;
-</script>
-</body></html>
+        </div>
+      </div>
+    </div>
+    <div id="cash-close-confirm-modal" class="fixed inset-0 z-[145] hidden flex items-center justify-center bg-black/55 px-4 py-8">
+      <div class="w-full max-w-md rounded-xl border border-outline-variant bg-surface-container-lowest p-5 shadow-2xl">
+        <div class="flex items-start gap-3"><span class="material-symbols-outlined rounded-full bg-primary-container p-2 text-primary">
+            verified</span>
+          <div>
+            <h3 class="font-headline text-xl font-extrabold text-on-surface">
+              Vuelve a confirmar
+            </h3>
+            <p class="mt-1 text-sm text-secondary">
+              El cierre vaciará el historial del turno y abrirá el informe para imprimir.
+            </p>
+          </div>
+        </div>
+        <div class="mt-4 rounded-lg bg-surface-container-low px-3 py-3 text-sm text-secondary">
+          <div class="flex justify-between"><span>
+              Ventas</span><strong id="cash-close-confirm-sales" class="text-on-surface">
+              0</strong>
+          </div>
+          <div class="mt-2 flex justify-between"><span>
+              Total neto</span><strong id="cash-close-confirm-total" class="text-on-surface">
+              $0.00</strong>
+          </div>
+          <div class="mt-2 flex justify-between"><span>
+              Diferencia</span><strong id="cash-close-confirm-difference" class="text-on-surface">
+              $0.00</strong>
+          </div>
+        </div>
+        <div class="mt-5 flex justify-end gap-3">
+          <button id="cancel-cash-close-confirm" type="button" class="rounded-lg bg-surface-container px-5 py-3 font-bold text-on-surface hover:bg-surface-container-high">
+            Revisar</button>
+          <button id="execute-cash-close" type="button" class="rounded-lg bg-primary px-5 py-3 font-bold text-on-primary hover:bg-primary-container hover:text-on-primary-container">
+            Confirmar cierre</button>
+        </div>
+      </div>
+    </div>
+    <div id="product-modal" class="fixed inset-0 z-[120] hidden flex items-center justify-center overflow-y-auto bg-black/45 px-4 py-6">
+      <div class="max-h-[calc(100vh-3rem)] w-full max-w-4xl overflow-y-auto rounded-xl bg-background p-5 shadow-2xl sm:p-6">
+        <div class="mb-5 flex items-start justify-between gap-4">
+          <div>
+            <h2 id="product-modal-title" class="font-headline text-3xl font-extrabold uppercase leading-tight text-on-surface">
+              Agregar producto
+            </h2>
+            <p id="product-modal-description" class="mt-1 text-sm font-medium text-on-surface-variant">
+              Ingrese la información del producto para agregar al catálogo.
+            </p>
+          </div>
+          <button id="close-product-modal" type="button" class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-secondary hover:bg-surface-container" aria-label="Cerrar">
+            <span class="material-symbols-outlined">
+              close</span></button>
+        </div>
+        <form id="product-form" class="grid gap-5 lg:grid-cols-[17rem_1fr]">
+          <input id="editing-product-id" type="hidden">
+          <input id="new-product-image" type="hidden">
+          <input id="new-product-image-name" type="hidden">
+          <section class="flex flex-col gap-4">
+            <label id="product-image-dropzone" class="group flex min-h-[17rem] cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-[#a9cbb3] bg-surface-container-lowest p-5 text-center transition-colors hover:border-primary hover:bg-primary-container/10">
+              <input id="new-product-image-file" class="sr-only" type="file" accept="image/*">
+              <div id="product-image-empty" class="flex flex-col items-center">
+                <span class="material-symbols-outlined text-4xl text-secondary">
+                  add_a_photo</span>
+                <p class="mt-4 text-base font-extrabold text-on-surface">
+                  Foto del Producto
+                </p>
+                <p class="mt-2 text-sm italic text-on-surface-variant">
+                  Arrastra una imagen o haz clic para subir
+                </p>
+              </div>
+              <img id="product-image-preview" class="hidden max-h-56 w-full rounded-lg object-contain" alt="Vista previa del producto">
+              <p id="product-image-name" class="mt-3 hidden max-w-full truncate text-xs font-bold text-primary">
+              </p>
+            </label>
+            <div class="rounded-lg border-l-4 border-primary-container bg-primary-container/15 p-4">
+              <p class="font-bold text-on-surface">
+                Consejo Pro
+              </p>
+              <p class="mt-3 text-sm leading-relaxed text-on-surface-variant">
+                Las fotos con fondo blanco o neutro mejoran la visualización en el kiosco táctil.
+              </p>
+            </div>
+          </section>
+          <section class="rounded-xl bg-surface-container-lowest p-5 shadow-[0px_16px_40px_rgba(28,27,27,0.08)]">
+            <div class="grid gap-4 sm:grid-cols-2">
+              <label class="flex flex-col gap-2 text-sm font-bold uppercase text-on-surface-variant sm:col-span-2">
+                Nombre del producto
+                <input id="new-product-name" class="rounded-lg border-none bg-surface-container-highest px-4 py-2.5 text-base font-medium normal-case text-on-surface placeholder:text-secondary focus:ring-2 focus:ring-primary" type="text" placeholder="Ej. Proteína Whey 1kg" required>
+              </label>
+              <label class="flex flex-col gap-2 text-sm font-bold uppercase text-on-surface-variant">
+                Categoría
+                <select id="new-product-category" class="rounded-lg border-none bg-surface-container-highest px-4 py-2.5 text-base font-semibold normal-case text-on-surface focus:ring-2 focus:ring-primary" required>
+                  <option value="Suplementos">
+                    Suplementos</option><option value="Bebidas">
+                    Bebidas</option><option value="Alimentos">
+                    Alimentos</option><option value="Indumentaria">
+                    Indumentaria</option><option value="Preparados">
+                    Preparados</option>
+                </select>
+              </label>
+              <label class="flex flex-col gap-2 text-sm font-bold uppercase text-on-surface-variant">
+                Precio
+                <div class="relative"><span class="absolute left-4 top-1/2 -translate-y-1/2 text-lg font-extrabold text-primary">
+                    $</span>
+                  <input id="new-product-price" class="w-full rounded-lg border-none bg-surface-container-highest py-2.5 pl-9 pr-4 text-base font-medium text-on-surface placeholder:text-secondary focus:ring-2 focus:ring-primary" type="number" min="0.01" step="0.01" placeholder="0.00" required>
+                </div>
+              </label>
+              <label class="flex flex-col gap-2 text-sm font-bold uppercase text-on-surface-variant sm:col-span-2">
+                Cantidad
+                <input id="new-product-stock" class="rounded-lg border-none bg-surface-container-highest px-4 py-2.5 text-base font-medium text-on-surface placeholder:text-secondary focus:ring-2 focus:ring-primary" type="number" min="0" step="1" placeholder="0" required>
+              </label>
+              <label class="flex flex-col gap-2 text-sm font-bold uppercase text-on-surface-variant sm:col-span-2">
+                Descripción
+                <textarea id="new-product-description" class="min-h-24 resize-y rounded-lg border-none bg-surface-container-highest px-4 py-3 text-base font-medium normal-case text-on-surface placeholder:text-secondary focus:ring-2 focus:ring-primary" placeholder="Detalles técnicos, ingredientes o especificaciones..."></textarea>
+              </label>
+              <input id="new-product-brand" type="hidden">
+              <input id="new-product-discount" type="hidden" value="0">
+            </div>
+            <p id="product-form-error" class="mt-5 hidden rounded-lg bg-error-container px-3 py-2 text-sm font-semibold text-error">
+            </p>
+            <div class="mt-6 grid gap-4 sm:grid-cols-2">
+              <button id="product-submit-button" type="submit" class="rounded-lg bg-primary px-5 py-3.5 font-extrabold uppercase text-on-primary shadow-[0px_8px_20px_rgba(0,109,55,0.18)] hover:bg-primary-container hover:text-on-primary-container active:scale-95">
+                Aceptar</button>
+              <button id="cancel-product-modal" type="button" class="rounded-lg border border-outline-variant bg-surface-container-lowest px-5 py-3.5 font-extrabold uppercase text-on-surface-variant hover:bg-surface-container active:scale-95">
+                Cancelar</button>
+            </div>
+          </section>
+        </form>
+      </div>
+    </div>
+    <div id="cash-close-print-area" aria-hidden="true">
+    </div>
+    <!-- Shared scripts -->
+    <script src="../../js/squatgym-header.js"></script>
+    <!-- Page scripts -->
+    <script src="../../js/kiosco.js"></script>
+  </body>
+</html>

@@ -1,0 +1,230 @@
+body {
+  font-family: Inter, sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.font-headline,
+.font-display {
+  font-family: Manrope, sans-serif;
+}
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.discount-option {
+  min-width: 4rem;
+  border: 1px solid rgb(39 174 96 / 0.22);
+  background: #ffffff;
+  color: #006d37;
+  transition: background-color 180ms ease, color 180ms ease, box-shadow 180ms ease, transform 120ms ease;
+}
+
+.discount-option:hover {
+  background: rgb(39 174 96 / 0.10);
+  box-shadow: inset 0 0 0 1px rgb(39 174 96 / 0.22);
+}
+
+.discount-option-active {
+  background: #27ae60;
+  color: #ffffff;
+  box-shadow: 0 8px 20px rgb(39 174 96 / 0.24);
+}
+
+.inventory-active-filter {
+  background: #006d37;
+  color: #ffffff;
+  box-shadow: 0 8px 20px rgb(0 109 55 / 0.18);
+}
+
+.cash-close-status-balanced {
+  border-color: rgb(0 109 55 / 0.25);
+  background: rgb(45 203 115 / 0.14);
+  color: #006d37;
+}
+
+.cash-close-status-shortage {
+  border-color: rgb(179 38 30 / 0.28);
+  background: #ffdad6;
+  color: #b3261e;
+}
+
+.cash-close-status-surplus {
+  border-color: rgb(226 185 59 / 0.55);
+  background: #fff6d6;
+  color: #7a5700;
+}
+
+.cash-close-difference-balanced {
+  color: #006d37;
+}
+
+.cash-close-difference-shortage {
+  color: #b3261e;
+}
+
+.cash-close-difference-surplus {
+  color: #8a5f00;
+}
+
+.dark body {
+  background-color: #061f12;
+  color: #f4fbf1;
+}
+
+.dark .bg-background,
+.dark .bg-surface {
+  background-color: #061f12 !important;
+}
+
+.dark .bg-surface-bright,
+.dark .bg-surface-container-lowest {
+  background-color: #0f2d1c !important;
+}
+
+.dark .bg-surface-container-low {
+  background-color: #123621 !important;
+}
+
+.dark .bg-surface-container,
+.dark .bg-surface-container-high,
+.dark .bg-surface-container-highest,
+.dark .dark\:bg-zinc-800,
+.dark .dark\:bg-zinc-900 {
+  background-color: #1a5231 !important;
+}
+
+.dark .dark\:hover\:bg-zinc-800:hover,
+.dark .hover\:bg-\[\#EAE7E7\]:hover {
+  background-color: #215f39 !important;
+}
+
+.dark .text-on-surface,
+.dark .dark\:text-zinc-100 {
+  color: #f4fbf1 !important;
+}
+
+.dark .text-on-surface-variant,
+.dark .text-secondary,
+.dark .dark\:text-zinc-400 {
+  color: #c7d8c5 !important;
+}
+
+.dark .text-primary,
+.dark .dark\:text-\[\#2ecc71\] {
+  color: #5cec88 !important;
+}
+
+.dark .border-outline-variant,
+.dark .border-surface-container-high {
+  border-color: rgb(92 236 136 / 0.24) !important;
+}
+
+.dark .profile-dropdown-panel,
+.dark .notifications-panel {
+  border-color: rgb(92 236 136 / 0.24);
+}
+
+.dark img.mix-blend-multiply {
+  mix-blend-mode: normal;
+}
+
+.dark .discount-option {
+  background: #0f2d1c;
+  border-color: rgb(92 236 136 / 0.28);
+  color: #5cec88;
+}
+
+.dark .discount-option:hover {
+  background: rgb(92 236 136 / 0.12);
+}
+
+.dark .discount-option-active {
+  background: #5cec88;
+  color: #041f13;
+  box-shadow: 0 8px 20px rgb(92 236 136 / 0.22);
+}
+
+.dark .cash-close-status-balanced {
+  background: rgb(92 236 136 / 0.14);
+  color: #5cec88;
+}
+
+.dark .cash-close-status-shortage {
+  background: rgb(255 218 214 / 0.12);
+  color: #ffb4ab;
+}
+
+.dark .cash-close-status-surplus {
+  background: rgb(255 246 214 / 0.12);
+  color: #f2c94c;
+}
+
+#cash-close-print-area {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .notifications-panel {
+    left: 1rem;
+    right: 1rem;
+    width: auto;
+  }
+}
+
+@media print {
+  @page {
+    margin: 12mm;
+  }
+
+  body > *:not(#cash-close-print-area) {
+    display: none !important;
+  }
+
+  #cash-close-print-area {
+    display: block !important;
+    color: #111111;
+    font-family: Inter, sans-serif;
+    padding: 0;
+  }
+
+  #cash-close-print-area h1,
+  #cash-close-print-area h2,
+  #cash-close-print-area h3 {
+    font-family: Manrope, sans-serif;
+  }
+
+  .print-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 14px;
+    font-size: 12px;
+  }
+
+  .print-table th,
+  .print-table td {
+    border-bottom: 1px solid #dddddd;
+    padding: 8px 6px;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .print-table th {
+    background: #f2f2f2;
+    font-weight: 800;
+  }
+}
