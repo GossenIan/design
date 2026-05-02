@@ -125,7 +125,7 @@
         </div>
       </nav>
     </header>
-    <main class="mx-auto flex w-full max-w-[92rem] flex-col gap-6 px-4 pb-10 pt-36 sm:px-6 lg:px-10">
+    <main id="inventory-page-main" class="mx-auto flex w-full max-w-[92rem] flex-col gap-6 px-4 pb-10 pt-36 sm:px-6 lg:px-10">
       <section class="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <p class="text-sm font-bold uppercase tracking-widest text-primary">
@@ -138,13 +138,39 @@
             Ordena productos por sucursal, precio, stock y categoria. Los cambios se guardan en este navegador y alimentan el catalogo usado por el kiosco.
           </p>
         </div>
-        <button id="open-product-modal" type="button" class="flex items-center justify-center gap-2 rounded-xl bg-primary px-6 py-4 font-bold text-on-primary shadow-lg shadow-primary/20 transition-transform active:scale-95 hover:bg-primary-container hover:text-on-primary-container">
-          <span class="material-symbols-outlined">
-            add_circle</span>
-          Agregar producto</button>
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+          <button id="toggle-restock-mode" type="button" class="flex items-center justify-center gap-2 rounded-xl bg-[#4f46e5] px-6 py-4 font-bold text-white shadow-lg shadow-[#4f46e5]/20 transition-transform active:scale-95 hover:bg-[#4338ca]">
+            <span class="material-symbols-outlined">
+              add_shopping_cart</span>
+            Reponer stock</button>
+          <button id="toggle-stock-control-mode" type="button" class="flex items-center justify-center gap-2 rounded-xl bg-surface-container px-6 py-4 font-bold text-on-surface transition-transform active:scale-95 hover:bg-surface-container-high">
+            <span class="material-symbols-outlined">
+              fact_check</span>
+            Control de stock</button>
+          <button id="open-product-modal" type="button" class="flex items-center justify-center gap-2 rounded-xl bg-primary px-6 py-4 font-bold text-on-primary shadow-lg shadow-primary/20 transition-transform active:scale-95 hover:bg-primary-container hover:text-on-primary-container">
+            <span class="material-symbols-outlined">
+              add_circle</span>
+            Agregar producto</button>
+        </div>
       </section>
-      <section class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <article class="rounded-xl bg-surface-container-low p-5"><span class="material-symbols-outlined text-3xl text-primary">
+      <section class="rounded-xl border border-outline-variant/15 bg-surface-container-lowest p-4 shadow-[0px_10px_24px_rgba(28,27,27,0.04)]">
+        <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <div>
+            <p class="text-xs font-black uppercase tracking-wider text-primary">
+              Sucursal activa
+            </p>
+            <h2 id="branch-context-title" class="font-headline text-2xl font-black text-on-surface">
+              Todas las sucursales
+            </h2>
+          </div>
+          <div class="no-scrollbar hidden gap-2 overflow-x-auto sm:flex" id="branch-context-tabs" role="tablist" aria-label="Seleccionar sucursal">
+          </div>
+          <select id="branch-context-select" class="rounded-lg border-none bg-surface-container-highest px-3 py-3 text-sm font-bold text-on-surface focus:ring-2 focus:ring-primary sm:hidden">
+          </select>
+        </div>
+      </section>
+      <section class="grid gap-4 md:grid-cols-3">
+        <article class="inventory-metric rounded-xl bg-surface-container-low p-5"><span class="material-symbols-outlined text-3xl text-primary">
             inventory_2</span>
           <p class="mt-5 text-xs font-bold uppercase tracking-wider text-on-surface-variant">
             Productos
@@ -153,7 +179,7 @@
             0
           </p>
         </article>
-        <article class="rounded-xl bg-primary-container/10 p-5 ring-1 ring-primary-container/20">
+        <article class="inventory-metric rounded-xl bg-primary-container/10 p-5 ring-1 ring-primary-container/20">
           <span class="material-symbols-outlined text-3xl text-primary">
             payments</span>
           <p class="mt-5 text-xs font-bold uppercase tracking-wider text-on-surface-variant">
@@ -163,7 +189,7 @@
             $0.00
           </p>
         </article>
-        <article class="rounded-xl bg-error-container/35 p-5"><span class="material-symbols-outlined text-3xl text-error">
+        <article class="inventory-metric rounded-xl bg-error-container/35 p-5"><span class="material-symbols-outlined text-3xl text-error">
             warning</span>
           <p class="mt-5 text-xs font-bold uppercase tracking-wider text-on-surface-variant">
             Stock bajo
@@ -172,24 +198,13 @@
             0
           </p>
         </article>
-        <article class="rounded-xl bg-surface-container-low p-5"><span class="material-symbols-outlined text-3xl text-primary">
-            storefront</span>
-          <p class="mt-5 text-xs font-bold uppercase tracking-wider text-on-surface-variant">
-            Sucursal activa
-          </p>
-          <p id="metric-branch" class="font-headline text-2xl font-black">
-            Todas
-          </p>
-        </article>
       </section>
       <section class="rounded-xl bg-surface-container-lowest p-4 shadow-[0px_12px_32px_rgba(28,27,27,0.06)]">
-        <div class="grid gap-3 lg:grid-cols-[1.5fr_1fr_1fr_1fr_auto]">
+        <div class="grid gap-3 lg:grid-cols-[1.7fr_1fr_1fr_auto]">
           <label class="relative"><span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-secondary">
               search</span>
             <input id="inventory-search" class="w-full rounded-lg border-none bg-surface-container-highest py-3 pl-11 pr-4 text-sm font-medium text-on-surface placeholder:text-secondary focus:ring-2 focus:ring-primary" type="search" placeholder="Buscar por producto, codigo de barras, categoria...">
           </label>
-          <select id="branch-filter" class="rounded-lg border-none bg-surface-container-highest px-3 py-3 text-sm font-bold text-on-surface focus:ring-2 focus:ring-primary">
-          </select>
           <select id="category-filter" class="rounded-lg border-none bg-surface-container-highest px-3 py-3 text-sm font-bold text-on-surface focus:ring-2 focus:ring-primary">
           </select>
           <select id="status-filter" class="rounded-lg border-none bg-surface-container-highest px-3 py-3 text-sm font-bold text-on-surface focus:ring-2 focus:ring-primary">
@@ -217,27 +232,123 @@
           </select>
         </div>
       </section>
-      <section class="overflow-hidden rounded-xl bg-surface-container-lowest shadow-[0px_12px_32px_rgba(28,27,27,0.06)]">
-        <div class="hidden grid-cols-12 gap-4 border-b border-outline-variant/15 bg-surface-container px-5 py-4 text-xs font-black uppercase tracking-wider text-on-surface-variant lg:grid">
-          <button type="button" class="col-span-3 text-left" data-sort-shortcut="nombre-asc">
-            Producto</button>
-          <button type="button" class="col-span-2 text-left" data-sort-shortcut="sucursal-asc">
-            Sucursal</button>
-          <div class="col-span-2">
-            Categoria
+      <section id="restock-panel" class="hidden rounded-xl border border-[#4f46e5]/20 bg-[#eef2ff] p-4 text-[#312e81] shadow-[0px_12px_32px_rgba(79,70,229,0.10)]">
+        <div class="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
+          <div>
+            <p class="text-xs font-black uppercase tracking-wider">
+              Reposicion express
+            </p>
+            <h2 class="font-headline text-2xl font-black">
+              Carga por codigo de barras
+            </h2>
+            <p class="mt-1 text-sm font-medium">
+              Escanea, carga cantidad y vencimiento. Al guardar se suma al stock de la sucursal seleccionada.
+            </p>
           </div>
-          <button type="button" class="col-span-1 text-left" data-sort-shortcut="precio-asc">
-            Precio</button>
-          <button type="button" class="col-span-1 text-left" data-sort-shortcut="stock-asc">
-            Stock</button>
-          <div class="col-span-1">
-            Min.
-          </div>
-          <div class="col-span-2 text-right">
-            Acciones
+          <div class="grid gap-3 sm:grid-cols-[minmax(16rem,1fr)_auto_auto]">
+            <label class="flex flex-col gap-1 text-xs font-black uppercase tracking-wider">
+              Codigo de barras
+              <input id="restock-scan-input" class="rounded-lg border border-[#c7d2fe] bg-white px-3 py-3 text-sm font-bold normal-case tracking-normal text-on-surface focus:border-[#4f46e5] focus:ring-[#4f46e5]" type="search" inputmode="numeric" placeholder="Escanear producto">
+            </label>
+            <button id="save-restock-changes" type="button" class="rounded-lg bg-[#4f46e5] px-5 py-3 font-bold text-white hover:bg-[#4338ca]">
+              Guardar cambios</button>
+            <button id="cancel-restock-mode" type="button" class="rounded-lg bg-white px-5 py-3 font-bold text-[#312e81] hover:bg-[#e0e7ff]">
+              Cancelar</button>
           </div>
         </div>
-        <div id="inventory-list" class="divide-y divide-outline-variant/15">
+        <p id="restock-feedback" class="mt-3 hidden rounded-lg bg-white/80 px-3 py-2 text-sm font-bold">
+        </p>
+      </section>
+      <section id="stock-control-panel" class="hidden rounded-xl border border-primary-container/25 bg-primary-container/10 p-4 text-on-surface shadow-[0px_12px_32px_rgba(0,109,55,0.08)]">
+        <div class="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
+          <div>
+            <p class="text-xs font-black uppercase tracking-wider text-primary">
+              Control de stock
+            </p>
+            <h2 class="font-headline text-2xl font-black text-on-surface">
+              Conteo fisico por sucursal
+            </h2>
+            <p class="mt-1 text-sm font-medium text-on-surface-variant">
+              Carga el stock contado. Al guardar, el sistema ajusta la existencia real.
+            </p>
+          </div>
+          <div class="grid gap-3 sm:grid-cols-[minmax(16rem,1fr)_auto_auto]">
+            <label class="flex flex-col gap-1 text-xs font-black uppercase tracking-wider text-on-surface-variant">
+              Codigo de barras
+              <input id="stock-control-scan-input" class="rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-3 text-sm font-bold normal-case tracking-normal text-on-surface focus:border-primary focus:ring-primary" type="search" inputmode="numeric" placeholder="Escanear producto">
+            </label>
+            <button id="save-stock-control" type="button" class="rounded-lg bg-primary px-5 py-3 font-bold text-on-primary hover:bg-primary-container hover:text-on-primary-container">
+              Guardar control</button>
+            <button id="cancel-stock-control-mode" type="button" class="rounded-lg bg-surface-container px-5 py-3 font-bold text-on-surface hover:bg-surface-container-high">
+              Cancelar</button>
+          </div>
+        </div>
+        <p id="stock-control-feedback" class="mt-3 hidden rounded-lg bg-surface-container-lowest px-3 py-2 text-sm font-bold">
+        </p>
+      </section>
+      <section id="supplier-order-panel" class="rounded-xl border border-outline-variant/15 bg-surface-container-lowest p-4 shadow-[0px_12px_32px_rgba(28,27,27,0.06)]">
+        <div class="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
+          <div class="min-w-0 flex-1">
+            <p class="text-xs font-black uppercase tracking-wider text-primary">
+              Lista de pedido al proveedor
+            </p>
+            <h2 id="supplier-order-title" class="font-headline text-xl font-black text-on-surface">
+              0 productos por reordenar
+            </h2>
+          </div>
+          <div class="grid w-full gap-2 sm:grid-cols-[minmax(14rem,1fr)_7rem_auto] xl:max-w-2xl">
+            <select id="supplier-product-select" class="rounded-lg border-none bg-surface-container-highest px-3 py-3 text-sm font-bold text-on-surface focus:ring-2 focus:ring-primary">
+            </select>
+            <input id="supplier-quantity-input" class="rounded-lg border-none bg-surface-container-highest px-3 py-3 text-sm font-bold text-on-surface focus:ring-2 focus:ring-primary" type="number" min="1" step="1" value="1" aria-label="Cantidad para pedido">
+            <button id="add-supplier-order-item" type="button" class="rounded-lg bg-primary px-4 py-3 text-sm font-bold text-on-primary hover:bg-primary-container hover:text-on-primary-container">
+              Anadir</button>
+          </div>
+        </div>
+        <div id="supplier-order-list" class="mt-4 grid gap-2">
+        </div>
+        <div class="mt-4 flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-end">
+          <button id="clear-supplier-order" type="button" class="rounded-lg bg-surface-container px-4 py-3 text-sm font-bold text-on-surface hover:bg-surface-container-high">
+            Limpiar lista</button>
+          <button id="confirm-supplier-order" type="button" class="rounded-lg bg-primary px-5 py-3 text-sm font-bold text-on-primary hover:bg-primary-container hover:text-on-primary-container disabled:cursor-not-allowed disabled:opacity-50">
+            Confirmar</button>
+        </div>
+        <div id="supplier-order-toast" class="mt-4 hidden rounded-xl border border-primary-container bg-primary-container/15 px-4 py-3 text-primary">
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined flex h-9 w-9 items-center justify-center rounded-full bg-primary text-on-primary">
+              check</span>
+            <p class="text-sm font-black">
+              El pedido de reposicion fue enviado al encargado.
+            </p>
+          </div>
+        </div>
+      </section>
+      <section id="inventory-report" class="inventory-report overflow-hidden rounded-xl border border-outline-variant/15 bg-surface-container-lowest shadow-[0px_12px_32px_rgba(28,27,27,0.06)]">
+        <div class="flex flex-col gap-4 border-b border-outline-variant/15 bg-surface-container-low px-5 py-5 lg:flex-row lg:items-center lg:justify-between">
+          <div>
+            <p class="text-xs font-black uppercase tracking-wider text-primary">
+              Listado por sucursal
+            </p>
+            <h2 class="font-headline text-2xl font-black text-on-surface">
+              Informe de inventario
+            </h2>
+          </div>
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+            <div class="rounded-lg border border-outline-variant/30 bg-surface-container-lowest px-4 py-3">
+              <p class="text-[11px] font-black uppercase tracking-wider text-on-surface-variant">
+                Fecha de ultima reposicion
+              </p>
+              <p id="inventory-issued-date" class="font-headline text-base font-black text-on-surface">
+                --/--/----
+              </p>
+            </div>
+            <button id="print-inventory-report" type="button" class="flex items-center justify-center gap-2 rounded-lg bg-surface-container px-4 py-3 text-sm font-bold text-on-surface hover:bg-surface-container-high active:scale-95">
+              <span class="material-symbols-outlined text-lg">
+                print</span>
+              Imprimir
+            </button>
+          </div>
+        </div>
+        <div id="inventory-list" class="space-y-8 p-5">
         </div>
         <div class="flex flex-col gap-3 border-t border-outline-variant/15 bg-surface-container-low px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
           <p id="inventory-count" class="text-sm font-semibold text-on-surface-variant">
@@ -302,7 +413,7 @@
               </label>
               <label class="flex flex-col gap-2 text-sm font-bold uppercase text-on-surface-variant">
                 Codigo de barras
-                <input id="product-barcode" class="rounded-lg border-none bg-surface-container-highest px-4 py-2.5 text-base font-medium normal-case text-on-surface placeholder:text-secondary focus:ring-2 focus:ring-primary" type="text" placeholder="7790001000010" required>
+                <input id="product-barcode" class="rounded-lg border-none bg-surface-container-highest px-4 py-2.5 text-base font-medium normal-case text-on-surface placeholder:text-secondary focus:ring-2 focus:ring-primary" type="text" inputmode="numeric" pattern="[0-9]+" placeholder="7790001000010" title="Ingrese solo numeros" required>
               </label>
               <label class="flex flex-col gap-2 text-sm font-bold uppercase text-on-surface-variant">
                 Sucursal
@@ -330,6 +441,10 @@
                 <input id="product-min-stock" class="rounded-lg border-none bg-surface-container-highest px-4 py-2.5 text-base font-medium text-on-surface placeholder:text-secondary focus:ring-2 focus:ring-primary" type="number" min="0" step="1" placeholder="5" required>
               </label>
               <label class="flex flex-col gap-2 text-sm font-bold uppercase text-on-surface-variant sm:col-span-2">
+                Proximo vencimiento
+                <input id="product-expiration" class="rounded-lg border-none bg-surface-container-highest px-4 py-2.5 text-base font-medium text-on-surface placeholder:text-secondary focus:ring-2 focus:ring-primary" type="date">
+              </label>
+              <label class="flex flex-col gap-2 text-sm font-bold uppercase text-on-surface-variant sm:col-span-2">
                 Descripcion
                 <textarea id="product-description" class="min-h-24 resize-y rounded-lg border-none bg-surface-container-highest px-4 py-3 text-base font-medium normal-case text-on-surface placeholder:text-secondary focus:ring-2 focus:ring-primary" placeholder="Detalles tecnicos, ingredientes o especificaciones..."></textarea>
               </label>
@@ -348,6 +463,7 @@
     </div>
     <!-- Shared scripts -->
     <script src="../../js/squatgym-header.js"></script>
+    <script src="../../js/image-upload.js"></script>
     <!-- Page scripts -->
     <script src="../../js/inventario.js"></script>
   </body>

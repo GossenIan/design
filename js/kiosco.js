@@ -107,6 +107,7 @@ let productosPersonalizados = [];
 let productosEliminados = [];
 let productos = [...productosBase];
 let carrito = [];
+let catalogoStorageFirma = '';
 let historialVentas = [];
 let totalesActuales = {
   subtotal: 0,
@@ -375,8 +376,22 @@ function obtenerClaveProducto(producto) {
   return `${Number(producto.id)}__${normalizarSucursal(producto.sucursal)}`;
 }
 
+function normalizarClaveProducto(clave) {
+  const claveTexto = String(clave ?? '').trim();
+
+  if (claveTexto.includes('__')) {
+    return claveTexto;
+  }
+
+  const producto = obtenerProductoPorId(claveTexto);
+
+  return producto ? obtenerClaveProducto(producto) : claveTexto;
+}
+
 function obtenerProductoPorClave(clave) {
-  return productos.find((producto) => obtenerClaveProducto(producto) === clave) || null;
+  const claveNormalizada = normalizarClaveProducto(clave);
+
+  return productos.find((producto) => obtenerClaveProducto(producto) === claveNormalizada) || null;
 }
 
 function cargarSucursalActiva() {
@@ -535,7 +550,9 @@ function cargarProductosEliminados() {
     const savedDeleted = JSON.parse(localStorage.getItem(PRODUCTOS_ELIMINADOS_STORAGE_KEY) || '[]');
 
     return Array.isArray(savedDeleted)
-      ? savedDeleted.map(Number).filter((id) => Number.isFinite(id))
+      ? savedDeleted
+        .map((value) => String(value ?? '').trim())
+        .filter(Boolean)
       : [];
   } catch (error) {
     return [];
@@ -554,13 +571,74 @@ function guardarProductosEliminados() {
 function sincronizarProductos() {
   const productosGuardadosPorClave = new Map(productosPersonalizados.map((producto) => [obtenerClaveProducto(producto), producto]));
   const clavesBase = new Set(productosBase.map(obtenerClaveProducto));
-  const idsEliminados = new Set(productosEliminados);
+  const clavesEliminadas = new Set(productosEliminados.map(String));
   const productosBaseActualizados = productosBase
-    .filter((producto) => !idsEliminados.has(producto.id))
+    .filter((producto) => {
+      const clave = obtenerClaveProducto(producto);
+
+      return !clavesEliminadas.has(clave) && !clavesEliminadas.has(String(producto.id));
+    })
     .map((producto) => productosGuardadosPorClave.get(obtenerClaveProducto(producto)) || producto);
   const productosCreados = productosPersonalizados.filter((producto) => !clavesBase.has(obtenerClaveProducto(producto)));
 
   productos = [...productosBaseActualizados, ...productosCreados];
+}
+
+function obtenerFirmaCatalogoGuardado() {
+  try {
+    return [
+      localStorage.getItem(PRODUCTOS_STORAGE_KEY) || '[]',
+      localStorage.getItem(PRODUCTOS_ELIMINADOS_STORAGE_KEY) || '[]'
+    ].join('::');
+  } catch (error) {
+    return '';
+  }
+}
+
+function actualizarCarritoConCatalogoActual(carritoPrevio) {
+  carrito = carritoPrevio
+    .map((item) => {
+      const productoActualizado = obtenerProductoPorClave(item.clave);
+
+      if (!productoActualizado) {
+        return null;
+      }
+
+      return {
+        ...productoActualizado,
+        cantidad: item.cantidad,
+        precioEfectivo: obtenerPrecioFinal(productoActualizado)
+      };
+    })
+    .filter(Boolean);
+}
+
+function recargarCatalogoDesdeInventario({ forzar = false, renderizar = true } = {}) {
+  const firmaActual = obtenerFirmaCatalogoGuardado();
+
+  if (!forzar && firmaActual === catalogoStorageFirma) {
+    return false;
+  }
+
+  const carritoPrevio = carrito.map((item) => ({
+    clave: obtenerClaveProducto(item),
+    cantidad: item.cantidad
+  }));
+
+  catalogoStorageFirma = firmaActual;
+  productosPersonalizados = cargarProductosPersonalizados()
+    .map(normalizarProductoGuardado)
+    .filter(Boolean);
+  productosEliminados = cargarProductosEliminados();
+  sincronizarProductos();
+  actualizarCarritoConCatalogoActual(carritoPrevio);
+
+  if (renderizar) {
+    renderizarProductos();
+    actualizarInterfaz();
+  }
+
+  return true;
 }
 
 function normalizarProductoGuardado(producto) {
@@ -592,6 +670,10 @@ function normalizarProductoGuardado(producto) {
     sucursal,
     stock: Number.isFinite(stock) && stock >= 0 ? Math.floor(stock) : 0,
     descripcion: String(producto.descripcion || '').trim(),
+    lotes: Array.isArray(producto.lotes) ? producto.lotes : [],
+    proximoVencimiento: String(producto.proximoVencimiento || '').trim(),
+    estadoLote: String(producto.estadoLote || '').trim(),
+    ventaBloqueada: Boolean(producto.ventaBloqueada),
     personalizado: true
   };
 }
@@ -646,8 +728,8 @@ function eliminarProducto(clave) {
 
   productosPersonalizados = productosPersonalizados.filter((item) => obtenerClaveProducto(item) !== clave);
 
-  if (productosBase.some((item) => obtenerClaveProducto(item) === clave) && !productosEliminados.includes(producto.id)) {
-    productosEliminados.push(producto.id);
+  if (productosBase.some((item) => obtenerClaveProducto(item) === clave) && !productosEliminados.includes(clave)) {
+    productosEliminados.push(clave);
     guardarProductosEliminados();
   }
 
@@ -717,7 +799,21 @@ function actualizarVistaImagenProducto(src = '', nombreArchivo = '') {
   }
 }
 
-function procesarArchivoImagenProducto(file) {
+function leerImagenTemporalProducto(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.addEventListener('load', () => resolve({
+      url: String(reader.result || ''),
+      fileName: file.name,
+      fallback: true
+    }));
+    reader.addEventListener('error', () => reject(new Error('No se pudo leer la imagen.')));
+    reader.readAsDataURL(file);
+  });
+}
+
+async function procesarArchivoImagenProducto(file) {
   if (!file) {
     return;
   }
@@ -727,13 +823,23 @@ function procesarArchivoImagenProducto(file) {
     return;
   }
 
-  const reader = new FileReader();
+  try {
+    const fileName = document.getElementById('product-image-name');
 
-  reader.addEventListener('load', () => {
-    actualizarVistaImagenProducto(String(reader.result || ''), file.name);
+    if (fileName) {
+      fileName.textContent = 'Subiendo imagen...';
+      fileName.classList.remove('hidden');
+    }
+
+    const image = window.SquatGymImageUpload
+      ? await window.SquatGymImageUpload.resolve(file)
+      : await leerImagenTemporalProducto(file);
+
+    actualizarVistaImagenProducto(image.url, image.fileName);
     mostrarErrorProducto('');
-  });
-  reader.readAsDataURL(file);
+  } catch (error) {
+    mostrarErrorProducto(error.message || 'No se pudo cargar la imagen.');
+  }
 }
 
 function abrirModalProducto(clave = null) {
@@ -829,7 +935,13 @@ function agregarProductoPersonalizado(event) {
     return;
   }
 
-  if (img && !/^https?:\/\//i.test(img) && !/^data:image\//i.test(img)) {
+  const imagenValida = !img
+    || /^https?:\/\//i.test(img)
+    || /^data:image\//i.test(img)
+    || /^\/?img\/uploads\//i.test(img)
+    || /^\.\.\/\.\.\/img\/uploads\//i.test(img);
+
+  if (!imagenValida) {
     mostrarErrorProducto('La imagen debe ser una URL web o una imagen subida desde el equipo.');
     return;
   }
@@ -889,6 +1001,7 @@ function obtenerProductosFiltrados() {
   return productos.filter((producto) => {
     const coincideSucursal = normalizarSucursal(producto.sucursal) === sucursalActiva;
     const coincideCategoria = categoriaActiva === 'Todos' || producto.categoria === categoriaActiva;
+    const disponibleParaVenta = !producto.ventaBloqueada;
     const coincideBusqueda = !busqueda
       || producto.nombre.toLowerCase().includes(busqueda)
       || producto.marca.toLowerCase().includes(busqueda)
@@ -896,7 +1009,7 @@ function obtenerProductosFiltrados() {
       || producto.categoria.toLowerCase().includes(busqueda)
       || normalizarSucursal(producto.sucursal).toLowerCase().includes(busqueda);
 
-    return coincideSucursal && coincideCategoria && coincideBusqueda;
+    return coincideSucursal && coincideCategoria && coincideBusqueda && disponibleParaVenta;
   });
 }
 
@@ -958,19 +1071,19 @@ function renderizarProductos() {
     ? 'bg-primary text-on-primary hover:bg-primary-container hover:text-on-primary-container'
     : 'bg-surface-container-high text-on-surface hover:bg-primary hover:text-on-primary';
     const claveProducto = obtenerClaveProducto(producto);
-    const claveProductoJson = JSON.stringify(claveProducto);
+    const claveProductoJson = escapeHtml(JSON.stringify(claveProducto));
     const claveProductoHtml = escapeHtml(claveProducto);
     const menuProducto = `
         <div class="absolute right-3 top-3 z-20">
-          <button type="button" onclick="toggleProductMenu(event, ${claveProductoJson})" class="flex h-9 w-9 items-center justify-center rounded-full bg-surface-container-lowest/90 text-secondary shadow-sm ring-1 ring-outline-variant/30 backdrop-blur hover:bg-surface-container hover:text-on-surface active:scale-95" aria-label="Opciones de ${nombreSeguro}" aria-haspopup="menu" aria-expanded="false" data-product-menu-button="${claveProductoHtml}">
+          <button type="button" onclick='toggleProductMenu(event, ${claveProductoJson})' class="flex h-9 w-9 items-center justify-center rounded-full bg-surface-container-lowest/90 text-secondary shadow-sm ring-1 ring-outline-variant/30 backdrop-blur hover:bg-surface-container hover:text-on-surface active:scale-95" aria-label="Opciones de ${nombreSeguro}" aria-haspopup="menu" aria-expanded="false" data-product-menu-button="${claveProductoHtml}">
             <span class="material-symbols-outlined text-xl">more_vert</span>
           </button>
           <div class="absolute right-0 top-11 hidden w-40 overflow-hidden rounded-lg border border-outline-variant/30 bg-surface-container-lowest shadow-xl" data-product-menu="${claveProductoHtml}" role="menu">
-            <button type="button" onclick="abrirModalProducto(${claveProductoJson})" class="flex w-full items-center gap-2 px-3 py-2 text-left text-sm font-semibold text-on-surface hover:bg-surface-container" role="menuitem">
+            <button type="button" onclick='abrirModalProducto(${claveProductoJson})' class="flex w-full items-center gap-2 px-3 py-2 text-left text-sm font-semibold text-on-surface hover:bg-surface-container" role="menuitem">
               <span class="material-symbols-outlined text-lg">edit</span>
               Editar
             </button>
-            <button type="button" onclick="eliminarProducto(${claveProductoJson})" class="flex w-full items-center gap-2 px-3 py-2 text-left text-sm font-semibold text-error hover:bg-error-container/60" role="menuitem">
+            <button type="button" onclick='eliminarProducto(${claveProductoJson})' class="flex w-full items-center gap-2 px-3 py-2 text-left text-sm font-semibold text-error hover:bg-error-container/60" role="menuitem">
               <span class="material-symbols-outlined text-lg">delete</span>
               Eliminar
             </button>
@@ -993,7 +1106,7 @@ function renderizarProductos() {
               ${precioAnterior}
               <span class="font-headline font-bold text-xl text-primary">${formatCurrency(precioFinal)}</span>
             </div>
-            <button type="button" onclick="agregarAlCarrito(${claveProductoJson})" class="${botonColor} w-10 h-10 rounded-full flex items-center justify-center transition-colors active:scale-95" aria-label="Agregar ${nombreSeguro}">
+            <button type="button" onclick='agregarAlCarrito(${claveProductoJson})' class="${botonColor} w-10 h-10 rounded-full flex items-center justify-center transition-colors active:scale-95" aria-label="Agregar ${nombreSeguro}">
               <span class="material-symbols-outlined">add</span>
             </button>
           </div>
@@ -1011,7 +1124,13 @@ function agregarAlCarrito(clave) {
     return;
   }
 
-  const itemEnCarrito = carrito.find((item) => obtenerClaveProducto(item) === clave);
+  if (producto.ventaBloqueada) {
+    window.alert('Este producto tiene lotes vencidos y no se puede vender hasta actualizar el stock.');
+    return;
+  }
+
+  const claveProducto = obtenerClaveProducto(producto);
+  const itemEnCarrito = carrito.find((item) => obtenerClaveProducto(item) === claveProducto);
 
   if (itemEnCarrito) {
     itemEnCarrito.cantidad += 1;
@@ -1027,7 +1146,8 @@ function agregarAlCarrito(clave) {
 }
 
 function cambiarCantidad(clave, delta) {
-  const item = carrito.find((producto) => obtenerClaveProducto(producto) === clave);
+  const claveNormalizada = normalizarClaveProducto(clave);
+  const item = carrito.find((producto) => obtenerClaveProducto(producto) === claveNormalizada);
 
   if (!item) {
     return;
@@ -1036,14 +1156,15 @@ function cambiarCantidad(clave, delta) {
   item.cantidad += delta;
 
   if (item.cantidad <= 0) {
-    carrito = carrito.filter((producto) => obtenerClaveProducto(producto) !== clave);
+    carrito = carrito.filter((producto) => obtenerClaveProducto(producto) !== claveNormalizada);
   }
 
   actualizarInterfaz();
 }
 
 function actualizarCantidadCarrito(clave, value) {
-  const item = carrito.find((producto) => obtenerClaveProducto(producto) === clave);
+  const claveNormalizada = normalizarClaveProducto(clave);
+  const item = carrito.find((producto) => obtenerClaveProducto(producto) === claveNormalizada);
   const cantidad = Math.floor(Number(value));
 
   if (!item) {
@@ -1056,7 +1177,7 @@ function actualizarCantidadCarrito(clave, value) {
   }
 
   if (cantidad <= 0) {
-    carrito = carrito.filter((producto) => obtenerClaveProducto(producto) !== clave);
+    carrito = carrito.filter((producto) => obtenerClaveProducto(producto) !== claveNormalizada);
   } else {
     item.cantidad = cantidad;
   }
@@ -1775,7 +1896,7 @@ function actualizarInterfaz() {
       ? carrito.map((item) => {
         const nombreSeguro = escapeHtml(item.nombre);
         const claveCarrito = obtenerClaveProducto(item);
-        const claveCarritoJson = JSON.stringify(claveCarrito);
+        const claveCarritoJson = escapeHtml(JSON.stringify(claveCarrito));
         const mediaCarrito = item.img
           ? `<img src="${escapeHtml(item.img)}" alt="${nombreSeguro}" class="w-full h-full object-cover mix-blend-multiply">`
           : `<span class="material-symbols-outlined text-secondary text-2xl">${escapeHtml(item.icono || 'inventory_2')}</span>`;
@@ -1789,16 +1910,16 @@ function actualizarInterfaz() {
             <h4 class="line-clamp-2 font-semibold text-sm leading-tight text-on-surface">${nombreSeguro}</h4>
             <span class="text-primary font-bold mt-1">${formatCurrency(item.precioEfectivo * item.cantidad)}</span>
             <div class="mt-3 flex flex-wrap items-center gap-2" aria-label="Modificar cantidad de ${nombreSeguro}">
-              <button type="button" onclick="cambiarCantidad(${claveCarritoJson}, -1)" class="flex h-8 w-8 items-center justify-center rounded-full bg-surface-container-high text-secondary transition-colors hover:bg-secondary hover:text-on-secondary active:scale-95" aria-label="Quitar ${nombreSeguro}">
+              <button type="button" onclick='cambiarCantidad(${claveCarritoJson}, -1)' class="flex h-8 w-8 items-center justify-center rounded-full bg-surface-container-high text-secondary transition-colors hover:bg-secondary hover:text-on-secondary active:scale-95" aria-label="Quitar ${nombreSeguro}">
                 <span class="material-symbols-outlined text-sm">remove</span>
               </button>
-              <input type="number" min="0" step="1" value="${item.cantidad}" onchange="actualizarCantidadCarrito(${claveCarritoJson}, this.value)" onkeydown="if (event.key === 'Enter') this.blur()" class="h-8 w-14 rounded-lg border border-outline-variant bg-surface-container-lowest px-2 text-center text-sm font-bold text-on-surface focus:border-primary focus:ring-primary" aria-label="Cantidad de ${nombreSeguro}">
-              <button type="button" onclick="cambiarCantidad(${claveCarritoJson}, 1)" class="flex h-8 w-8 items-center justify-center rounded-full bg-surface-container-high text-secondary transition-colors hover:bg-primary hover:text-on-primary active:scale-95" aria-label="Agregar ${nombreSeguro}">
+              <input type="number" min="0" step="1" value="${item.cantidad}" onchange='actualizarCantidadCarrito(${claveCarritoJson}, this.value)' onkeydown="if (event.key === 'Enter') this.blur()" class="h-8 w-14 rounded-lg border border-outline-variant bg-surface-container-lowest px-2 text-center text-sm font-bold text-on-surface focus:border-primary focus:ring-primary" aria-label="Cantidad de ${nombreSeguro}">
+              <button type="button" onclick='cambiarCantidad(${claveCarritoJson}, 1)' class="flex h-8 w-8 items-center justify-center rounded-full bg-surface-container-high text-secondary transition-colors hover:bg-primary hover:text-on-primary active:scale-95" aria-label="Agregar ${nombreSeguro}">
                 <span class="material-symbols-outlined text-sm">add</span>
               </button>
             </div>
           </div>
-          <button type="button" onclick="cambiarCantidad(${claveCarritoJson}, -${item.cantidad})" class="mt-1 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-secondary opacity-100 transition-colors hover:bg-error-container hover:text-error xl:opacity-0 xl:group-hover:opacity-100" aria-label="Eliminar ${nombreSeguro}">
+          <button type="button" onclick='cambiarCantidad(${claveCarritoJson}, -${item.cantidad})' class="mt-1 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-secondary opacity-100 transition-colors hover:bg-error-container hover:text-error xl:opacity-0 xl:group-hover:opacity-100" aria-label="Eliminar ${nombreSeguro}">
             <span class="material-symbols-outlined text-xl">delete</span>
           </button>
         </div>
@@ -1894,17 +2015,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const cancelCashCloseConfirm = document.getElementById('cancel-cash-close-confirm');
   const executeCashClose = document.getElementById('execute-cash-close');
 
-  productosPersonalizados = cargarProductosPersonalizados()
-    .map(normalizarProductoGuardado)
-    .filter(Boolean);
-  productosEliminados = cargarProductosEliminados();
   historialVentas = cargarHistorialVentas();
   turnoInicioISO = obtenerTurnoInicio();
   descuentosDisponibles = cargarDescuentosGuardados();
   sucursalActiva = cargarSucursalActiva();
   renderizarSucursalActiva();
   sincronizarDescuentoActivo();
-  sincronizarProductos();
+  recargarCatalogoDesdeInventario({ forzar: true, renderizar: false });
   renderizarProductos();
   actualizarInterfaz();
 
@@ -2051,6 +2168,17 @@ document.addEventListener('DOMContentLoaded', () => {
       cerrarCierreCaja();
       document.getElementById('receipt-modal')?.classList.add('hidden');
       cerrarMenusProducto();
+    }
+  });
+  window.addEventListener('storage', (event) => {
+    if ([PRODUCTOS_STORAGE_KEY, PRODUCTOS_ELIMINADOS_STORAGE_KEY].includes(event.key)) {
+      recargarCatalogoDesdeInventario();
+    }
+  });
+  window.addEventListener('focus', () => recargarCatalogoDesdeInventario());
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) {
+      recargarCatalogoDesdeInventario();
     }
   });
 });
