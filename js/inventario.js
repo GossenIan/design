@@ -9,6 +9,15 @@ const LOW_STOCK_DEFAULT = 5;
 const DAY_MS = 24 * 60 * 60 * 1000;
 const LOT_WARNING_DAYS = 30;
 const LOT_HEALTHY_DAYS = 180;
+const PEDIDO_REPOSICION_EJEMPLO = {
+  codigo: 'PED-GENERAL-001',
+  proveedor: 'Proveedor general',
+  items: [
+    { nombre: 'Gold Standard 100% Whey', codigoBarras: '7790001000010', cantidad: 6 },
+    { nombre: 'Original BCAA - Fresa Kiwi', codigoBarras: '7790001000034', cantidad: 4 },
+    { nombre: 'Shaker SquatGym Pro 700ml', codigoBarras: '7790002000019', cantidad: 10 }
+  ]
+};
 
 const productosBaseInventario = [
   {
@@ -98,7 +107,10 @@ let estadoInventario = {
   editandoId: null,
   reposicion: false,
   controlStock: false,
-  filaDestacada: null
+  filaDestacada: null,
+  filaOperacionExpandida: null,
+  ordenReposicion: '',
+  ordenReposicionConfirmada: false
 };
 
 function escapeHtml(value) {
@@ -779,42 +791,14 @@ function renderizarFilaInforme(producto) {
   const estadoVisual = obtenerEstadoInventarioVisual(producto);
   const estadoLote = obtenerEstadoLote(producto);
   const resumenMultisucursal = obtenerResumenMultisucursal(producto);
-  const reposicion = reposicionPendiente[clave] || {};
-  const conteo = controlStockPendiente[clave];
   const estaDestacado = estadoInventario.filaDestacada === clave;
   const esStockBajo = obtenerEstadoStock(producto) !== 'ok';
-  const reposicionActiva = normalizarReposicionActiva(producto.reposicionActiva);
-  const botonReordenar = esStockBajo && reposicionActiva
-    ? `
-      <button type="button" onclick='agregarAListaPedido(${claveJson})' class="inventory-action-button inventory-action-reorder" aria-label="Agregar ${escapeHtml(producto.nombre)} a pedido al proveedor" title="Agregar a pedido">
-        <span class="material-symbols-outlined text-base">shopping_cart</span>
-      </button>
-    `
-    : '';
-  const botonBajaReposicion = `
-    <button type="button" onclick='alternarReposicionProducto(${claveJson})' class="inventory-action-button ${reposicionActiva ? 'inventory-action-disable-restock' : 'inventory-action-enable-restock'}" aria-label="${reposicionActiva ? 'Dar de baja reposicion' : 'Reactivar reposicion'} de ${escapeHtml(producto.nombre)}" title="${reposicionActiva ? 'Dar de baja reposicion' : 'Reactivar reposicion'}">
-      <span class="material-symbols-outlined text-base">${reposicionActiva ? 'block' : 'restart_alt'}</span>
+  const botonReordenar = `
+    <button type="button" onclick='agregarAListaPedido(${claveJson})' class="inventory-action-button inventory-action-reorder" aria-label="Agregar ${escapeHtml(producto.nombre)} a pedido al proveedor" title="Agregar a pedido">
+      <span class="material-symbols-outlined text-base">shopping_cart</span>
     </button>
   `;
-  const stockCell = estadoInventario.controlStock
-    ? `
-      <div class="inventory-restock-cell">
-        <span class="text-[11px] font-bold text-secondary">Sistema: ${escapeHtml(producto.stock)}</span>
-        <input data-stock-count="${escapeHtml(clave)}" class="inventory-restock-input" type="number" min="0" step="1" value="${escapeHtml(conteo ?? '')}" placeholder="Contado" oninput='actualizarConteoStock(${claveJson}, this.value)' onkeydown="if (event.key === 'Enter') enfocarSiguienteControlStock('${escapeHtml(clave)}')">
-        <span class="text-[11px] font-black ${Number(conteo) - producto.stock === 0 ? 'text-primary' : 'text-error'}">${conteo === undefined || conteo === '' ? 'Sin contar' : `Dif. ${Number(conteo) - producto.stock}`}</span>
-      </div>
-    `
-    : estadoInventario.reposicion
-    ? `
-      <div class="inventory-restock-cell">
-        <span class="text-[11px] font-bold text-secondary">Actual: ${escapeHtml(producto.stock)}</span>
-        ${reposicionActiva ? `
-          <input data-restock-qty="${escapeHtml(clave)}" class="inventory-restock-input" type="number" min="0" step="1" value="${escapeHtml(reposicion.cantidad || '')}" placeholder="+0" oninput='actualizarReposicion(${claveJson}, this.value, null)' onkeydown="if (event.key === 'Enter') enfocarSiguienteReposicion('${escapeHtml(clave)}')">
-          <input data-restock-expiration="${escapeHtml(clave)}" class="inventory-restock-date" type="date" value="${escapeHtml(reposicion.vencimiento || '')}" oninput='actualizarReposicion(${claveJson}, null, this.value)'>
-        ` : '<span class="inventory-restock-paused">Sin reposicion</span>'}
-      </div>
-    `
-    : `<span title="${escapeHtml(construirTooltipLotes(producto))}">${escapeHtml(producto.stock)}</span>`;
+  const stockCell = `<span title="${escapeHtml(construirTooltipLotes(producto))}">${escapeHtml(producto.stock)}</span>`;
 
   return `
     <tr class="inventory-report-row ${esStockBajo ? 'inventory-report-row-low' : ''} ${estaDestacado ? 'inventory-report-row-highlight' : ''}" data-product-row="${escapeHtml(clave)}">
@@ -823,7 +807,6 @@ function renderizarFilaInforme(producto) {
         <div class="font-bold text-on-surface">${escapeHtml(producto.nombre)}</div>
         <div class="inventory-code-cell">Codigo: ${escapeHtml(producto.codigoBarras)}</div>
         ${resumenMultisucursal ? `<div class="text-[11px] font-black text-primary">Stock sedes: ${escapeHtml(resumenMultisucursal)}</div>` : ''}
-        ${reposicionActiva ? '' : '<div class="text-[11px] font-black text-error">Reposicion dada de baja</div>'}
         <div class="text-[11px] font-semibold text-secondary">${escapeHtml(producto.descripcion || 'Sin descripcion')}</div>
       </td>
       <td class="text-right font-black">${stockCell}</td>
@@ -837,7 +820,6 @@ function renderizarFilaInforme(producto) {
       <td>
         <span class="inventory-row-actions">
           ${botonReordenar}
-          ${botonBajaReposicion}
           <button type="button" onclick='abrirModalProducto(${claveJson})' class="inventory-action-button inventory-action-edit" aria-label="Editar ${escapeHtml(producto.nombre)}">
             <span class="material-symbols-outlined text-base">edit</span>
           </button>
@@ -1187,29 +1169,6 @@ function eliminarProducto(clave) {
   renderizarInventario();
 }
 
-function alternarReposicionProducto(clave) {
-  const producto = buscarProductoPorClave(clave);
-
-  if (!producto) {
-    return;
-  }
-
-  producto.reposicionActiva = !normalizarReposicionActiva(producto.reposicionActiva);
-
-  if (!producto.reposicionActiva) {
-    delete reposicionPendiente[clave];
-    listaPedidoProveedor = listaPedidoProveedor.filter((item) => item.clave !== clave);
-    guardarListaPedidoProveedor();
-  }
-
-  if (!guardarProductos(true)) {
-    producto.reposicionActiva = !producto.reposicionActiva;
-    return;
-  }
-
-  renderizarInventario();
-}
-
 function limpiarFiltros() {
   restablecerFiltrosInventario();
 }
@@ -1243,7 +1202,6 @@ function guardarListaPedidoProveedor() {
 
 function obtenerProductosParaPedidoProveedor() {
   return productosInventario
-    .filter((producto) => normalizarReposicionActiva(producto.reposicionActiva))
     .sort((a, b) => {
       const sucursalCompare = a.sucursal.localeCompare(b.sucursal, 'es');
 
@@ -1310,7 +1268,7 @@ function renderizarListaPedidoProveedor() {
           <div class="grid gap-3 md:grid-cols-[minmax(0,1fr)_8rem_auto] md:items-center">
             <div>
               <p class="text-sm font-black text-on-surface">${escapeHtml(producto.nombre)}</p>
-              <p class="mt-1 text-xs font-semibold text-secondary">${escapeHtml(producto.sucursal)} · Codigo ${escapeHtml(producto.codigoBarras)}</p>
+              <p class="mt-1 text-xs font-semibold text-secondary">${escapeHtml(producto.sucursal)} - Codigo ${escapeHtml(producto.codigoBarras)}</p>
             </div>
             <label class="flex flex-col gap-1 text-xs font-black uppercase tracking-wider text-secondary">
               Cantidad
@@ -1338,11 +1296,6 @@ function agregarAListaPedido(clave) {
   const producto = buscarProductoPorClave(clave);
 
   if (!producto) {
-    return;
-  }
-
-  if (!normalizarReposicionActiva(producto.reposicionActiva)) {
-    renderizarToastPedido('Este producto tiene la reposicion dada de baja.', true);
     return;
   }
 
@@ -1462,18 +1415,262 @@ function confirmarPedidoProveedor() {
   renderizarToastPedido('El pedido de reposicion fue enviado al encargado.');
 }
 
+function obtenerProductosParaOperacionStock() {
+  return obtenerProductosFiltrados();
+}
+
+function renderizarEstadoVacioOperacion(message) {
+  return `
+    <div class="flex min-h-44 flex-col items-center justify-center rounded-lg border border-dashed border-outline-variant/40 bg-surface-container-low px-6 py-10 text-center text-secondary">
+      <span class="material-symbols-outlined text-4xl">inventory_2</span>
+      <p class="mt-3 font-bold text-on-surface">${escapeHtml(message)}</p>
+      <p class="mt-1 text-sm">Cambia los filtros o escanea otro codigo para continuar.</p>
+    </div>
+  `;
+}
+
+function renderizarImagenProductoOperacion(producto) {
+  if (producto.img) {
+    return `
+      <img src="${escapeHtml(producto.img)}" alt="${escapeHtml(producto.nombre)}" class="inventory-operation-image" loading="lazy">
+    `;
+  }
+
+  return `
+    <span class="material-symbols-outlined text-3xl text-secondary">inventory_2</span>
+  `;
+}
+
+function renderizarItemsPedidoReposicionEjemplo() {
+  return PEDIDO_REPOSICION_EJEMPLO.items
+    .map((item) => `
+      <li class="flex items-center justify-between gap-3 rounded-md bg-white/80 px-3 py-2 text-xs font-bold">
+        <span class="min-w-0">
+          <span class="block truncate text-on-surface">${escapeHtml(item.nombre)}</span>
+          <span class="block text-[11px] text-secondary">Codigo ${escapeHtml(item.codigoBarras)}</span>
+        </span>
+        <span class="rounded-full bg-[#4f46e5] px-2.5 py-1 text-white">${escapeHtml(item.cantidad)}</span>
+      </li>
+    `)
+    .join('');
+}
+
+function renderizarOrdenReposicion(options = {}) {
+  const input = document.getElementById('restock-order-input');
+  const checkbox = document.getElementById('restock-order-confirm');
+  const summary = document.getElementById('restock-order-summary');
+  const status = document.getElementById('restock-order-status');
+  const saveButton = document.getElementById('save-restock-changes');
+  const ordenCargada = Boolean(estadoInventario.ordenReposicion);
+
+  if (input && !options.preservarInput) {
+    input.value = estadoInventario.ordenReposicion;
+  }
+
+  if (checkbox) {
+    checkbox.disabled = !ordenCargada;
+    checkbox.checked = ordenCargada && estadoInventario.ordenReposicionConfirmada;
+  }
+
+  if (saveButton) {
+    saveButton.disabled = !estadoInventario.ordenReposicionConfirmada;
+  }
+
+  if (status) {
+    status.textContent = ordenCargada
+      ? estadoInventario.ordenReposicionConfirmada
+        ? `Orden ${estadoInventario.ordenReposicion} confirmada. Ya puedes guardar la carga.`
+        : 'Revisa el pedido solicitado y confirma que coincide con lo recibido.'
+      : 'Carga una orden para habilitar la confirmacion.';
+    status.classList.toggle('text-primary', ordenCargada && estadoInventario.ordenReposicionConfirmada);
+    status.classList.toggle('text-secondary', !ordenCargada || !estadoInventario.ordenReposicionConfirmada);
+  }
+
+  if (summary) {
+    const codigoVisible = estadoInventario.ordenReposicion || PEDIDO_REPOSICION_EJEMPLO.codigo;
+
+    summary.innerHTML = `
+      <div class="flex items-start justify-between gap-3">
+        <div>
+          <p class="text-[11px] font-black uppercase tracking-wider">Pedido solicitado</p>
+          <h3 class="mt-1 font-headline text-lg font-black">${escapeHtml(codigoVisible)}</h3>
+          <p class="mt-1 text-xs font-semibold">Ejemplo general - ${escapeHtml(PEDIDO_REPOSICION_EJEMPLO.proveedor)}</p>
+        </div>
+        <span class="rounded-full bg-white px-3 py-1 text-xs font-black ${estadoInventario.ordenReposicionConfirmada ? 'text-primary' : 'text-[#4f46e5]'}">
+          ${estadoInventario.ordenReposicionConfirmada ? 'Confirmado' : 'Pendiente'}
+        </span>
+      </div>
+      <ul class="mt-3 grid gap-2">
+        ${renderizarItemsPedidoReposicionEjemplo()}
+      </ul>
+    `;
+  }
+}
+
+function cargarOrdenReposicion(codigo = '') {
+  const input = document.getElementById('restock-order-input');
+  const codigoOrden = String(codigo || input?.value || '').trim();
+
+  if (!codigoOrden) {
+    estadoInventario.ordenReposicion = '';
+    estadoInventario.ordenReposicionConfirmada = false;
+    renderizarOrdenReposicion({ preservarInput: true });
+    mostrarFeedbackReposicion('Ingresa una orden de pedido antes de cargar stock.', true);
+    return;
+  }
+
+  estadoInventario.ordenReposicion = codigoOrden;
+  estadoInventario.ordenReposicionConfirmada = false;
+  renderizarOrdenReposicion();
+  mostrarFeedbackReposicion(`Orden ${codigoOrden} cargada. Confirma que coincide con el pedido solicitado.`);
+}
+
+function usarPedidoReposicionEjemplo() {
+  cargarOrdenReposicion(PEDIDO_REPOSICION_EJEMPLO.codigo);
+}
+
+function confirmarOrdenReposicion(confirmada) {
+  if (!estadoInventario.ordenReposicion) {
+    estadoInventario.ordenReposicionConfirmada = false;
+    renderizarOrdenReposicion();
+    mostrarFeedbackReposicion('Primero carga una orden de pedido.', true);
+    return;
+  }
+
+  estadoInventario.ordenReposicionConfirmada = Boolean(confirmada);
+  renderizarOrdenReposicion();
+}
+
+function manejarCambioInputOrdenReposicion(event) {
+  const value = String(event.target.value || '').trim();
+
+  if (value !== estadoInventario.ordenReposicion) {
+    estadoInventario.ordenReposicion = '';
+    estadoInventario.ordenReposicionConfirmada = false;
+    renderizarOrdenReposicion({ preservarInput: true });
+  }
+}
+
+function renderizarListaReposicionModal() {
+  const list = document.getElementById('restock-products-list');
+  const count = document.getElementById('restock-products-count');
+
+  if (!list) {
+    return;
+  }
+
+  const productos = obtenerProductosParaOperacionStock();
+
+  if (count) {
+    count.textContent = `${productos.length} ${productos.length === 1 ? 'producto visible' : 'productos visibles'}`;
+  }
+
+  if (!productos.length) {
+    list.innerHTML = renderizarEstadoVacioOperacion('No hay productos para reponer');
+    return;
+  }
+
+  list.innerHTML = productos
+    .map((producto) => {
+      const clave = obtenerClaveProducto(producto);
+      const claveJson = escapeHtml(JSON.stringify(clave));
+      const reposicion = reposicionPendiente[clave] || {};
+      const estaDestacado = estadoInventario.filaDestacada === clave;
+      const estaExpandido = estadoInventario.filaOperacionExpandida === clave;
+
+      return `
+        <article class="inventory-operation-row ${estaDestacado ? 'inventory-report-row-highlight' : ''} ${estaExpandido ? 'inventory-operation-row-expanded' : ''}" data-operation-row="${escapeHtml(clave)}" onclick='alternarExpansionOperacion(${claveJson}, event)'>
+          <div class="inventory-operation-product">
+            <div class="inventory-operation-media">
+              ${renderizarImagenProductoOperacion(producto)}
+            </div>
+            <div class="min-w-0">
+              <p class="text-sm font-black text-on-surface">${escapeHtml(producto.nombre)}</p>
+              <p class="mt-1 text-xs font-semibold text-secondary">${escapeHtml(producto.sucursal)} - Codigo ${escapeHtml(producto.codigoBarras)}</p>
+              <p class="mt-2 text-xs font-black text-[#4f46e5]">Stock actual: ${escapeHtml(producto.stock)}</p>
+            </div>
+          </div>
+          <label class="flex flex-col gap-1 text-xs font-black uppercase tracking-wider text-secondary">
+            Cantidad llegada
+            <input data-restock-qty="${escapeHtml(clave)}" class="inventory-restock-input" type="number" min="0" step="1" value="${escapeHtml(reposicion.cantidad || '')}" placeholder="+0" oninput='actualizarReposicion(${claveJson}, this.value, null)' onkeydown="if (event.key === 'Enter') enfocarSiguienteReposicion('${escapeHtml(clave)}')">
+          </label>
+          <label class="flex flex-col gap-1 text-xs font-black uppercase tracking-wider text-secondary">
+            Vencimiento
+            <input data-restock-expiration="${escapeHtml(clave)}" class="inventory-restock-date" type="date" value="${escapeHtml(reposicion.vencimiento || '')}" oninput='actualizarReposicion(${claveJson}, null, this.value)'>
+          </label>
+        </article>
+      `;
+    })
+    .join('');
+}
+
+function renderizarListaControlStockModal() {
+  const list = document.getElementById('stock-control-products-list');
+  const count = document.getElementById('stock-control-products-count');
+
+  if (!list) {
+    return;
+  }
+
+  const productos = obtenerProductosParaOperacionStock();
+
+  if (count) {
+    count.textContent = `${productos.length} ${productos.length === 1 ? 'producto visible' : 'productos visibles'}`;
+  }
+
+  if (!productos.length) {
+    list.innerHTML = renderizarEstadoVacioOperacion('No hay productos para controlar');
+    return;
+  }
+
+  list.innerHTML = productos
+    .map((producto) => {
+      const clave = obtenerClaveProducto(producto);
+      const claveJson = escapeHtml(JSON.stringify(clave));
+      const conteo = controlStockPendiente[clave];
+      const diferencia = conteo === undefined || conteo === '' ? null : Number(conteo) - producto.stock;
+      const estaDestacado = estadoInventario.filaDestacada === clave;
+      const estaExpandido = estadoInventario.filaOperacionExpandida === clave;
+
+      return `
+        <article class="inventory-operation-row ${estaDestacado ? 'inventory-report-row-highlight' : ''} ${estaExpandido ? 'inventory-operation-row-expanded' : ''}" data-operation-row="${escapeHtml(clave)}" onclick='alternarExpansionOperacion(${claveJson}, event)'>
+          <div class="inventory-operation-product">
+            <div class="inventory-operation-media">
+              ${renderizarImagenProductoOperacion(producto)}
+            </div>
+            <div class="min-w-0">
+              <p class="text-sm font-black text-on-surface">${escapeHtml(producto.nombre)}</p>
+              <p class="mt-1 text-xs font-semibold text-secondary">${escapeHtml(producto.sucursal)} - Codigo ${escapeHtml(producto.codigoBarras)}</p>
+              <p class="mt-2 text-xs font-black text-primary">Sistema: ${escapeHtml(producto.stock)}</p>
+            </div>
+          </div>
+          <label class="flex flex-col gap-1 text-xs font-black uppercase tracking-wider text-secondary">
+            Stock contado
+            <input data-stock-count="${escapeHtml(clave)}" class="inventory-restock-input" type="number" min="0" step="1" value="${escapeHtml(conteo ?? '')}" placeholder="Contado" oninput='actualizarConteoStock(${claveJson}, this.value)' onkeydown="if (event.key === 'Enter') enfocarSiguienteControlStock('${escapeHtml(clave)}')">
+          </label>
+          <div class="flex flex-col gap-1 text-xs font-black uppercase tracking-wider text-secondary">
+            Diferencia
+            <span data-stock-diff="${escapeHtml(clave)}" class="rounded-lg bg-surface-container px-3 py-2 text-sm font-black normal-case ${diferencia === null || diferencia === 0 ? 'text-primary' : 'text-error'}">
+              ${diferencia === null ? 'Sin contar' : `Dif. ${diferencia}`}
+            </span>
+          </div>
+        </article>
+      `;
+    })
+    .join('');
+}
+
 function actualizarPanelReposicion() {
   const panel = document.getElementById('restock-panel');
   const toggle = document.getElementById('toggle-restock-mode');
 
   panel?.classList.toggle('hidden', !estadoInventario.reposicion);
+  renderizarOrdenReposicion();
+  renderizarListaReposicionModal();
 
   if (toggle) {
-    toggle.classList.toggle('bg-[#4f46e5]', !estadoInventario.reposicion);
-    toggle.classList.toggle('bg-[#312e81]', estadoInventario.reposicion);
-    toggle.innerHTML = estadoInventario.reposicion
-      ? '<span class="material-symbols-outlined">close</span>Salir de reposicion'
-      : '<span class="material-symbols-outlined">add_shopping_cart</span>Reponer stock';
+    toggle.setAttribute('aria-expanded', String(estadoInventario.reposicion));
+    toggle.innerHTML = '<span class="material-symbols-outlined">add_shopping_cart</span>Reponer stock';
   }
 }
 
@@ -1482,15 +1679,25 @@ function actualizarPanelControlStock() {
   const toggle = document.getElementById('toggle-stock-control-mode');
 
   panel?.classList.toggle('hidden', !estadoInventario.controlStock);
+  renderizarListaControlStockModal();
 
   if (toggle) {
-    toggle.classList.toggle('bg-primary', estadoInventario.controlStock);
-    toggle.classList.toggle('text-on-primary', estadoInventario.controlStock);
-    toggle.classList.toggle('bg-surface-container', !estadoInventario.controlStock);
-    toggle.classList.toggle('text-on-surface', !estadoInventario.controlStock);
-    toggle.innerHTML = estadoInventario.controlStock
-      ? '<span class="material-symbols-outlined">close</span>Salir de control'
-      : '<span class="material-symbols-outlined">fact_check</span>Control de stock';
+    toggle.setAttribute('aria-expanded', String(estadoInventario.controlStock));
+    toggle.innerHTML = '<span class="material-symbols-outlined">fact_check</span>Control de stock';
+  }
+}
+
+function alternarExpansionOperacion(clave, event = null) {
+  if (event?.target?.closest('input, select, textarea, button, label')) {
+    return;
+  }
+
+  estadoInventario.filaOperacionExpandida = estadoInventario.filaOperacionExpandida === clave ? null : clave;
+
+  if (estadoInventario.controlStock) {
+    renderizarListaControlStockModal();
+  } else {
+    renderizarListaReposicionModal();
   }
 }
 
@@ -1529,6 +1736,7 @@ function mostrarFeedbackEscaneo(message, error = false) {
 function alternarModoReposicion(force = null) {
   estadoInventario.reposicion = force === null ? !estadoInventario.reposicion : Boolean(force);
   estadoInventario.filaDestacada = null;
+  estadoInventario.filaOperacionExpandida = null;
 
   if (estadoInventario.reposicion) {
     estadoInventario.controlStock = false;
@@ -1538,6 +1746,8 @@ function alternarModoReposicion(force = null) {
 
   if (!estadoInventario.reposicion) {
     reposicionPendiente = {};
+    estadoInventario.ordenReposicion = '';
+    estadoInventario.ordenReposicionConfirmada = false;
     mostrarFeedbackReposicion('');
   }
 
@@ -1552,6 +1762,7 @@ function alternarModoReposicion(force = null) {
 function alternarModoControlStock(force = null) {
   estadoInventario.controlStock = force === null ? !estadoInventario.controlStock : Boolean(force);
   estadoInventario.filaDestacada = null;
+  estadoInventario.filaOperacionExpandida = null;
 
   if (estadoInventario.controlStock) {
     estadoInventario.reposicion = false;
@@ -1599,13 +1810,30 @@ function enfocarSiguienteReposicion(claveActual) {
 
 function actualizarConteoStock(clave, value) {
   const valueText = String(value ?? '').trim();
+  const producto = buscarProductoPorClave(clave);
+  const diffElement = document.querySelector(`[data-stock-diff="${CSS.escape(clave)}"]`);
 
   if (!valueText) {
     delete controlStockPendiente[clave];
+
+    if (diffElement) {
+      diffElement.textContent = 'Sin contar';
+      diffElement.classList.remove('text-error');
+      diffElement.classList.add('text-primary');
+    }
+
     return;
   }
 
-  controlStockPendiente[clave] = Math.max(Math.floor(Number(valueText) || 0), 0);
+  const cantidad = Math.max(Math.floor(Number(valueText) || 0), 0);
+  controlStockPendiente[clave] = cantidad;
+
+  if (diffElement && producto) {
+    const diferencia = cantidad - producto.stock;
+    diffElement.textContent = `Dif. ${diferencia}`;
+    diffElement.classList.toggle('text-primary', diferencia === 0);
+    diffElement.classList.toggle('text-error', diferencia !== 0);
+  }
 }
 
 function enfocarSiguienteControlStock(claveActual) {
@@ -1694,6 +1922,7 @@ function enfocarProductoPorCodigo(codigo) {
   estadoInventario.categoria = 'todas';
   estadoInventario.estado = 'todos';
   estadoInventario.filaDestacada = obtenerClaveProducto(producto);
+  estadoInventario.filaOperacionExpandida = estadoInventario.filaDestacada;
   sincronizarFiltrosEnPantalla();
   mostrarFeedbackEscaneo(`Producto seleccionado: ${producto.nombre}`);
   renderizarInventario();
@@ -1748,6 +1977,12 @@ function guardarControlStock() {
 }
 
 function guardarReposicion() {
+  if (!estadoInventario.ordenReposicion || !estadoInventario.ordenReposicionConfirmada) {
+    mostrarFeedbackReposicion('Confirma que la orden recibida coincide con el pedido solicitado antes de guardar.', true);
+    renderizarOrdenReposicion();
+    return;
+  }
+
   const entradas = Object.entries(reposicionPendiente)
     .map(([clave, data]) => ({
       clave,
@@ -1791,11 +2026,14 @@ function guardarReposicion() {
   }
 
   const totalUnidades = entradas.reduce((acc, entrada) => acc + entrada.cantidad, 0);
+  const ordenConfirmada = estadoInventario.ordenReposicion;
 
   registrarFechaUltimaReposicion();
   reposicionPendiente = {};
+  estadoInventario.ordenReposicion = '';
+  estadoInventario.ordenReposicionConfirmada = false;
   estadoInventario.filaDestacada = null;
-  mostrarFeedbackReposicion(`Stock actualizado: ${totalUnidades} unidades cargadas.`);
+  mostrarFeedbackReposicion(`Stock actualizado: ${totalUnidades} unidades cargadas desde la orden ${ordenConfirmada}.`);
   renderizarInventario();
 }
 
@@ -1842,8 +2080,20 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('toggle-stock-control-mode')?.addEventListener('click', () => alternarModoControlStock());
   document.getElementById('cancel-restock-mode')?.addEventListener('click', () => alternarModoReposicion(false));
   document.getElementById('cancel-stock-control-mode')?.addEventListener('click', () => alternarModoControlStock(false));
+  document.getElementById('close-restock-modal')?.addEventListener('click', () => alternarModoReposicion(false));
+  document.getElementById('close-stock-control-modal')?.addEventListener('click', () => alternarModoControlStock(false));
   document.getElementById('save-restock-changes')?.addEventListener('click', guardarReposicion);
   document.getElementById('save-stock-control')?.addEventListener('click', guardarControlStock);
+  document.getElementById('load-restock-order')?.addEventListener('click', () => cargarOrdenReposicion());
+  document.getElementById('use-sample-restock-order')?.addEventListener('click', usarPedidoReposicionEjemplo);
+  document.getElementById('restock-order-confirm')?.addEventListener('change', (event) => confirmarOrdenReposicion(event.target.checked));
+  document.getElementById('restock-order-input')?.addEventListener('input', manejarCambioInputOrdenReposicion);
+  document.getElementById('restock-order-input')?.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      cargarOrdenReposicion();
+    }
+  });
   document.getElementById('add-supplier-order-item')?.addEventListener('click', agregarProductoSeleccionadoAListaPedido);
   document.getElementById('confirm-supplier-order')?.addEventListener('click', confirmarPedidoProveedor);
   document.getElementById('clear-supplier-order')?.addEventListener('click', limpiarListaPedidoProveedor);
@@ -1874,6 +2124,16 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('product-modal')?.addEventListener('click', (event) => {
     if (event.target === document.getElementById('product-modal')) {
       cerrarModalProducto();
+    }
+  });
+  document.getElementById('restock-panel')?.addEventListener('click', (event) => {
+    if (event.target === document.getElementById('restock-panel')) {
+      alternarModoReposicion(false);
+    }
+  });
+  document.getElementById('stock-control-panel')?.addEventListener('click', (event) => {
+    if (event.target === document.getElementById('stock-control-panel')) {
+      alternarModoControlStock(false);
     }
   });
 
@@ -1925,7 +2185,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   window.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') {
-      cerrarModalProducto();
+      const productModalOpen = !document.getElementById('product-modal')?.classList.contains('hidden');
+
+      if (productModalOpen) {
+        cerrarModalProducto();
+        return;
+      }
+
+      alternarModoReposicion(false);
+      alternarModoControlStock(false);
     }
   });
   window.addEventListener('afterprint', () => {
@@ -1938,8 +2206,8 @@ window.eliminarProducto = eliminarProducto;
 window.actualizarReposicion = actualizarReposicion;
 window.enfocarSiguienteReposicion = enfocarSiguienteReposicion;
 window.agregarAListaPedido = agregarAListaPedido;
-window.alternarReposicionProducto = alternarReposicionProducto;
 window.actualizarConteoStock = actualizarConteoStock;
 window.enfocarSiguienteControlStock = enfocarSiguienteControlStock;
+window.alternarExpansionOperacion = alternarExpansionOperacion;
 window.actualizarCantidadPedidoProveedor = actualizarCantidadPedidoProveedor;
 window.eliminarItemPedidoProveedor = eliminarItemPedidoProveedor;

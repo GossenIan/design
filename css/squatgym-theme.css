@@ -154,6 +154,14 @@ h6,
   animation: inventoryMetricPulse 420ms ease;
 }
 
+.inventory-modal-backdrop {
+  display: flex;
+}
+
+.inventory-modal-backdrop.hidden {
+  display: none !important;
+}
+
 @keyframes inventoryMetricPulse {
   0% {
     transform: translateY(0);
@@ -313,26 +321,6 @@ h6,
   color: #ffffff;
 }
 
-.inventory-action-disable-restock {
-  background: #fff6d6;
-  color: #7a5700;
-}
-
-.inventory-action-disable-restock:hover {
-  background: #7a5700;
-  color: #ffffff;
-}
-
-.inventory-action-enable-restock {
-  background: rgb(45 203 115 / 0.14);
-  color: #006d37;
-}
-
-.inventory-action-enable-restock:hover {
-  background: #006d37;
-  color: #ffffff;
-}
-
 .supplier-order-row {
   transition: background-color 160ms ease, border-color 160ms ease;
 }
@@ -344,6 +332,68 @@ h6,
 
 .supplier-order-quantity {
   width: 100%;
+}
+
+.inventory-operation-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(8rem, 10rem) minmax(8rem, 10rem);
+  gap: 0.85rem;
+  align-items: center;
+  border: 1px solid rgb(121 116 126 / 0.18);
+  border-radius: 0.65rem;
+  background: #ffffff;
+  padding: 0.85rem;
+  cursor: pointer;
+  transition: border-color 180ms ease, box-shadow 180ms ease, grid-template-columns 180ms ease, padding 180ms ease;
+}
+
+.inventory-operation-row:hover {
+  border-color: rgb(79 70 229 / 0.35);
+  box-shadow: 0 12px 28px rgb(28 27 27 / 0.08);
+}
+
+.inventory-operation-row-expanded {
+  grid-template-columns: minmax(0, 1.45fr) minmax(8rem, 10rem) minmax(8rem, 10rem);
+  border-color: rgb(79 70 229 / 0.42);
+  box-shadow: 0 16px 36px rgb(79 70 229 / 0.14);
+  padding: 1rem;
+}
+
+.inventory-operation-product {
+  display: grid;
+  grid-template-columns: 4.75rem minmax(0, 1fr);
+  gap: 0.9rem;
+  align-items: center;
+}
+
+.inventory-operation-media {
+  display: flex;
+  height: 4.75rem;
+  width: 4.75rem;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 0.65rem;
+  border: 1px solid rgb(121 116 126 / 0.18);
+  background: #f6f5f5;
+  transition: height 180ms ease, width 180ms ease, border-color 180ms ease, background-color 180ms ease;
+}
+
+.inventory-operation-image {
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+}
+
+.inventory-operation-row-expanded .inventory-operation-product {
+  grid-template-columns: 7.5rem minmax(0, 1fr);
+}
+
+.inventory-operation-row-expanded .inventory-operation-media {
+  height: 7.5rem;
+  width: 7.5rem;
+  border-color: rgb(79 70 229 / 0.38);
 }
 
 .inventory-status {
@@ -646,29 +696,28 @@ h6,
   color: #141036;
 }
 
-.dark .inventory-action-disable-restock {
-  background: rgb(255 246 214 / 0.12);
-  color: #f2c94c;
-}
-
-.dark .inventory-action-disable-restock:hover {
-  background: #f2c94c;
-  color: #241b00;
-}
-
-.dark .inventory-action-enable-restock {
-  background: rgb(92 236 136 / 0.14);
-  color: #5cec88;
-}
-
-.dark .inventory-action-enable-restock:hover {
-  background: #5cec88;
-  color: #041f13;
-}
-
 .dark .supplier-order-row:hover {
   border-color: rgb(92 236 136 / 0.24);
   background: rgb(92 236 136 / 0.08);
+}
+
+.dark .inventory-operation-row {
+  border-color: rgb(92 236 136 / 0.18);
+  background: #0f2d1c;
+}
+
+.dark .inventory-operation-row:hover,
+.dark .inventory-operation-row-expanded {
+  border-color: rgb(129 140 248 / 0.45);
+}
+
+.dark .inventory-operation-media {
+  border-color: rgb(92 236 136 / 0.18);
+  background: #123621;
+}
+
+.dark .inventory-operation-image {
+  mix-blend-mode: normal;
 }
 
 .dark .inventory-lot-none {
@@ -717,6 +766,24 @@ h6,
     left: 1rem;
     right: 1rem;
     width: auto;
+  }
+
+  .inventory-operation-row {
+    grid-template-columns: 1fr;
+  }
+
+  .inventory-operation-row-expanded {
+    grid-template-columns: 1fr;
+  }
+
+  .inventory-operation-product,
+  .inventory-operation-row-expanded .inventory-operation-product {
+    grid-template-columns: 4.75rem minmax(0, 1fr);
+  }
+
+  .inventory-operation-row-expanded .inventory-operation-media {
+    height: 5.75rem;
+    width: 5.75rem;
   }
 }
 
@@ -769,8 +836,19 @@ h6,
   }
 
   body.inventory-print-mode > *:not(main#inventory-page-main),
-  body.inventory-print-mode main#inventory-page-main > *:not(#inventory-report) {
+  body.inventory-print-mode main#inventory-page-main > *:not(#inventory-report):not(#inventory-report-heading) {
     display: none !important;
+  }
+
+  body.inventory-print-mode #inventory-report-heading {
+    display: block !important;
+    border: 0 !important;
+    border-bottom: 2px solid #111111 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    color: #111111 !important;
+    background: #ffffff !important;
+    padding: 0 0 12px !important;
   }
 
   body.inventory-print-mode #inventory-report {
@@ -780,12 +858,6 @@ h6,
     box-shadow: none !important;
     color: #111111 !important;
     background: #ffffff !important;
-  }
-
-  body.inventory-print-mode #inventory-report > div:first-child {
-    background: #ffffff !important;
-    border-bottom: 2px solid #111111 !important;
-    padding: 0 0 12px !important;
   }
 
   body.inventory-print-mode #inventory-list {
