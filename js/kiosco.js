@@ -18,6 +18,12 @@ const CATEGORIA_ALIASES = {
   comestibles: 'Alimentos',
   equipo: 'Indumentaria'
 };
+const DATOS_FACTURA_KIOSCO = {
+  domicilio: 'Av. Siempreviva 123, Resistencia',
+  cuit: '30-12345678-9',
+  condicionFiscal: 'IVA Responsable Inscripto',
+  puntoVenta: '0001'
+};
 
 const descuentosBase = [
   { id: 'sin-descuento', nombre: 'Sin descuento', porcentaje: 0 },
@@ -125,6 +131,7 @@ let categoriaActiva = 'Todos';
 let terminoBusqueda = '';
 let productoEnEdicionId = null;
 let turnoInicioISO = null;
+let ultimaVentaRegistrada = null;
 const IVA = 0.16;
 const DIFERENCIA_CIERRE_EPSILON = 0.005;
 
@@ -156,6 +163,18 @@ function formatDateOnly(value) {
   try {
     return new Intl.DateTimeFormat('es-AR', {
       dateStyle: 'short'
+    }).format(new Date(value));
+  } catch (error) {
+    return String(value || '');
+  }
+}
+
+function formatInvoiceDate(value) {
+  try {
+    return new Intl.DateTimeFormat('es-AR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
     }).format(new Date(value));
   } catch (error) {
     return String(value || '');
@@ -1448,6 +1467,7 @@ function crearRegistroVenta() {
       id: item.id,
       nombre: item.nombre,
       marca: item.marca,
+      categoria: item.categoria || 'Producto',
       codigoBarras: item.codigoBarras,
       cantidad: item.cantidad,
       precioUnitario: item.precioEfectivo,
@@ -1462,6 +1482,7 @@ function registrarVentaActual() {
   historialVentas = [venta, ...historialVentas].slice(0, 100);
   guardarHistorialVentas();
   renderizarHistorialVentas();
+  return venta;
 }
 
 function renderizarHistorialVentas() {
@@ -1857,6 +1878,117 @@ function ejecutarCierreCaja() {
   window.print();
 }
 
+function obtenerNumeroFactura(venta) {
+  const numero = String(Math.abs(Number(venta?.id) || Date.now())).slice(-8).padStart(8, '0');
+
+  return `N°${DATOS_FACTURA_KIOSCO.puntoVenta}-0000${numero.slice(-4)}`;
+}
+
+function obtenerNombreSucursalFactura(sucursal = sucursalActiva) {
+  return String(sucursal || SUCURSAL_DEFAULT)
+    .replace(/^SquatGym\s*/i, '')
+    .replace(/^Sucursal\s*/i, '')
+    .trim() || 'Central';
+}
+
+function construirFacturaVenta(venta) {
+  const porcentajeDescuento = Number(venta?.descuento?.porcentaje) || 0;
+  const subtotalNeto = Math.max((Number(venta?.subtotal) || 0) - (Number(venta?.descuento?.monto) || 0), 0);
+  const cliente = venta?.cliente || {
+    nombre: 'Consumidor Final',
+    documento: 'Sin identificar',
+    condicionIva: 'Consumidor Final'
+  };
+  const filasItems = (venta?.items || []).length
+    ? venta.items.map((item) => {
+      const cantidad = Number(item.cantidad) || 0;
+      const precioUnitario = Number(item.precioUnitario) || 0;
+      const subtotalLinea = precioUnitario * cantidad * (1 - porcentajeDescuento / 100);
+
+      return `
+        <tr>
+          <td class="receipt-invoice-center">${escapeHtml(cantidad)}</td>
+          <td>${escapeHtml(item.nombre)}</td>
+          <td>${escapeHtml(item.categoria || 'Producto')}</td>
+          <td class="receipt-invoice-money">${formatCurrency(precioUnitario)}</td>
+          <td class="receipt-invoice-center">${escapeHtml(porcentajeDescuento)}%</td>
+          <td class="receipt-invoice-money">${formatCurrency(subtotalLinea)}</td>
+        </tr>
+      `;
+    }).join('')
+    : '<tr><td colspan="6">Sin productos cargados.</td></tr>';
+
+  return `
+    <section class="receipt-invoice">
+      <header class="receipt-invoice-header">
+        <div>
+          <h1>Squat <span>Gym</span></h1>
+          <p>${escapeHtml(DATOS_FACTURA_KIOSCO.domicilio)}</p>
+          <p>CUIT: ${escapeHtml(DATOS_FACTURA_KIOSCO.cuit)}</p>
+          <p>${escapeHtml(DATOS_FACTURA_KIOSCO.condicionFiscal)}</p>
+        </div>
+        <div class="receipt-invoice-meta">
+          <h2>FACTURA</h2>
+          <p>${escapeHtml(obtenerNumeroFactura(venta))}</p>
+          <p>Fecha: ${escapeHtml(formatInvoiceDate(venta?.fechaISO))}</p>
+          <p>Sede: ${escapeHtml(obtenerNombreSucursalFactura(venta?.sucursal))}</p>
+        </div>
+      </header>
+      <div class="receipt-invoice-divider"></div>
+      <section class="receipt-invoice-client">
+        <div>
+          <p><strong>CLIENTE:</strong> ${escapeHtml(cliente.nombre)}</p>
+          <p><strong>DNI/CUIL:</strong> ${escapeHtml(cliente.documento)}</p>
+        </div>
+        <div>
+          <p><strong>Cond. IVA:</strong> ${escapeHtml(cliente.condicionIva)}</p>
+          <p><strong>Pago:</strong> ${escapeHtml(venta?.metodoPagoNombre || obtenerNombreMetodoPago(venta?.metodoPago))}</p>
+        </div>
+      </section>
+      <table class="receipt-invoice-table">
+        <thead>
+          <tr>
+            <th>CANT.</th>
+            <th>DESCRIPCIÓN</th>
+            <th>CATEGORÍA</th>
+            <th>P.UNIT(S/IVA)</th>
+            <th>DESC.</th>
+            <th>SUBTOTAL</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${filasItems}
+        </tbody>
+      </table>
+      <section class="receipt-invoice-totals">
+        <div>
+          <span>SUBTOTAL NETO:</span>
+          <strong>${formatCurrency(subtotalNeto)}</strong>
+        </div>
+        <div>
+          <span>IVAS(${Math.round(IVA * 100)}%)</span>
+          <strong>${formatCurrency(Number(venta?.impuestos) || 0)}</strong>
+        </div>
+        <div class="receipt-invoice-total-final">
+          <span>TOTAL FINAL:</span>
+          <strong>${formatCurrency(Number(venta?.total) || 0)}</strong>
+        </div>
+      </section>
+    </section>
+  `;
+}
+
+function prepararImpresionTicketVenta(venta = ultimaVentaRegistrada) {
+  const printArea = document.getElementById('cash-close-print-area');
+
+  if (!printArea || !venta) {
+    return false;
+  }
+
+  printArea.innerHTML = construirFacturaVenta(venta);
+  return true;
+}
+
 function confirmarCobro() {
   if (totalesActuales.totalItems <= 0) {
     mostrarErrorPago('Agregá productos al carrito antes de cobrar.');
@@ -1872,7 +2004,8 @@ function confirmarCobro() {
     }
   }
 
-  registrarVentaActual();
+  ultimaVentaRegistrada = registrarVentaActual();
+  prepararImpresionTicketVenta(ultimaVentaRegistrada);
   carrito = [];
   actualizarInterfaz();
   cerrarModalPago();
@@ -1881,7 +2014,9 @@ function confirmarCobro() {
 
 function finalizarVenta({ imprimir = false } = {}) {
   if (imprimir) {
-    window.print();
+    if (prepararImpresionTicketVenta()) {
+      window.print();
+    }
   }
 
   document.getElementById('receipt-modal')?.classList.add('hidden');
