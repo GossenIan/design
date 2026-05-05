@@ -16,6 +16,7 @@ const PERMISOS_USUARIO = [
 ];
 const USUARIOS_PAGE_SIZE = 3;
 const SUCURSAL_USUARIO_DEFAULT = 'SquatGym Central';
+const AUDITORIAS_STORAGE_KEY = 'squatgym-users-audits';
 
 const usuariosDemo = [
   {
@@ -79,7 +80,7 @@ let auditCalendarMonthDate = new Date();
 let auditRangeDraftStart = '';
 let cambiosUsuariosPendientes = [];
 let cambioUsuarioEnConfirmacion = null;
-let auditorias = [
+const auditoriasDemo = [
   {
     id: 'a-1',
     userId: 'u-1',
@@ -113,6 +114,7 @@ let auditorias = [
     detalle: 'Cierre de caja 04/05/2026 12:00'
   }
 ];
+let auditorias = [];
 
 function escapeHtml(value) {
   return String(value ?? '')
@@ -123,8 +125,12 @@ function escapeHtml(value) {
     .replaceAll("'", '&#039;');
 }
 
+function buscarUsuarioPorId(id) {
+  return usuarios.find((usuario) => usuario.id === id) || null;
+}
+
 function obtenerUsuario(id = usuarioSeleccionadoId) {
-  return usuarios.find((usuario) => usuario.id === id) || usuarios[0] || null;
+  return buscarUsuarioPorId(id) || usuarios[0] || null;
 }
 
 function buscarUsuarioPorTexto(value = '') {
@@ -428,6 +434,53 @@ function formatFechaAuditoria(value = new Date()) {
     hour: '2-digit',
     minute: '2-digit'
   }).format(new Date(value));
+}
+
+function normalizarAuditoria(audit) {
+  const userId = String(audit?.userId || '').trim();
+  const modulo = String(audit?.modulo || '').trim();
+  const accion = String(audit?.accion || '').trim();
+  const detalle = String(audit?.detalle || '').trim();
+  const fechaISO = String(audit?.fechaISO || '').trim();
+
+  if (!userId || !modulo || !accion || !detalle || !fechaISO) {
+    return null;
+  }
+
+  return {
+    id: String(audit?.id || `audit-${Date.now()}`),
+    userId,
+    fechaISO,
+    modulo,
+    accion,
+    detalle,
+    sucursal: String(audit?.sucursal || '').trim()
+  };
+}
+
+function cargarAuditorias() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(AUDITORIAS_STORAGE_KEY) || '[]');
+    const normalizadas = Array.isArray(saved)
+      ? saved.map(normalizarAuditoria).filter(Boolean)
+      : [];
+
+    auditorias = normalizadas.length
+      ? normalizadas
+      : auditoriasDemo.map((audit) => ({ ...audit }));
+  } catch (error) {
+    auditorias = auditoriasDemo.map((audit) => ({ ...audit }));
+  }
+}
+
+function guardarAuditorias() {
+  try {
+    localStorage.setItem(AUDITORIAS_STORAGE_KEY, JSON.stringify(auditorias));
+  } catch (error) {
+    return false;
+  }
+
+  return true;
 }
 
 function normalizarFechaInput(value) {
@@ -766,13 +819,14 @@ function registrarAuditoria(userId, modulo, accion, detalle) {
       id: `audit-${Date.now()}`,
       userId,
       fechaISO: new Date().toISOString(),
-      sucursal: obtenerUsuario(userId)?.sucursal || SUCURSAL_USUARIO_DEFAULT,
+      sucursal: buscarUsuarioPorId(userId)?.sucursal || SUCURSAL_USUARIO_DEFAULT,
       modulo,
       accion,
       detalle
     },
     ...auditorias
   ];
+  guardarAuditorias();
 }
 
 function mostrarToastUsuarios(message, error = false) {
@@ -1073,7 +1127,7 @@ function renderizarTablaUsuarios() {
               <button type="button" onclick="abrirModalResetPassword('${escapeHtml(usuario.id)}')" class="users-icon-button text-[#7a5700]" title="Restablecer contrasena">
                 <span class="material-symbols-outlined text-lg">key</span>
               </button>
-              <button type="button" onclick="imprimirReporteAuditoria('${escapeHtml(usuario.id)}')" class="users-icon-button text-on-surface" title="Imprimir reporte">
+              <button type="button" onclick="imprimirReporteAuditoria()" class="users-icon-button text-on-surface" title="Imprimir reporte general">
                 <span class="material-symbols-outlined text-lg">print</span>
               </button>
             </div>
@@ -1619,38 +1673,35 @@ function guardarAuditoriaInline(event) {
   mostrarToastUsuarios('Registro de auditoria agregado.');
 }
 
-function construirReporteAuditoria(id = usuarioSeleccionadoId, rango = obtenerRangoReporte()) {
-  const usuario = obtenerUsuario(id);
-  const registrosUsuario = auditorias.filter((audit) => audit.userId === usuario?.id);
-  const registros = filtrarRegistrosPorRango(registrosUsuario, rango.desde, rango.hasta);
-  const desde = rango.desde ? `${rango.desde}T00:00:00` : registrosUsuario[registrosUsuario.length - 1]?.fechaISO || new Date().toISOString();
-  const hasta = rango.hasta ? `${rango.hasta}T23:59:59` : registrosUsuario[0]?.fechaISO || new Date().toISOString();
+function obtenerSucursalAuditoria(audit) {
+  const usuario = buscarUsuarioPorId(audit.userId);
 
-  if (!usuario) {
-    return '';
-  }
+  return audit.sucursal || usuario?.sucursal || SUCURSAL_USUARIO_DEFAULT;
+}
 
-  return `
-    <div class="audit-print-document">
-      <div class="audit-print-date">${escapeHtml(formatFechaAuditoria(new Date()))}</div>
-      <h1>Reporte de Auditoria de Actividad del Sistema</h1>
-      <p><strong>Generado por:</strong> Administrador</p>
-      <p><strong>Periodo evaluado:</strong> ${escapeHtml(formatFechaAuditoria(desde))} - ${escapeHtml(formatFechaAuditoria(hasta))}</p>
-      <p><strong>Usuario:</strong> ${escapeHtml(usuario.nombre)} (${escapeHtml(usuario.rol)})</p>
-      <p><strong>Roles:</strong> ${escapeHtml(usuario.rol)}</p>
-      <p><strong>Accion:</strong> Todas las acciones registradas</p>
-      <table class="print-table">
-        <thead>
-          <tr>
-            <th>Fecha y Hora</th>
-            <th>Usuario (Rol)</th>
-            <th>Modulo</th>
-            <th>Accion</th>
-            <th>Detalle</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${registros.map((audit) => `
+function construirReporteAuditoria(rango = obtenerRangoReporte()) {
+  const registros = filtrarRegistrosPorRango(auditorias, rango.desde, rango.hasta)
+    .map((audit) => ({
+      ...audit,
+      usuario: buscarUsuarioPorId(audit.userId),
+      sucursal: obtenerSucursalAuditoria(audit)
+    }))
+    .sort((a, b) => a.sucursal.localeCompare(b.sucursal) || new Date(a.fechaISO) - new Date(b.fechaISO));
+  const registrosPorSucursal = registros.reduce((groups, audit) => {
+    groups[audit.sucursal] = groups[audit.sucursal] || [];
+    groups[audit.sucursal].push(audit);
+    return groups;
+  }, {});
+  const sucursales = Object.keys(registrosPorSucursal).sort((a, b) => a.localeCompare(b));
+  const desde = rango.desde ? `${rango.desde}T00:00:00` : registros[0]?.fechaISO || new Date().toISOString();
+  const hasta = rango.hasta ? `${rango.hasta}T23:59:59` : registros[registros.length - 1]?.fechaISO || new Date().toISOString();
+  const seccionesSucursal = sucursales.length
+    ? sucursales.map((sucursal) => {
+      const filas = registrosPorSucursal[sucursal]
+        .map((audit) => {
+          const usuario = audit.usuario || { nombre: 'Usuario no encontrado', rol: 'Sin rol' };
+
+          return `
             <tr>
               <td>${escapeHtml(formatFechaAuditoria(audit.fechaISO))}</td>
               <td>${escapeHtml(usuario.nombre)} (${escapeHtml(usuario.rol)})</td>
@@ -1658,20 +1709,58 @@ function construirReporteAuditoria(id = usuarioSeleccionadoId, rango = obtenerRa
               <td>${escapeHtml(audit.accion)}</td>
               <td>${escapeHtml(audit.detalle)}</td>
             </tr>
-          `).join('') || `
+          `;
+        })
+        .join('');
+
+      return `
+        <section class="audit-print-branch">
+          <h2>Sucursal: ${escapeHtml(sucursal)}</h2>
+          <table class="print-table">
+            <thead>
+              <tr>
+                <th>Fecha y Hora</th>
+                <th>Usuario (Rol)</th>
+                <th>Modulo</th>
+                <th>Accion</th>
+                <th>Detalle</th>
+              </tr>
+            </thead>
+            <tbody>${filas}</tbody>
+          </table>
+          <p class="audit-print-total"><strong>Total sucursal:</strong> ${registrosPorSucursal[sucursal].length} registros</p>
+        </section>
+      `;
+    }).join('')
+    : `
+      <section class="audit-print-branch">
+        <h2>Sin registros</h2>
+        <table class="print-table">
+          <tbody>
             <tr>
-              <td colspan="5">Sin registros para el periodo seleccionado.</td>
+              <td>Sin registros para el periodo seleccionado.</td>
             </tr>
-          `}
-        </tbody>
-      </table>
-      <p class="audit-print-total"><strong>Total de accesos registrados:</strong> ${registros.length}</p>
+          </tbody>
+        </table>
+      </section>
+    `;
+
+  return `
+    <div class="audit-print-document">
+      <div class="audit-print-date">${escapeHtml(formatFechaAuditoria(new Date()))}</div>
+      <h1>Reporte de Auditoria de Actividad del Sistema</h1>
+      <p><strong>Generado por:</strong> Administrador</p>
+      <p><strong>Periodo evaluado:</strong> ${escapeHtml(formatFechaAuditoria(desde))} - ${escapeHtml(formatFechaAuditoria(hasta))}</p>
+      <p><strong>Alcance:</strong> Todas las personas registradas</p>
+      <p><strong>Orden:</strong> Corte por sucursal y fecha/hora</p>
+      ${seccionesSucursal}
+      <p class="audit-print-total"><strong>Total general de accesos registrados:</strong> ${registros.length}</p>
       <p class="audit-print-page">Pagina 1 de 1</p>
     </div>
   `;
 }
 
-function imprimirReporteAuditoria(id = usuarioSeleccionadoId) {
+function imprimirReporteAuditoria() {
   const printArea = document.getElementById('audit-print-area');
   const rango = obtenerRangoReporte();
   const desdeDate = crearFechaLocal(rango.desde);
@@ -1687,13 +1776,13 @@ function imprimirReporteAuditoria(id = usuarioSeleccionadoId) {
     return;
   }
 
-  usuarioSeleccionadoId = id;
-  printArea.innerHTML = construirReporteAuditoria(id, rango);
+  printArea.innerHTML = construirReporteAuditoria(rango);
   document.body.classList.add('users-print-mode');
   window.print();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  cargarAuditorias();
   renderizarTodoUsuarios();
 
   document.getElementById('users-search')?.addEventListener('input', (event) => {

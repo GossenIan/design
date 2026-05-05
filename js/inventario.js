@@ -870,6 +870,7 @@ function renderizarInventario() {
   const productos = obtenerProductosFiltrados();
 
   renderizarMetricas(productos);
+  renderizarResumenFiltrosActivos();
   renderizarListaPedidoProveedor();
   actualizarPanelReposicion();
   actualizarPanelControlStock();
@@ -1059,6 +1060,41 @@ function sincronizarFiltrosEnPantalla() {
     if (element) {
       element.value = value;
     }
+  });
+}
+
+function renderizarResumenFiltrosActivos() {
+  const summary = document.getElementById('inventory-active-filters-summary');
+  const chips = [];
+
+  if (estadoInventario.sucursal !== 'todas') {
+    chips.push(`Sucursal: ${estadoInventario.sucursal.replace('SquatGym ', '')}`);
+  }
+
+  if (estadoInventario.categoria !== 'todas') {
+    chips.push(`Categoria: ${estadoInventario.categoria}`);
+  }
+
+  if (estadoInventario.estado !== 'todos') {
+    const etiquetaEstado = {
+      ok: 'Stock saludable',
+      bajo: 'Stock bajo',
+      'sin-stock': 'Sin stock'
+    }[estadoInventario.estado] || estadoInventario.estado;
+    chips.push(etiquetaEstado);
+  }
+
+  if (estadoInventario.busqueda.trim()) {
+    chips.push(`Busqueda: "${estadoInventario.busqueda.trim()}"`);
+  }
+
+  if (summary) {
+    summary.textContent = chips.length ? chips.join(' · ') : 'Sin filtros activos';
+  }
+
+  document.querySelectorAll('[data-inventory-quick-filter]').forEach((button) => {
+    const activo = button.dataset.inventoryQuickFilter === estadoInventario.estado;
+    button.classList.toggle('inventory-quick-filter-active', activo);
   });
 }
 
@@ -2157,6 +2193,13 @@ document.addEventListener('DOMContentLoaded', () => {
     renderizarInventario();
   });
   document.getElementById('clear-filters')?.addEventListener('click', limpiarFiltros);
+  document.querySelectorAll('[data-inventory-quick-filter]').forEach((button) => {
+    button.addEventListener('click', () => {
+      estadoInventario.estado = button.dataset.inventoryQuickFilter || 'todos';
+      sincronizarFiltrosEnPantalla();
+      renderizarInventario();
+    });
+  });
   document.getElementById('print-inventory-report')?.addEventListener('click', imprimirInformeInventario);
   document.querySelectorAll('[data-sort-shortcut]').forEach((button) => {
     button.addEventListener('click', () => {
@@ -2164,6 +2207,14 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('sort-select').value = estadoInventario.orden;
       renderizarInventario();
     });
+  });
+  document.addEventListener('keydown', (event) => {
+    const esInputActivo = ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName || '');
+
+    if (!esInputActivo && event.key === '/') {
+      event.preventDefault();
+      document.getElementById('inventory-search')?.focus();
+    }
   });
 
   const dropzone = document.getElementById('product-image-dropzone');

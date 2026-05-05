@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asistencias | SquatGym</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="../../js/squatgym-theme.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800;900&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/squatgym-theme.css">
+    <link rel="stylesheet" href="../../css/squatgym-header.css">
+  </head>
+  <body class="min-h-screen bg-background text-on-surface font-body antialiased" data-notification-icon="how_to_reg" data-notification-title="Asistencias" data-notification-body="Hay registros recientes para validar.">
+    <header class="fixed left-0 top-0 z-50 w-full border-b border-outline-variant bg-surface-container-lowest/95 shadow-sm backdrop-blur-md">
+      <div class="flex h-16 w-full items-center justify-between gap-3 px-4 sm:px-6 md:px-10">
+        <a class="flex min-w-0 items-center gap-2 sm:gap-3" href="../home.html" aria-label="Ir al inicio">
+          <img class="hidden h-10 w-10 shrink-0 rounded-lg border border-outline-variant bg-white object-contain p-1 sm:block" alt="Logo SquatGym" src="../../img/logo.png">
+          <span class="whitespace-nowrap font-headline text-lg font-black text-on-surface sm:text-2xl">Squat<span class="brand-gym">Gym</span></span>
+        </a>
+        <div class="flex shrink-0 items-center justify-end gap-1 sm:gap-2">
+          <div class="relative">
+            <button type="button" class="flex h-9 w-9 items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-low active:scale-95 sm:h-10 sm:w-10" id="notifications-button" aria-label="Ver notificaciones" aria-expanded="false" aria-controls="notifications-dropdown">
+              <span class="relative block">
+                <span class="material-symbols-outlined" id="notifications-icon" style="font-variation-settings: 'FILL' 1">notifications</span>
+                <span class="absolute right-0.5 top-0 h-2 w-2 rounded-full border border-surface-container-lowest bg-red-500 hidden" id="notification-dot"></span>
+              </span>
+            </button>
+            <div class="notifications-panel z-[100] hidden overflow-hidden rounded-lg border" id="notifications-dropdown" role="menu">
+              <div class="flex items-center justify-between gap-4 border-b border-outline-variant p-4">
+                <div>
+                  <p class="text-sm font-bold text-on-surface">Notificaciones</p>
+                  <p class="text-xs text-on-surface-variant" id="notification-status">Sin novedades pendientes</p>
+                </div>
+                <button type="button" class="rounded-full p-1 text-on-surface-variant hover:bg-surface-container" id="mark-notifications-read" aria-label="Marcar notificaciones como leidas">
+                  <span class="material-symbols-outlined text-lg">done_all</span>
+                </button>
+              </div>
+              <div class="max-h-72 overflow-y-auto p-2" id="notifications-list">
+                <article class="rounded-md px-3 py-3 hover:bg-surface-container">
+                  <div class="flex items-start gap-3">
+                    <span class="material-symbols-outlined mt-0.5 text-lg text-primary">how_to_reg</span>
+                    <div>
+                      <p class="text-sm font-semibold text-on-surface">Registro manual</p>
+                      <p class="text-xs leading-5 text-on-surface-variant">Ya puedes editar o agregar asistencias desde este panel.</p>
+                      <p class="mt-1 text-[11px] font-semibold text-primary">Asistencias</p>
+                    </div>
+                  </div>
+                </article>
+              </div>
+            </div>
+          </div>
+          <button type="button" class="flex h-9 w-9 items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-low active:scale-95 sm:h-10 sm:w-10" id="theme-toggle" aria-label="Cambiar a modo oscuro">
+            <span class="material-symbols-outlined" id="theme-toggle-dark-icon">dark_mode</span>
+            <span class="material-symbols-outlined hidden" id="theme-toggle-light-icon">light_mode</span>
+          </button>
+          <div class="relative ml-1 flex items-center border-l border-outline-variant pl-2 sm:ml-2 sm:pl-4">
+            <button type="button" class="flex h-10 items-center gap-3 rounded-lg px-1 hover:bg-surface-container-low sm:px-2" id="profile-menu-button" aria-expanded="false" aria-controls="profile-dropdown">
+              <span class="hidden flex-col items-end sm:flex">
+                <span class="text-xs font-bold text-on-surface">Admin Squat</span>
+                <span class="text-[10px] uppercase tracking-wider text-on-surface-variant">Super Admin</span>
+              </span>
+              <span class="flex h-9 w-9 items-center justify-center rounded-lg border border-outline-variant bg-primary-container/15 text-primary shadow-sm">
+                <span class="material-symbols-outlined">person</span>
+              </span>
+            </button>
+            <div class="profile-dropdown-panel absolute right-0 top-full z-[100] mt-2 hidden w-56 max-w-[calc(100vw-2rem)] overflow-hidden rounded-lg border" id="profile-dropdown" role="menu">
+              <div class="border-b border-outline-variant p-4">
+                <p class="text-sm font-bold text-on-surface">Admin Squat</p>
+                <p class="text-xs text-on-surface-variant">Super Administrador</p>
+              </div>
+              <div class="p-2">
+                <button type="button" class="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-on-surface hover:bg-surface-container" role="menuitem">
+                  <span class="material-symbols-outlined text-lg">person</span>
+                  Mi Perfil
+                </button>
+                <button type="button" class="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-on-surface hover:bg-surface-container" role="menuitem">
+                  <span class="material-symbols-outlined text-lg">settings</span>
+                  Configuracion
+                </button>
+              </div>
+              <div class="border-t border-outline-variant p-2">
+                <button type="button" class="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-semibold text-error hover:bg-error-container/15" role="menuitem" onclick="window.location.href='../../index.html'">
+                  <span class="material-symbols-outlined text-lg">logout</span>
+                  Cerrar sesion
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <nav class="no-scrollbar h-12 w-full overflow-x-auto bg-surface-container-lowest/95" aria-label="Navegacion principal">
+        <div class="flex h-full w-max min-w-full items-center gap-1 px-4 sm:px-6 md:px-10">
+          <a class="nav-tab active:scale-95" href="../home.html">Inicio</a>
+          <a class="nav-tab active:scale-95" href="../kiosco/kiosco.html">Kiosco</a>
+          <a class="nav-tab active:scale-95" href="../inventario/inventario.html">Inventario</a>
+          <a class="nav-tab nav-tab-active active:scale-95" href="asistencias.html" aria-current="page">Asistencias</a>
+          <a class="nav-tab active:scale-95" href="../usuarios/gestionroles.html">Usuarios</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="mx-auto grid w-full max-w-[92rem] gap-6 px-4 pb-10 pt-36 sm:px-6 lg:grid-cols-[15rem_minmax(0,1fr)] lg:px-10">
+      <aside class="h-max rounded-xl border border-outline-variant/15 bg-surface-container-lowest p-3 shadow-[0px_10px_24px_rgba(28,27,27,0.04)] lg:sticky lg:top-32">
+        <p class="px-3 py-2 text-xs font-black uppercase tracking-wider text-primary">Asistencias</p>
+        <nav class="grid gap-1" aria-label="Navegacion de asistencias">
+          <a class="users-side-link" href="#attendance-table-panel">
+            <span class="material-symbols-outlined text-lg">history</span>
+            Ultimas asistencias
+          </a>
+          <a class="users-side-link" href="#manual-entry-panel">
+            <span class="material-symbols-outlined text-lg">edit_note</span>
+            Ingreso manual
+          </a>
+        </nav>
+      </aside>
+
+      <div class="grid gap-6">
+        <section class="flex flex-col gap-5 rounded-xl border border-outline-variant/15 bg-surface-container-low p-5 shadow-[0px_12px_32px_rgba(28,27,27,0.06)] lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <p class="text-sm font-bold uppercase tracking-widest text-primary">Control diario</p>
+            <h1 class="font-headline text-4xl font-black tracking-tight text-on-surface sm:text-5xl">Asistencias</h1>
+            <p class="mt-2 max-w-3xl text-base text-on-surface-variant">Visualiza las ultimas asistencias y registra entradas manuales para recepcion.</p>
+          </div>
+          <button id="open-manual-entry-modal" type="button" class="flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 font-bold text-on-primary shadow-lg shadow-primary/15 hover:bg-primary-container hover:text-on-primary-container active:scale-95">
+            <span class="material-symbols-outlined">person_add</span>
+            Ingreso manual
+          </button>
+        </section>
+
+        <section class="grid gap-4 md:grid-cols-3">
+          <article class="rounded-xl bg-surface-container-lowest p-5 shadow-sm">
+            <p class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Ingresos hoy</p>
+            <p id="metric-total-today" class="mt-4 font-headline text-3xl font-black text-primary">0</p>
+          </article>
+          <article class="rounded-xl bg-surface-container-lowest p-5 shadow-sm">
+            <p class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Activas</p>
+            <p id="metric-active-membership" class="mt-4 font-headline text-3xl font-black">0</p>
+          </article>
+          <article class="rounded-xl bg-surface-container-lowest p-5 shadow-sm">
+            <p class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Vencidas</p>
+            <p id="metric-expired-membership" class="mt-4 font-headline text-3xl font-black text-error">0</p>
+          </article>
+        </section>
+
+        <section id="manual-entry-panel" class="rounded-xl border border-outline-variant/15 bg-surface-container-lowest p-5 shadow-[0px_12px_32px_rgba(28,27,27,0.06)]">
+          <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p class="text-xs font-black uppercase tracking-wider text-primary">Ingreso manual</p>
+              <h2 class="font-headline text-2xl font-black">Registrar nueva asistencia</h2>
+            </div>
+          </div>
+          <form id="manual-attendance-form" class="mt-4 grid gap-3 lg:grid-cols-[minmax(0,1fr)_minmax(12rem,0.6fr)_minmax(12rem,0.6fr)_auto]">
+            <label class="grid gap-2 text-sm font-bold uppercase text-on-surface-variant">
+              Nombre o socio
+              <input id="attendance-member-input" class="rounded-lg border-none bg-surface-container-highest px-3 py-3 text-base font-medium normal-case text-on-surface focus:ring-2 focus:ring-primary" type="text" placeholder="Ej. Valeria Mendez / #8210" required>
+            </label>
+            <label class="grid gap-2 text-sm font-bold uppercase text-on-surface-variant">
+              Plan
+              <select id="attendance-plan-input" class="rounded-lg border-none bg-surface-container-highest px-3 py-3 text-base font-bold normal-case text-on-surface focus:ring-2 focus:ring-primary">
+                <option>Plan Gold</option>
+                <option>Plan Basico</option>
+                <option>Plan VIP</option>
+              </select>
+            </label>
+            <label class="grid gap-2 text-sm font-bold uppercase text-on-surface-variant">
+              Estado
+              <select id="attendance-status-input" class="rounded-lg border-none bg-surface-container-highest px-3 py-3 text-base font-bold normal-case text-on-surface focus:ring-2 focus:ring-primary">
+                <option value="activa">Activa</option>
+                <option value="vencido">Vencido</option>
+              </select>
+            </label>
+            <button type="submit" class="rounded-lg bg-primary px-4 py-3 text-sm font-bold text-on-primary hover:bg-primary-container hover:text-on-primary-container lg:self-end">
+              Guardar
+            </button>
+          </form>
+        </section>
+
+        <section id="attendance-table-panel" class="rounded-xl border border-outline-variant/15 bg-surface-container-lowest shadow-[0px_12px_32px_rgba(28,27,27,0.06)]">
+          <div class="grid gap-3 border-b border-outline-variant/15 p-4 lg:grid-cols-[minmax(0,1fr)_14rem]">
+            <div class="relative">
+              <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-secondary">search</span>
+              <input id="attendance-search" class="w-full rounded-lg border-none bg-surface-container-highest py-3 pl-11 pr-4 text-sm font-medium text-on-surface placeholder:text-secondary focus:ring-2 focus:ring-primary" type="search" placeholder="Buscar por socio, nombre o plan">
+            </div>
+            <select id="attendance-filter" class="rounded-lg border-none bg-surface-container-highest px-3 py-3 text-sm font-bold text-on-surface focus:ring-2 focus:ring-primary">
+              <option value="todos">Todas</option>
+              <option value="activa">Activas</option>
+              <option value="vencido">Vencidas</option>
+            </select>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full min-w-[54rem] text-left">
+              <thead class="bg-surface-container-low">
+                <tr>
+                  <th class="px-5 py-4 text-xs font-black uppercase tracking-wider text-on-surface-variant">Socio</th>
+                  <th class="px-5 py-4 text-xs font-black uppercase tracking-wider text-on-surface-variant">Plan</th>
+                  <th class="px-5 py-4 text-xs font-black uppercase tracking-wider text-on-surface-variant">Ingreso</th>
+                  <th class="px-5 py-4 text-xs font-black uppercase tracking-wider text-on-surface-variant">Estado</th>
+                  <th class="px-5 py-4 text-right text-xs font-black uppercase tracking-wider text-on-surface-variant">Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="attendance-table-body" class="divide-y divide-outline-variant/15"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <div id="attendance-modal" class="inventory-modal-backdrop fixed inset-0 z-[130] hidden items-center justify-center bg-black/45 px-4 py-6">
+      <section class="w-full max-w-xl rounded-xl bg-background p-5 shadow-2xl">
+        <header class="flex items-start justify-between gap-4">
+          <div>
+            <p class="text-xs font-black uppercase tracking-wider text-primary">Editar asistencia</p>
+            <h2 class="font-headline text-3xl font-black">Modificar registro</h2>
+          </div>
+          <button id="close-attendance-modal" type="button" class="flex h-10 w-10 items-center justify-center rounded-full text-secondary hover:bg-surface-container" aria-label="Cerrar asistencia">
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </header>
+        <form id="attendance-edit-form" class="mt-5 grid gap-4">
+          <input id="attendance-edit-id" type="hidden">
+          <label class="grid gap-2 text-sm font-bold uppercase text-on-surface-variant">
+            Socio
+            <input id="attendance-edit-member" class="rounded-lg border-none bg-surface-container-highest px-3 py-3 text-base font-medium normal-case text-on-surface focus:ring-2 focus:ring-primary" type="text" required>
+          </label>
+          <div class="grid gap-4 sm:grid-cols-2">
+            <label class="grid gap-2 text-sm font-bold uppercase text-on-surface-variant">
+              Plan
+              <select id="attendance-edit-plan" class="rounded-lg border-none bg-surface-container-highest px-3 py-3 text-base font-bold normal-case text-on-surface focus:ring-2 focus:ring-primary">
+                <option>Plan Gold</option>
+                <option>Plan Basico</option>
+                <option>Plan VIP</option>
+              </select>
+            </label>
+            <label class="grid gap-2 text-sm font-bold uppercase text-on-surface-variant">
+              Estado
+              <select id="attendance-edit-status" class="rounded-lg border-none bg-surface-container-highest px-3 py-3 text-base font-bold normal-case text-on-surface focus:ring-2 focus:ring-primary">
+                <option value="activa">Activa</option>
+                <option value="vencido">Vencido</option>
+              </select>
+            </label>
+          </div>
+          <div class="grid gap-3 sm:grid-cols-2">
+            <button type="submit" class="rounded-lg bg-primary px-5 py-3 font-bold text-on-primary hover:bg-primary-container hover:text-on-primary-container">Guardar cambios</button>
+            <button id="cancel-attendance-modal" type="button" class="rounded-lg bg-surface-container px-5 py-3 font-bold text-on-surface hover:bg-surface-container-high">Cancelar</button>
+          </div>
+        </form>
+      </section>
+    </div>
+
+    <div id="attendance-toast" class="fixed bottom-5 right-5 z-[140] hidden max-w-sm rounded-xl border border-primary-container bg-primary-container px-4 py-3 text-sm font-bold text-primary shadow-2xl"></div>
+
+    <script src="../../js/squatgym-header.js"></script>
+    <script src="../../js/asistencias.js"></script>
+  </body>
+</html>

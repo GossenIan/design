@@ -96,7 +96,7 @@
           <a class="nav-tab active:scale-95" href="../home.html">Inicio</a>
           <a class="nav-tab active:scale-95" href="../kiosco/kiosco.html">Kiosco</a>
           <a class="nav-tab active:scale-95" href="../inventario/inventario.html">Inventario</a>
-          <a class="nav-tab active:scale-95" href="../home.html#asistencias">Asistencias</a>
+          <a class="nav-tab active:scale-95" href="../asistencias/asistencias.html">Asistencias</a>
           <a class="nav-tab nav-tab-active active:scale-95" href="gestionroles.html" aria-current="page">Usuarios</a>
         </div>
       </nav>
@@ -180,45 +180,12 @@ msilva;Inv2026!;Analista Inventario;Martin Silva;msilva@squatgym.com</pre>
           </div>
         </section>
 
-        <section id="users-list" class="rounded-xl border border-outline-variant/15 bg-surface-container-lowest shadow-[0px_12px_32px_rgba(28,27,27,0.06)]">
-          <div class="grid gap-3 border-b border-outline-variant/15 p-4 lg:grid-cols-[minmax(0,1fr)_14rem]">
-            <div class="users-suggest-wrap">
-              <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-secondary">search</span>
-              <input id="users-search" class="w-full rounded-lg border-none bg-surface-container-highest py-3 pl-11 pr-4 text-sm font-medium text-on-surface placeholder:text-secondary focus:ring-2 focus:ring-primary" type="search" placeholder="Buscar por nombre, rol o permiso" autocomplete="off" aria-autocomplete="list" aria-controls="users-search-suggestions" aria-expanded="false">
-              <div id="users-search-suggestions" class="users-suggestions-panel hidden" role="listbox" aria-label="Usuarios coincidentes">
-              </div>
-            </div>
-            <select id="users-role-filter" class="rounded-lg border-none bg-surface-container-highest px-3 py-3 text-sm font-bold text-on-surface focus:ring-2 focus:ring-primary">
-            </select>
-          </div>
-          <div class="overflow-x-auto">
-            <table class="w-full min-w-[54rem] text-left">
-              <thead class="bg-surface-container-low">
-                <tr>
-                  <th class="px-5 py-4 text-xs font-black uppercase tracking-wider text-on-surface-variant">Usuario</th>
-                  <th class="px-5 py-4 text-xs font-black uppercase tracking-wider text-on-surface-variant">Rol</th>
-                  <th class="px-5 py-4 text-xs font-black uppercase tracking-wider text-on-surface-variant">Permisos</th>
-                  <th class="px-5 py-4 text-xs font-black uppercase tracking-wider text-on-surface-variant">Estado</th>
-                  <th class="px-5 py-4 text-right text-xs font-black uppercase tracking-wider text-on-surface-variant">Acciones</th>
-                </tr>
-              </thead>
-              <tbody id="users-table-body" class="divide-y divide-outline-variant/15">
-              </tbody>
-            </table>
-          </div>
-          <div class="flex flex-col gap-2 border-t border-outline-variant/15 bg-surface-container-low px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
-            <p id="users-count" class="text-sm font-semibold text-on-surface-variant">0 usuarios</p>
-            <div id="users-pagination" class="flex flex-wrap items-center gap-1">
-            </div>
-          </div>
-        </section>
-
         <section id="audit-report-panel" class="rounded-xl border border-outline-variant/15 bg-surface-container-lowest p-5 shadow-[0px_12px_32px_rgba(28,27,27,0.06)]">
           <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
             <div>
               <p class="text-xs font-black uppercase tracking-wider text-primary">Reporte</p>
-              <h2 class="font-headline text-2xl font-black">Reporte de auditoria por persona</h2>
-              <p class="mt-1 text-sm text-on-surface-variant">Formato basado en el reporte de auditoria compartido, con datos de ejemplo.</p>
+              <h2 class="font-headline text-2xl font-black">Reporte de auditoria por rango y sucursal</h2>
+              <p class="mt-1 text-sm text-on-surface-variant">Incluye todas las personas del rango seleccionado y separa los registros por sucursal.</p>
             </div>
             <div class="grid w-full gap-3 sm:grid-cols-[minmax(0,1fr)_auto] lg:w-[36rem]">
               <div class="users-date-picker">
@@ -271,6 +238,42 @@ msilva;Inv2026!;Analista Inventario;Martin Silva;msilva@squatgym.com</pre>
             </div>
           </div>
         </section>
+
+
+        <section id="users-list" class="rounded-xl border border-outline-variant/15 bg-surface-container-lowest shadow-[0px_12px_32px_rgba(28,27,27,0.06)]">
+          <div class="grid gap-3 border-b border-outline-variant/15 p-4 lg:grid-cols-[minmax(0,1fr)_14rem]">
+            <div class="users-suggest-wrap">
+              <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-secondary">search</span>
+              <input id="users-search" class="w-full rounded-lg border-none bg-surface-container-highest py-3 pl-11 pr-4 text-sm font-medium text-on-surface placeholder:text-secondary focus:ring-2 focus:ring-primary" type="search" placeholder="Buscar por nombre, rol o permiso" autocomplete="off" aria-autocomplete="list" aria-controls="users-search-suggestions" aria-expanded="false">
+              <div id="users-search-suggestions" class="users-suggestions-panel hidden" role="listbox" aria-label="Usuarios coincidentes">
+              </div>
+            </div>
+            <select id="users-role-filter" class="rounded-lg border-none bg-surface-container-highest px-3 py-3 text-sm font-bold text-on-surface focus:ring-2 focus:ring-primary">
+            </select>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full min-w-[54rem] text-left">
+              <thead class="bg-surface-container-low">
+                <tr>
+                  <th class="px-5 py-4 text-xs font-black uppercase tracking-wider text-on-surface-variant">Usuario</th>
+                  <th class="px-5 py-4 text-xs font-black uppercase tracking-wider text-on-surface-variant">Rol</th>
+                  <th class="px-5 py-4 text-xs font-black uppercase tracking-wider text-on-surface-variant">Permisos</th>
+                  <th class="px-5 py-4 text-xs font-black uppercase tracking-wider text-on-surface-variant">Estado</th>
+                  <th class="px-5 py-4 text-right text-xs font-black uppercase tracking-wider text-on-surface-variant">Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="users-table-body" class="divide-y divide-outline-variant/15">
+              </tbody>
+            </table>
+          </div>
+          <div class="flex flex-col gap-2 border-t border-outline-variant/15 bg-surface-container-low px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+            <p id="users-count" class="text-sm font-semibold text-on-surface-variant">0 usuarios</p>
+            <div id="users-pagination" class="flex flex-wrap items-center gap-1">
+            </div>
+          </div>
+        </section>
+
+        
       </div>
     </main>
 

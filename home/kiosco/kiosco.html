@@ -133,7 +133,7 @@
           <a class="nav-tab active:scale-95" href="../inventario/inventario.html">
             Inventario
           </a>
-          <a class="nav-tab active:scale-95" href="../home.html#asistencias">
+          <a class="nav-tab active:scale-95" href="../asistencias/asistencias.html">
             Asistencias
           </a>
           <a class="nav-tab active:scale-95" href="../usuarios/gestionroles.html">
@@ -210,11 +210,11 @@
                   tune</span>
                 Filtros<span id="toggle-filters-icon" class="material-symbols-outlined text-lg" aria-hidden="true">
                   expand_more</span></button>
-              <a href="../inventario/inventario.html" class="bg-primary text-on-primary px-6 py-4 rounded-xl font-semibold flex items-center gap-2 hover:bg-primary-container hover:text-on-primary-container transition-colors active:scale-95">
-                <span class="material-symbols-outlined" data-icon="inventory_2">
-                  inventory_2</span>
-                Inventario
-              </a>
+              <button id="open-product-loss-modal" type="button" class="bg-primary text-on-primary px-6 py-4 rounded-xl font-semibold flex items-center gap-2 hover:bg-primary-container hover:text-on-primary-container transition-colors active:scale-95">
+                <span class="material-symbols-outlined" data-icon="remove_shopping_cart">
+                  remove_shopping_cart</span>
+                Dar de baja
+              </button>
             </div>
             <!-- Category Pills -->
             <div id="quick-filters" class="hidden flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
@@ -762,6 +762,49 @@
           </section>
         </form>
       </div>
+    </div>
+    <div id="product-loss-modal" class="fixed inset-0 z-[132] hidden flex items-center justify-center bg-black/45 px-4 py-6">
+      <section class="w-full max-w-2xl rounded-xl bg-background p-5 shadow-2xl">
+        <header class="flex items-start justify-between gap-4">
+          <div>
+            <p class="text-xs font-black uppercase tracking-wider text-primary">Control de stock</p>
+            <h2 class="font-headline text-3xl font-black">Dar de baja producto</h2>
+            <p class="mt-1 text-sm text-on-surface-variant">Descuenta unidades por mal estado o devolución.</p>
+          </div>
+          <button id="close-product-loss-modal" type="button" class="flex h-10 w-10 items-center justify-center rounded-full text-secondary hover:bg-surface-container" aria-label="Cerrar baja de producto">
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </header>
+        <form id="product-loss-form" class="mt-5 grid gap-4">
+          <label class="grid gap-2 text-sm font-bold uppercase text-on-surface-variant">
+            Producto
+            <select id="product-loss-product" class="rounded-lg border-none bg-surface-container-highest px-3 py-3 text-base font-bold normal-case text-on-surface focus:ring-2 focus:ring-primary" required>
+            </select>
+          </label>
+          <div class="grid gap-4 sm:grid-cols-2">
+            <label class="grid gap-2 text-sm font-bold uppercase text-on-surface-variant">
+              Motivo
+              <select id="product-loss-reason" class="rounded-lg border-none bg-surface-container-highest px-3 py-3 text-base font-bold normal-case text-on-surface focus:ring-2 focus:ring-primary">
+                <option value="mal-estado">Mal estado</option>
+                <option value="devolucion">Devolucion</option>
+              </select>
+            </label>
+            <label class="grid gap-2 text-sm font-bold uppercase text-on-surface-variant">
+              Cantidad
+              <input id="product-loss-quantity" class="rounded-lg border-none bg-surface-container-highest px-3 py-3 text-base font-medium text-on-surface focus:ring-2 focus:ring-primary" type="number" min="1" step="1" value="1" required>
+            </label>
+          </div>
+          <label class="grid gap-2 text-sm font-bold uppercase text-on-surface-variant">
+            Detalle opcional
+            <textarea id="product-loss-note" class="min-h-24 rounded-lg border-none bg-surface-container-highest px-3 py-3 text-base font-medium normal-case text-on-surface focus:ring-2 focus:ring-primary" placeholder="Ej. Lote vencido o devolución por empaque dañado"></textarea>
+          </label>
+          <p id="product-loss-feedback" class="hidden rounded-lg bg-error-container px-3 py-2 text-sm font-bold text-error"></p>
+          <div class="grid gap-3 sm:grid-cols-2">
+            <button type="submit" class="rounded-lg bg-primary px-5 py-3 font-bold text-on-primary hover:bg-primary-container hover:text-on-primary-container">Confirmar baja</button>
+            <button id="cancel-product-loss-modal" type="button" class="rounded-lg bg-surface-container px-5 py-3 font-bold text-on-surface hover:bg-surface-container-high">Cancelar</button>
+          </div>
+        </form>
+      </section>
     </div>
     <div id="cash-close-print-area" aria-hidden="true">
     </div>

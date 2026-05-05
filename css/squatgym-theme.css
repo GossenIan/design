@@ -51,6 +51,38 @@ h6,
   box-shadow: 0 8px 20px rgb(0 109 55 / 0.18);
 }
 
+.inventory-quick-filter {
+  border-radius: 999px;
+  background: #f1f8f3;
+  color: #006d37;
+  font-size: 0.74rem;
+  font-weight: 900;
+  padding: 0.36rem 0.7rem;
+  transition: background-color 150ms ease, color 150ms ease, transform 120ms ease;
+}
+
+.inventory-quick-filter:hover {
+  background: rgb(0 109 55 / 0.16);
+}
+
+.inventory-quick-filter:active {
+  transform: scale(0.96);
+}
+
+.inventory-quick-filter-active {
+  background: #006d37;
+  color: #ffffff;
+}
+
+.inventory-active-filters-summary {
+  border-radius: 999px;
+  background: #f6f5f5;
+  color: #3f4941;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 0.3rem 0.65rem;
+}
+
 .cash-close-status-balanced {
   border-color: rgb(0 109 55 / 0.25);
   background: rgb(45 203 115 / 0.14);
@@ -776,6 +808,21 @@ h6,
   font-size: 13px;
 }
 
+.audit-print-branch {
+  margin-top: 22px;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.audit-print-branch h2 {
+  border-bottom: 1px solid #111111;
+  font-family: Manrope, sans-serif;
+  font-size: 17px;
+  font-weight: 900;
+  margin: 0 0 8px;
+  padding-bottom: 6px;
+}
+
 .audit-print-page {
   margin-top: 40px;
   text-align: center;
@@ -1024,6 +1071,26 @@ h6,
 }
 
 .dark .inventory-branch-tab {
+  background: #123621;
+  color: #c7d8c5;
+}
+
+.dark .inventory-quick-filter {
+  background: #123621;
+  color: #9de9b6;
+}
+
+.dark .inventory-quick-filter:hover {
+  background: rgb(92 236 136 / 0.18);
+  color: #d8ffe2;
+}
+
+.dark .inventory-quick-filter-active {
+  background: #5cec88;
+  color: #041f13;
+}
+
+.dark .inventory-active-filters-summary {
   background: #123621;
   color: #c7d8c5;
 }

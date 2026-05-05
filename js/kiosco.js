@@ -1093,7 +1093,7 @@ function renderizarProductos() {
     const claveProductoJson = escapeHtml(JSON.stringify(claveProducto));
     const claveProductoHtml = escapeHtml(claveProducto);
     const menuProducto = `
-        <div class="absolute right-3 top-3 z-20">
+        <div class="absolute right-3 top-3 z-30">
           <button type="button" onclick='toggleProductMenu(event, ${claveProductoJson})' class="flex h-9 w-9 items-center justify-center rounded-full bg-surface-container-lowest/90 text-secondary shadow-sm ring-1 ring-outline-variant/30 backdrop-blur hover:bg-surface-container hover:text-on-surface active:scale-95" aria-label="Opciones de ${nombreSeguro}" aria-haspopup="menu" aria-expanded="false" data-product-menu-button="${claveProductoHtml}">
             <span class="material-symbols-outlined text-xl">more_vert</span>
           </button>
@@ -1112,10 +1112,10 @@ function renderizarProductos() {
     return `
       <div class="bg-surface-container-lowest rounded-xl p-4 flex flex-col gap-4 relative group hover:bg-surface-container-low transition-colors border border-outline-variant/15">
         ${menuProducto}
-        <div class="h-48 rounded-lg bg-surface-container-highest overflow-hidden relative">
+        <button type="button" onclick='agregarAlCarrito(${claveProductoJson})' class="relative block h-48 w-full overflow-hidden rounded-lg bg-surface-container-highest text-left group" aria-label="Agregar ${nombreSeguro} al carrito">
           ${mediaProducto}
           ${badgeDescuento}
-        </div>
+        </button>
         <div class="flex flex-col gap-1">
           <span class="text-xs text-secondary font-medium uppercase tracking-wider">${marcaSegura}</span>
           <h3 class="font-headline font-semibold text-lg leading-tight line-clamp-2">${nombreSeguro}</h3>
@@ -1162,6 +1162,112 @@ function agregarAlCarrito(clave) {
   }
 
   actualizarInterfaz();
+}
+
+function mostrarFeedbackBaja(message = '', error = false) {
+  const feedback = document.getElementById('product-loss-feedback');
+
+  if (!feedback) {
+    return;
+  }
+
+  feedback.textContent = message;
+  feedback.classList.toggle('hidden', !message);
+  feedback.classList.toggle('bg-error-container', error);
+  feedback.classList.toggle('text-error', error);
+  feedback.classList.toggle('bg-primary-container', !error);
+  feedback.classList.toggle('text-primary', !error);
+}
+
+function obtenerProductosSucursalActiva() {
+  return productos
+    .filter((producto) => normalizarSucursal(producto.sucursal) === sucursalActiva)
+    .sort((a, b) => a.nombre.localeCompare(b.nombre));
+}
+
+function poblarModalBajaProductos() {
+  const select = document.getElementById('product-loss-product');
+
+  if (!select) {
+    return;
+  }
+
+  const productosSucursal = obtenerProductosSucursalActiva();
+
+  select.innerHTML = productosSucursal.length
+    ? productosSucursal.map((producto) => `
+      <option value="${escapeHtml(obtenerClaveProducto(producto))}">
+        ${escapeHtml(producto.nombre)} · Stock: ${escapeHtml(producto.stock ?? 0)}
+      </option>
+    `).join('')
+    : '<option value="">Sin productos en la sucursal</option>';
+}
+
+function abrirModalBajaProducto() {
+  const modal = document.getElementById('product-loss-modal');
+  const form = document.getElementById('product-loss-form');
+  const quantity = document.getElementById('product-loss-quantity');
+
+  poblarModalBajaProductos();
+  form?.reset();
+  if (quantity) {
+    quantity.value = '1';
+  }
+  mostrarFeedbackBaja('');
+  modal?.classList.remove('hidden');
+}
+
+function cerrarModalBajaProducto() {
+  document.getElementById('product-loss-modal')?.classList.add('hidden');
+  document.getElementById('product-loss-form')?.reset();
+  mostrarFeedbackBaja('');
+}
+
+function guardarBajaProducto(event) {
+  event.preventDefault();
+  const clave = document.getElementById('product-loss-product')?.value;
+  const motivo = document.getElementById('product-loss-reason')?.value || 'mal-estado';
+  const cantidad = Math.floor(Number(document.getElementById('product-loss-quantity')?.value || 0));
+  const nota = document.getElementById('product-loss-note')?.value.trim() || '';
+  const producto = obtenerProductoPorClave(clave);
+
+  if (!producto) {
+    mostrarFeedbackBaja('Selecciona un producto valido.', true);
+    return;
+  }
+
+  if (!Number.isFinite(cantidad) || cantidad <= 0) {
+    mostrarFeedbackBaja('La cantidad debe ser mayor a 0.', true);
+    return;
+  }
+
+  if ((producto.stock ?? 0) < cantidad) {
+    mostrarFeedbackBaja(`Stock insuficiente. Disponible: ${producto.stock ?? 0}.`, true);
+    return;
+  }
+
+  const stockActualizado = Math.max(0, (producto.stock ?? 0) - cantidad);
+  const productoActualizado = normalizarProductoGuardado({
+    ...producto,
+    stock: stockActualizado,
+    descripcion: `${producto.descripcion || ''}${nota ? `\n[Baja ${motivo}] ${nota}` : ''}`.trim()
+  });
+
+  if (!productoActualizado) {
+    mostrarFeedbackBaja('No se pudo procesar la baja.', true);
+    return;
+  }
+
+  guardarProductoEditado(productoActualizado);
+  if (!guardarProductosPersonalizados()) {
+    mostrarFeedbackBaja('No se pudo guardar la baja en este navegador.', true);
+    return;
+  }
+
+  sincronizarProductos();
+  renderizarProductos();
+  actualizarInterfaz();
+  cerrarModalBajaProducto();
 }
 
 function cambiarCantidad(clave, delta) {
@@ -2149,6 +2255,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const cashCloseConfirmModal = document.getElementById('cash-close-confirm-modal');
   const cancelCashCloseConfirm = document.getElementById('cancel-cash-close-confirm');
   const executeCashClose = document.getElementById('execute-cash-close');
+  const openProductLossModal = document.getElementById('open-product-loss-modal');
+  const productLossModal = document.getElementById('product-loss-modal');
+  const closeProductLossModal = document.getElementById('close-product-loss-modal');
+  const cancelProductLossModal = document.getElementById('cancel-product-loss-modal');
+  const productLossForm = document.getElementById('product-loss-form');
 
   historialVentas = cargarHistorialVentas();
   turnoInicioISO = obtenerTurnoInicio();
@@ -2184,6 +2295,15 @@ document.addEventListener('DOMContentLoaded', () => {
   productModal?.addEventListener('click', (event) => {
     if (event.target === productModal) {
       cerrarModalProducto();
+    }
+  });
+  openProductLossModal?.addEventListener('click', abrirModalBajaProducto);
+  closeProductLossModal?.addEventListener('click', cerrarModalBajaProducto);
+  cancelProductLossModal?.addEventListener('click', cerrarModalBajaProducto);
+  productLossForm?.addEventListener('submit', guardarBajaProducto);
+  productLossModal?.addEventListener('click', (event) => {
+    if (event.target === productLossModal) {
+      cerrarModalBajaProducto();
     }
   });
 
@@ -2299,6 +2419,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (event.key === 'Escape') {
       cerrarModalProducto();
       cerrarModalPago();
+      cerrarModalBajaProducto();
       cerrarHistorialVentas();
       cerrarCierreCaja();
       document.getElementById('receipt-modal')?.classList.add('hidden');
