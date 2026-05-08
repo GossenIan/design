@@ -1,9 +1,7 @@
-const ROLES_USUARIO = [
-  'Superadministrador',
-  'Gerente de Kiosco',
-  'Analista Inventario',
-  'Personal Operativo',
-  'Recepcion'
+﻿const ROLES_USUARIO = [
+  'Administrador',
+  'Encargado',
+  'Secretaria'
 ];
 
 const PERMISOS_USUARIO = [
@@ -25,7 +23,7 @@ const usuariosDemo = [
     contrasena: 'Admin2026!',
     nombre: 'Alejandro Moreno',
     email: 'amoreno@squatgym.com',
-    rol: 'Superadministrador',
+    rol: 'Administrador',
     sucursal: 'SquatGym Central',
     estado: 'Activo',
     iniciales: 'AM',
@@ -37,7 +35,7 @@ const usuariosDemo = [
     contrasena: 'Kiosco2026!',
     nombre: 'Beatriz Sanchez',
     email: 'bsanchez@squatgym.com',
-    rol: 'Gerente de Kiosco',
+    rol: 'Encargado',
     sucursal: 'SquatGym Central',
     estado: 'Activo',
     iniciales: 'BS',
@@ -49,7 +47,7 @@ const usuariosDemo = [
     contrasena: 'Operativo2026!',
     nombre: 'Carlos Ruiz',
     email: 'cruiz@squatgym.com',
-    rol: 'Personal Operativo',
+    rol: 'Secretaria',
     sucursal: 'Sucursal Sur',
     estado: 'Inactivo',
     iniciales: 'CR',
@@ -61,7 +59,7 @@ const usuariosDemo = [
     contrasena: 'Inventario2026!',
     nombre: 'Diana Lopez',
     email: 'dlopez@squatgym.com',
-    rol: 'Analista Inventario',
+    rol: 'Encargado',
     sucursal: 'Sucursal Sur',
     estado: 'Activo',
     iniciales: 'DL',
@@ -803,11 +801,9 @@ function obtenerPermisosTexto(permisos = []) {
 
 function obtenerPermisosPorRol(rol) {
   const permisosPorRol = {
-    Superadministrador: PERMISOS_USUARIO.map((permiso) => permiso.id),
-    'Gerente de Kiosco': ['kiosco', 'caja', 'auditoria'],
-    'Analista Inventario': ['inventario', 'auditoria'],
-    'Personal Operativo': ['asistencias'],
-    Recepcion: ['asistencias', 'kiosco']
+    Administrador: PERMISOS_USUARIO.map((permiso) => permiso.id),
+    Encargado: ['kiosco', 'inventario', 'caja', 'asistencias'],
+    Secretaria: ['kiosco', 'inventario', 'caja', 'asistencias']
   };
 
   return permisosPorRol[rol] || ['asistencias'];
@@ -1522,7 +1518,7 @@ function parsearLineaUsuarioTxt(linea) {
   return {
     usuario,
     contrasena,
-    rol: rol || 'Recepcion',
+    rol: rol || 'Secretaria',
     nombre: nombre || usuario.replace(/[._-]+/g, ' '),
     email: email || ''
   };
@@ -1563,7 +1559,7 @@ function procesarArchivoUsuariosTxt(file) {
 
       const resultado = crearUsuarioDesdeDatos({
         ...data,
-        permisos: obtenerPermisosPorRol(ROLES_USUARIO.includes(data.rol) ? data.rol : 'Recepcion')
+        permisos: obtenerPermisosPorRol(ROLES_USUARIO.includes(data.rol) ? data.rol : 'Secretaria')
       });
 
     if (resultado.ok) {
@@ -1991,3 +1987,5 @@ window.abrirModalPermisos = abrirModalPermisos;
 window.abrirModalResetPassword = abrirModalResetPassword;
 window.imprimirReporteAuditoria = imprimirReporteAuditoria;
 window.cambiarPaginaUsuarios = cambiarPaginaUsuarios;
+
+

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="utf-8"/>
@@ -42,6 +42,30 @@
         .input-error:focus {
             border-bottom-color: #b3261e !important;
         }
+
+        .quick-login-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            border: 1px solid rgb(var(--outline-variant));
+            border-radius: 0.75rem;
+            background: rgb(var(--surface-container));
+            color: rgb(var(--on-surface));
+            padding: 0.8rem 0.9rem;
+            font-weight: 800;
+            transition: background-color 160ms ease, color 160ms ease, transform 120ms ease, box-shadow 160ms ease;
+        }
+
+        .quick-login-btn:hover {
+            background: rgb(var(--primary));
+            color: rgb(var(--on-primary));
+            box-shadow: 0 10px 24px rgb(var(--primary) / 0.18);
+        }
+
+        .quick-login-btn:active {
+            transform: scale(0.98);
+        }
     </style>
 </head>
 <body class="min-h-screen bg-background text-on-surface font-body antialiased overflow-hidden">
@@ -84,7 +108,7 @@
                         <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">lock</span>
                         <input class="w-full pl-12 pr-12 py-4 bg-surface-container-highest border-0 border-b-2 border-transparent focus:border-primary focus:ring-0 rounded-xl transition-all"
                                id="password"
-                               placeholder="••••••••"
+                               placeholder="********"
                                type="password"
                                autocomplete="current-password"
                                aria-describedby="passwordError"/>
@@ -108,7 +132,20 @@
                     Usuario o contraseña incorrectos.
                 </p>
             </form>
-
+            <div class="mt-6 grid gap-3 sm:grid-cols-3" aria-label="Accesos rapidos de prueba">
+                <button type="button" class="quick-login-btn" data-user="admin">
+                    <span class="material-symbols-outlined text-lg">admin_panel_settings</span>
+                    Administrador
+                </button>
+                <button type="button" class="quick-login-btn" data-user="encar">
+                    <span class="material-symbols-outlined text-lg">manage_accounts</span>
+                    Encargado
+                </button>
+                <button type="button" class="quick-login-btn" data-user="secre">
+                    <span class="material-symbols-outlined text-lg">support_agent</span>
+                    Secretaria
+                </button>
+            </div>
             <div class="mt-10 pt-8 border-t border-gray-200 text-center text-sm text-gray-500">
                 <p>El sistema identificará su rol: <span class="font-semibold text-on-surface">Administrador, Encargado o Secretaria</span>.</p>
             </div>
@@ -122,10 +159,9 @@
 <script>
     // LISTA DE USUARIOS -
     const usersDB = [
-        { user: "user", pass: "1234", role: "Administrador" },
         { user: "admin", pass: "1234", role: "Administrador" },
-        { user: "juan.perez", pass: "gym2026", role: "Encargado Sucursal" },
-        { user: "ana.secretaria", pass: "pass987", role: "Secretaria" }
+        { user: "encar", pass: "1234", role: "Encargado" },
+        { user: "secre", pass: "1234", role: "Secretaria" }
     ];
 
     const loginForm = document.getElementById('loginForm');
@@ -158,6 +194,29 @@
         errorMessage.classList.add('hidden');
     }
 
+    function loginConUsuario(validUser) {
+        errorMessage.classList.add('hidden');
+        sessionStorage.setItem('squatgym-user', JSON.stringify({
+            user: validUser.user,
+            role: validUser.role
+        }));
+        window.location.href = "home/home.html";
+    }
+
+    document.querySelectorAll('.quick-login-btn').forEach((button) => {
+        button.addEventListener('click', () => {
+            const selectedUser = usersDB.find((usuario) => usuario.user === button.dataset.user);
+
+            if (!selectedUser) {
+                return;
+            }
+
+            usernameInput.value = selectedUser.user;
+            passwordInput.value = selectedUser.pass;
+            limpiarErrores();
+            loginConUsuario(selectedUser);
+        });
+    });
     // Mostrar / ocultar contraseña
     togglePassword.addEventListener('click', () => {
         const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
@@ -207,12 +266,7 @@
         );
 
         if (validUser) {
-            errorMessage.classList.add('hidden');
-            sessionStorage.setItem('squatgym-user', JSON.stringify({
-                user: validUser.user,
-                role: validUser.role
-            }));
-            window.location.href = "home/home.html";
+            loginConUsuario(validUser);
         } else {
             errorMessage.classList.remove('hidden');
         }
@@ -221,3 +275,10 @@
 
 </body>
 </html>
+
+
+
+
+
+
+

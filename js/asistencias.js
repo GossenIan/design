@@ -1,9 +1,9 @@
-const ASISTENCIAS_STORAGE_KEY = 'squatgym-attendance-records';
+﻿const ASISTENCIAS_STORAGE_KEY = 'squatgym-attendance-records';
 const asistenciasDemo = [
-  { id: 'as-1', socio: 'Valeria Mendez (#8210)', plan: 'Plan Gold', estado: 'activa', fechaISO: new Date(Date.now() - 2 * 60 * 1000).toISOString() },
-  { id: 'as-2', socio: 'Carlos Ruiz (#4492)', plan: 'Plan Basico', estado: 'vencido', fechaISO: new Date(Date.now() - 15 * 60 * 1000).toISOString() },
-  { id: 'as-3', socio: 'Elena Gomez (#1023)', plan: 'Plan VIP', estado: 'activa', fechaISO: new Date(Date.now() - 22 * 60 * 1000).toISOString() },
-  { id: 'as-4', socio: 'Martin Silva (#5561)', plan: 'Plan Gold', estado: 'activa', fechaISO: new Date(Date.now() - 48 * 60 * 1000).toISOString() }
+  { id: 'as-1', socio: '30123456', plan: 'Clientes', estado: 'activa', fechaISO: new Date(Date.now() - 2 * 60 * 1000).toISOString() },
+  { id: 'as-2', socio: '28987654', plan: 'Profesores', estado: 'vencido', fechaISO: new Date(Date.now() - 15 * 60 * 1000).toISOString() },
+  { id: 'as-3', socio: '33555123', plan: 'Encargados', estado: 'activa', fechaISO: new Date(Date.now() - 22 * 60 * 1000).toISOString() },
+  { id: 'as-4', socio: '27666777', plan: 'Clientes', estado: 'activa', fechaISO: new Date(Date.now() - 48 * 60 * 1000).toISOString() }
 ];
 let asistencias = [];
 
@@ -53,7 +53,9 @@ function mostrarToast(message, error = false) {
 
 function normalizarAsistencia(item) {
   const socio = String(item?.socio || '').trim();
-  const plan = String(item?.plan || '').trim() || 'Plan Gold';
+  const planOriginal = String(item?.plan || '').trim();
+  const categoriasLegacy = { 'Plan Gold': 'Clientes', 'Plan Basico': 'Profesores', 'Plan VIP': 'Encargados' };
+  const plan = categoriasLegacy[planOriginal] || planOriginal || 'Clientes';
   const estado = item?.estado === 'vencido' ? 'vencido' : 'activa';
   const fechaISO = String(item?.fechaISO || '').trim() || new Date().toISOString();
 
@@ -208,7 +210,7 @@ function guardarManual(event) {
   const estado = document.getElementById('attendance-status-input')?.value || 'activa';
 
   if (!socio) {
-    mostrarToast('Ingresa un socio o nombre valido.', true);
+    mostrarToast('Ingresa un DNI valido.', true);
     return;
   }
 
@@ -224,7 +226,7 @@ function guardarManual(event) {
   ];
 
   document.getElementById('manual-attendance-form')?.reset();
-  document.getElementById('attendance-plan-input').value = 'Plan Gold';
+  document.getElementById('attendance-plan-input').value = 'Clientes';
   document.getElementById('attendance-status-input').value = 'activa';
   guardarAsistencias();
   renderTodo();
@@ -262,3 +264,5 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 window.abrirEdicionAsistencia = abrirEdicionAsistencia;
+
+

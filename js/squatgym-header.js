@@ -1,6 +1,64 @@
-(() => {
+﻿(() => {
   const THEME_KEY = 'squatgym-theme';
   let unreadNotificationCount = 0;
+  const ROLE_PERMISSIONS = {
+    Administrador: ['inicio', 'kiosco', 'inventario', 'asistencias', 'usuarios'],
+    Encargado: ['inicio', 'kiosco', 'inventario', 'asistencias'],
+    Secretaria: ['inicio', 'kiosco', 'inventario', 'asistencias']
+  };
+
+  function readCurrentUser() {
+    try {
+      return JSON.parse(sessionStorage.getItem('squatgym-user') || 'null');
+    } catch (error) {
+      return null;
+    }
+  }
+
+  function normalizeRole(role) {
+    return role === 'Encargado Sucursal' ? 'Encargado' : role || 'Administrador';
+  }
+
+  function getSectionFromHref(href = '') {
+    if (href.includes('kiosco')) return 'kiosco';
+    if (href.includes('inventario')) return 'inventario';
+    if (href.includes('asistencias')) return 'asistencias';
+    if (href.includes('usuarios')) return 'usuarios';
+    return 'inicio';
+  }
+
+  function applyRoleVisibility() {
+    const currentUser = readCurrentUser();
+    const role = normalizeRole(currentUser?.role);
+    const allowedSections = ROLE_PERMISSIONS[role] || ROLE_PERMISSIONS.Administrador;
+
+    document.querySelectorAll('.nav-tab').forEach((link) => {
+      const section = getSectionFromHref(link.getAttribute('href') || '');
+      link.classList.toggle('hidden', !allowedSections.includes(section));
+    });
+
+    const currentSection = getSectionFromHref(window.location.pathname);
+    if (!allowedSections.includes(currentSection)) {
+      const homeLink = document.querySelector('.nav-tab[href$="home.html"]')?.getAttribute('href') || '../home.html';
+      window.location.href = homeLink;
+      return;
+    }
+
+    document.querySelectorAll('[data-role-visible]').forEach((element) => {
+      const roles = element.dataset.roleVisible.split(',').map((item) => item.trim()).filter(Boolean);
+      element.classList.toggle('hidden', roles.length > 0 && !roles.includes(role));
+    });
+
+    document.querySelectorAll('[data-role-hidden]').forEach((element) => {
+      const roles = element.dataset.roleHidden.split(',').map((item) => item.trim()).filter(Boolean);
+      element.classList.toggle('hidden', roles.includes(role));
+    });
+
+    document.querySelectorAll('#profile-menu-button [class*="text-[10px]"], #profile-dropdown .text-xs.text-on-surface-variant').forEach((element) => {
+      element.textContent = role;
+    });
+  }
+
 
   function saveTheme(theme) {
     try {
@@ -159,6 +217,7 @@
 
     setTheme(readSavedTheme());
     updateNotificationState();
+    applyRoleVisibility();
 
     themeButton?.addEventListener('click', toggleTheme);
 
@@ -220,6 +279,10 @@
   window.SquatGymHeader = {
     setTheme,
     receiveNotification,
-    markNotificationsRead
+    markNotificationsRead,
+    applyRoleVisibility
   };
 })();
+
+
+

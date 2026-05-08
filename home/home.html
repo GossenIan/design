@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html class="light" lang="es">
 <head>
   <meta charset="utf-8">
@@ -337,12 +337,12 @@
   </style>
 </head>
 
-<body class="min-h-screen bg-background text-on-surface font-body antialiased" data-notification-icon="how_to_reg" data-notification-title="Nuevo ingreso registrado" data-notification-body="Valeria Méndez acaba de validar su asistencia.">
+<body class="min-h-screen bg-background text-on-surface font-body antialiased" data-notification-icon="how_to_reg" data-notification-title="Nuevo ingreso registrado" data-notification-body="Valeria Mendez acaba de validar su asistencia.">
   <header class="fixed left-0 top-0 z-50 w-full border-b border-outline-variant bg-surface-container-lowest/95 shadow-sm backdrop-blur-md">
     <div class="flex h-16 w-full items-center justify-between gap-3 px-4 sm:px-6 md:px-10">
       <a class="flex min-w-0 items-center gap-2 sm:gap-3" href="home.html" aria-label="Ir al inicio">
         <img class="hidden h-10 w-10 shrink-0 rounded-lg border border-outline-variant bg-white object-contain p-1 sm:block" alt="Logo SquatGym" src="../img/logo.png">
-        <span class="whitespace-nowrap font-manrope text-lg font-black text-on-surface sm:text-2xl">Squat<span class="brand-gym">Gym</span></span>
+        <span class="whitespace-nowrap font-headline text-lg font-black text-on-surface sm:text-2xl">Squat<span class="brand-gym">Gym</span></span>
       </a>
 
       <div class="flex shrink-0 items-center justify-end gap-1 sm:gap-2">
@@ -396,10 +396,7 @@
 
         <div class="relative ml-1 flex items-center border-l border-outline-variant pl-2 sm:ml-2 sm:pl-4">
           <button type="button" class="flex h-10 items-center gap-3 rounded-lg px-1 hover:bg-surface-container-low sm:px-2" id="profile-menu-button" aria-expanded="false" aria-controls="profile-dropdown">
-            <span class="hidden flex-col items-end sm:flex">
-              <span class="text-xs font-bold text-on-surface">Admin Squat</span>
-              <span class="text-[10px] uppercase tracking-wider text-on-surface-variant">Super Admin</span>
-            </span>
+            <span class="hidden flex-col items-end sm:flex"><span class="text-xs font-bold text-on-surface">Admin Squat</span><span class="text-[10px] uppercase tracking-wider text-on-surface-variant">Administrador</span></span>
             <span class="flex h-9 w-9 items-center justify-center rounded-lg border border-outline-variant bg-primary-container/15 text-primary shadow-sm">
               <span class="material-symbols-outlined">person</span>
             </span>
@@ -407,8 +404,7 @@
 
           <div class="profile-dropdown-panel absolute right-0 top-full z-[100] mt-2 hidden w-56 max-w-[calc(100vw-2rem)] overflow-hidden rounded-lg border" id="profile-dropdown" role="menu">
             <div class="border-b border-outline-variant p-4">
-              <p class="text-sm font-bold text-on-surface">Admin Squat</p>
-              <p class="text-xs text-on-surface-variant">Super Administrador</p>
+              <p class="text-sm font-bold text-on-surface">Admin Squat</p><p class="text-xs text-on-surface-variant">Administrador</p>
             </div>
             <div class="p-2">
               <button type="button" class="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-on-surface hover:bg-surface-container" role="menuitem">
@@ -447,13 +443,13 @@
       <div class="flex flex-col justify-between gap-6 md:flex-row md:items-end">
         <div>
           <h2 class="dashboard-title font-manrope font-extrabold text-on-surface">Hola, <span class="text-primary">Administrador</span></h2>
-          <p class="max-w-xl font-body-lg text-body-lg text-on-surface-variant">Gestiona el flujo de tu gimnasio con eficiencia clínica y energía deportiva.</p>
+          <p class="max-w-xl font-body-lg text-body-lg text-on-surface-variant">Gestiona el flujo de tu gimnasio con eficiencia clinica y energia deportiva.</p>
         </div>
       </div>
     </section>
 
     <section class="mb-14 grid grid-cols-1 gap-8 md:grid-cols-3 lg:gap-10 xl:gap-12">
-      <article class="dashboard-panel compact-action-card group relative cursor-pointer overflow-hidden rounded-lg border border-outline-variant p-6 transition-transform duration-200 hover:-translate-y-1 hover:shadow-xl sm:p-8">
+      <a class="dashboard-panel compact-action-card group relative block cursor-pointer overflow-hidden rounded-lg border border-outline-variant p-6 text-inherit no-underline transition-transform duration-200 hover:-translate-y-1 hover:shadow-xl sm:p-8" href="asistencias/asistencias.html" aria-label="Ir a asistencias">
         <div class="absolute right-0 top-0 p-6 opacity-10 group-hover:opacity-20 sm:p-8" aria-hidden="true">
           <span class="material-symbols-outlined card-bg-icon text-on-surface">how_to_reg</span>
         </div>
@@ -462,15 +458,12 @@
             <span class="material-symbols-outlined text-3xl text-on-primary">check_circle</span>
           </div>
           <h3 class="mb-2 font-manrope text-2xl font-bold text-on-surface sm:text-headline-h1">Tomar Asistencia</h3>
-          <p class="mb-6 font-body-md text-body-md text-on-surface-variant">Registro rápido de entrada de miembros y verificación de membresías.</p>
-          <button type="button" class="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 font-bold text-on-primary hover:bg-primary-container" onclick="window.location.href='asistencias/asistencias.html'">
-            <span>Iniciar Registro</span>
-            <span class="material-symbols-outlined text-sm">arrow_forward</span>
-          </button>
+          <p class="font-body-md text-body-md text-on-surface-variant">Registro rapido de entrada de miembros y verificacion de membresias.</p>
+          <p class="mt-6 inline-flex items-center gap-2 font-bold text-primary">Abrir asistencias <span class="material-symbols-outlined text-sm">arrow_forward</span></p>
         </div>
-      </article>
+      </a>
 
-      <article class="sale-card compact-action-card group relative cursor-pointer overflow-hidden rounded-lg border p-6 transition-transform duration-200 hover:-translate-y-1 hover:shadow-xl sm:p-8">
+      <a class="sale-card compact-action-card group relative block cursor-pointer overflow-hidden rounded-lg border p-6 text-inherit no-underline transition-transform duration-200 hover:-translate-y-1 hover:shadow-xl sm:p-8" href="kiosco/kiosco.html" aria-label="Ir al kiosco">
         <div class="absolute right-0 top-0 p-6 opacity-10 group-hover:opacity-20 sm:p-8" aria-hidden="true">
           <span class="material-symbols-outlined card-bg-icon sale-card-bg-icon">payments</span>
         </div>
@@ -479,15 +472,12 @@
             <span class="material-symbols-outlined text-3xl">shopping_cart</span>
           </div>
           <h3 class="sale-card-title mb-2 font-manrope text-2xl font-bold sm:text-headline-h1">Realizar Venta</h3>
-          <p class="sale-card-text mb-6 font-body-md text-body-md">Procesa pagos de suplementos, accesorios o nuevas inscripciones.</p>
-          <button type="button" class="sale-card-button inline-flex items-center gap-2 rounded-full px-6 py-3 font-bold" onclick="window.location.href='kiosco/kiosco.html'">
-            <span>Abrir Terminal</span>
-            <span class="material-symbols-outlined text-sm">point_of_sale</span>
-          </button>
+          <p class="sale-card-text font-body-md text-body-md">Procesa pagos de suplementos, accesorios o nuevas inscripciones.</p>
+          <p class="sale-card-text mt-6 inline-flex items-center gap-2 font-bold">Abrir kiosco <span class="material-symbols-outlined text-sm">arrow_forward</span></p>
         </div>
-      </article>
+      </a>
 
-      <article class="dashboard-panel compact-action-card group relative cursor-pointer overflow-hidden rounded-lg border border-outline-variant p-6 transition-transform duration-200 hover:-translate-y-1 hover:shadow-xl sm:p-8">
+      <a class="dashboard-panel compact-action-card group relative block cursor-pointer overflow-hidden rounded-lg border border-outline-variant p-6 text-inherit no-underline transition-transform duration-200 hover:-translate-y-1 hover:shadow-xl sm:p-8" href="inventario/inventario.html" aria-label="Ir a inventario">
         <div class="absolute right-0 top-0 p-6 opacity-10 group-hover:opacity-20 sm:p-8" aria-hidden="true">
           <span class="material-symbols-outlined card-bg-icon text-on-surface">inventory_2</span>
         </div>
@@ -496,21 +486,17 @@
             <span class="material-symbols-outlined text-3xl text-on-secondary-container">search</span>
           </div>
           <h3 class="mb-2 font-manrope text-2xl font-bold text-on-surface sm:text-headline-h1">Buscar Producto</h3>
-          <p class="mb-6 font-body-md text-body-md text-on-surface-variant">Consulta disponibilidad en stock y precios de inventario en tiempo real.</p>
-          <div class="relative">
-            <label class="sr-only" for="product-search">Buscar producto por SKU o nombre</label>
-            <input id="product-search" class="w-full rounded-full border border-outline-variant bg-surface-container px-6 py-3 pr-12 text-sm text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:ring-2 focus:ring-primary" placeholder="SKU o nombre..." type="search">
-            <span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-primary">manage_search</span>
-          </div>
+          <p class="font-body-md text-body-md text-on-surface-variant">Consulta disponibilidad en stock y precios de inventario en tiempo real.</p>
+          <p class="mt-6 inline-flex items-center gap-2 font-bold text-primary">Abrir inventario <span class="material-symbols-outlined text-sm">arrow_forward</span></p>
         </div>
-      </article>
+      </a>
     </section>
 
     <section class="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-10 xl:gap-12" id="asistencias">
-      <article class="dashboard-panel rounded-lg border border-outline-variant p-6 shadow-sm sm:p-8">
+      <a class="dashboard-panel block rounded-lg border border-outline-variant p-6 text-inherit no-underline shadow-sm transition-transform duration-200 hover:-translate-y-1 hover:shadow-xl sm:p-8" href="asistencias/asistencias.html" aria-label="Ver asistencias recientes">
         <div class="mb-8 flex items-center justify-between gap-4">
           <h4 class="font-headline-h2 text-headline-h2 text-on-surface">Asistencias Recientes</h4>
-          <button type="button" class="font-label-caps text-label-caps text-primary hover:underline" onclick="window.location.href='asistencias/asistencias.html'">VER TODO</button>
+          <span class="material-symbols-outlined text-primary" aria-hidden="true">arrow_forward</span>
         </div>
 
         <div class="space-y-4">
@@ -518,8 +504,8 @@
             <div class="flex items-center gap-4">
               <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary-container/15 font-manrope font-bold text-primary">VM</span>
               <div>
-                <p class="font-body-md text-body-md font-bold text-on-surface">Valeria Méndez</p>
-                <p class="text-body-sm text-secondary">Socio #8210 • Plan Gold</p>
+                <p class="font-body-md text-body-md font-bold text-on-surface">Valeria Mendez</p>
+                <p class="text-body-sm text-secondary">Socio #8210 - Clientes</p>
               </div>
             </div>
             <div class="flex items-center justify-between gap-3 sm:flex-col sm:items-end">
@@ -533,7 +519,7 @@
               <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-secondary-container font-manrope font-bold text-on-secondary-container">CR</span>
               <div>
                 <p class="font-body-md text-body-md font-bold text-on-surface">Carlos Ruiz</p>
-                <p class="text-body-sm text-secondary">Socio #4492 • Plan Básico</p>
+                <p class="text-body-sm text-secondary">Socio #4492 - Profesores</p>
               </div>
             </div>
             <div class="flex items-center justify-between gap-3 sm:flex-col sm:items-end">
@@ -546,8 +532,8 @@
             <div class="flex items-center gap-4">
               <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary-container/15 font-manrope font-bold text-primary">EG</span>
               <div>
-                <p class="font-body-md text-body-md font-bold text-on-surface">Elena Gómez</p>
-                <p class="text-body-sm text-secondary">Socio #1023 • Plan VIP</p>
+                <p class="font-body-md text-body-md font-bold text-on-surface">Elena Gomez</p>
+                <p class="text-body-sm text-secondary">Socio #1023 - Encargados</p>
               </div>
             </div>
             <div class="flex items-center justify-between gap-3 sm:flex-col sm:items-end">
@@ -556,24 +542,28 @@
             </div>
           </div>
         </div>
-      </article>
+      </a>
 
-      <article class="group relative min-h-[360px] overflow-hidden rounded-lg border border-outline-variant shadow-sm sm:min-h-[400px]">
+      <a class="group relative block min-h-[360px] overflow-hidden rounded-lg border border-outline-variant text-inherit no-underline shadow-sm transition-transform duration-200 hover:-translate-y-1 hover:shadow-xl sm:min-h-[400px]" href="inventario/inventario.html" aria-label="Ir a inventario">
         <div class="absolute inset-0 z-10 bg-gradient-to-t from-black/85 via-black/55 to-black/20" aria-hidden="true"></div>
         <img alt="Sala moderna de entrenamiento" class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1600&auto=format&fit=crop" loading="lazy">
         <div class="absolute bottom-0 left-0 z-20 p-6 sm:p-10">
-          <span class="mb-4 inline-block rounded-full bg-primary-container px-4 py-1 font-label-caps text-label-caps text-white">TIP DEL DÍA</span>
+          <span class="mb-4 inline-block rounded-full bg-primary-container px-4 py-1 font-label-caps text-label-caps text-white">TIP DEL DIA</span>
           <h3 class="mb-4 font-manrope text-3xl font-extrabold text-white sm:text-display-lg">Optimiza tu Inventario</h3>
-          <p class="mb-6 max-w-sm text-body-lg text-white/90">El 40% de tus ventas de suplementos ocurren entre las 18:00 y las 20:00. Asegúrate de tener stock listo.</p>
-          <button type="button" class="rounded-full bg-white px-8 py-3 font-bold text-zinc-950 hover:bg-primary hover:text-white" onclick="window.location.href='inventario/inventario.html'">Revisar Stock</button>
+          <p class="mb-6 max-w-sm text-body-lg text-white/90">El 40% de tus ventas de suplementos ocurren entre las 18:00 y las 20:00. Asegurate de tener stock listo.</p>
+          <span class="inline-flex items-center gap-2 font-bold text-white">Abrir inventario <span class="material-symbols-outlined text-sm">arrow_forward</span></span>
         </div>
-      </article>
+      </a>
     </section>
   </main>
-
-  <button type="button" class="fixed bottom-10 right-10 z-50 hidden h-16 w-16 items-center justify-center rounded-full bg-primary text-on-primary shadow-2xl hover:bg-primary-container active:scale-95 sm:flex" aria-label="Agregar elemento" onclick="window.location.href='inventario/agregarproducto.html'">
-    <span class="material-symbols-outlined text-3xl">add</span>
-  </button>
 <script src="../js/squatgym-header.js"></script>
 </body>
 </html>
+
+
+
+
+
+
+
+

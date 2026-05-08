@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html class="light" lang="es">
   <head>
     <meta charset="utf-8">
@@ -58,18 +58,14 @@
           </button>
           <div class="relative ml-1 flex items-center border-l border-outline-variant pl-2 sm:ml-2 sm:pl-4">
             <button type="button" class="flex h-10 items-center gap-3 rounded-lg px-1 hover:bg-surface-container-low sm:px-2" id="profile-menu-button" aria-expanded="false" aria-controls="profile-dropdown">
-              <span class="hidden flex-col items-end sm:flex">
-                <span class="text-xs font-bold text-on-surface">Admin Squat</span>
-                <span class="text-[10px] uppercase tracking-wider text-on-surface-variant">Super Admin</span>
-              </span>
+              <span class="hidden flex-col items-end sm:flex"><span class="text-xs font-bold text-on-surface">Admin Squat</span><span class="text-[10px] uppercase tracking-wider text-on-surface-variant">Administrador</span></span>
               <span class="flex h-9 w-9 items-center justify-center rounded-lg border border-outline-variant bg-primary-container/15 text-primary shadow-sm">
                 <span class="material-symbols-outlined">person</span>
               </span>
             </button>
             <div class="profile-dropdown-panel absolute right-0 top-full z-[100] mt-2 hidden w-56 max-w-[calc(100vw-2rem)] overflow-hidden rounded-lg border" id="profile-dropdown" role="menu">
               <div class="border-b border-outline-variant p-4">
-                <p class="text-sm font-bold text-on-surface">Admin Squat</p>
-                <p class="text-xs text-on-surface-variant">Super Administrador</p>
+                <p class="text-sm font-bold text-on-surface">Admin Squat</p><p class="text-xs text-on-surface-variant">Administrador</p>
               </div>
               <div class="p-2">
                 <button type="button" class="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-on-surface hover:bg-surface-container" role="menuitem">
@@ -78,13 +74,13 @@
                 </button>
                 <button type="button" class="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-on-surface hover:bg-surface-container" role="menuitem">
                   <span class="material-symbols-outlined text-lg">settings</span>
-                  Configuracion
+                  Configuración
                 </button>
               </div>
               <div class="border-t border-outline-variant p-2">
                 <button type="button" class="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-semibold text-error hover:bg-error-container/15" role="menuitem" onclick="window.location.href='../../index.html'">
                   <span class="material-symbols-outlined text-lg">logout</span>
-                  Cerrar sesion
+                  Cerrar sesión
                 </button>
               </div>
             </div>
@@ -154,15 +150,15 @@
           </div>
           <form id="manual-attendance-form" class="mt-4 grid gap-3 lg:grid-cols-[minmax(0,1fr)_minmax(12rem,0.6fr)_minmax(12rem,0.6fr)_auto]">
             <label class="grid gap-2 text-sm font-bold uppercase text-on-surface-variant">
-              Nombre o socio
-              <input id="attendance-member-input" class="rounded-lg border-none bg-surface-container-highest px-3 py-3 text-base font-medium normal-case text-on-surface focus:ring-2 focus:ring-primary" type="text" placeholder="Ej. Valeria Mendez / #8210" required>
+              DNI
+              <input id="attendance-member-input" class="rounded-lg border-none bg-surface-container-highest px-3 py-3 text-base font-medium normal-case text-on-surface focus:ring-2 focus:ring-primary" type="text" placeholder="Ej. 30123456" inputmode="numeric" pattern="[0-9]{7,8}" maxlength="8" required>
             </label>
             <label class="grid gap-2 text-sm font-bold uppercase text-on-surface-variant">
-              Plan
+              Categoria
               <select id="attendance-plan-input" class="rounded-lg border-none bg-surface-container-highest px-3 py-3 text-base font-bold normal-case text-on-surface focus:ring-2 focus:ring-primary">
-                <option>Plan Gold</option>
-                <option>Plan Basico</option>
-                <option>Plan VIP</option>
+                <option>Profesores</option>
+                <option>Clientes</option>
+                <option>Encargados</option>
               </select>
             </label>
             <label class="grid gap-2 text-sm font-bold uppercase text-on-surface-variant">
@@ -182,7 +178,7 @@
           <div class="grid gap-3 border-b border-outline-variant/15 p-4 lg:grid-cols-[minmax(0,1fr)_14rem]">
             <div class="relative">
               <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-secondary">search</span>
-              <input id="attendance-search" class="w-full rounded-lg border-none bg-surface-container-highest py-3 pl-11 pr-4 text-sm font-medium text-on-surface placeholder:text-secondary focus:ring-2 focus:ring-primary" type="search" placeholder="Buscar por socio, nombre o plan">
+              <input id="attendance-search" class="w-full rounded-lg border-none bg-surface-container-highest py-3 pl-11 pr-4 text-sm font-medium text-on-surface placeholder:text-secondary focus:ring-2 focus:ring-primary" type="search" placeholder="Buscar por DNI o categoria">
             </div>
             <select id="attendance-filter" class="rounded-lg border-none bg-surface-container-highest px-3 py-3 text-sm font-bold text-on-surface focus:ring-2 focus:ring-primary">
               <option value="todos">Todas</option>
@@ -194,8 +190,8 @@
             <table class="w-full min-w-[54rem] text-left">
               <thead class="bg-surface-container-low">
                 <tr>
-                  <th class="px-5 py-4 text-xs font-black uppercase tracking-wider text-on-surface-variant">Socio</th>
-                  <th class="px-5 py-4 text-xs font-black uppercase tracking-wider text-on-surface-variant">Plan</th>
+                  <th class="px-5 py-4 text-xs font-black uppercase tracking-wider text-on-surface-variant">DNI</th>
+                  <th class="px-5 py-4 text-xs font-black uppercase tracking-wider text-on-surface-variant">Categoria</th>
                   <th class="px-5 py-4 text-xs font-black uppercase tracking-wider text-on-surface-variant">Ingreso</th>
                   <th class="px-5 py-4 text-xs font-black uppercase tracking-wider text-on-surface-variant">Estado</th>
                   <th class="px-5 py-4 text-right text-xs font-black uppercase tracking-wider text-on-surface-variant">Acciones</th>
@@ -222,16 +218,16 @@
         <form id="attendance-edit-form" class="mt-5 grid gap-4">
           <input id="attendance-edit-id" type="hidden">
           <label class="grid gap-2 text-sm font-bold uppercase text-on-surface-variant">
-            Socio
-            <input id="attendance-edit-member" class="rounded-lg border-none bg-surface-container-highest px-3 py-3 text-base font-medium normal-case text-on-surface focus:ring-2 focus:ring-primary" type="text" required>
+            DNI
+            <input id="attendance-edit-member" class="rounded-lg border-none bg-surface-container-highest px-3 py-3 text-base font-medium normal-case text-on-surface focus:ring-2 focus:ring-primary" type="text" inputmode="numeric" pattern="[0-9]{7,8}" maxlength="8" required>
           </label>
           <div class="grid gap-4 sm:grid-cols-2">
             <label class="grid gap-2 text-sm font-bold uppercase text-on-surface-variant">
-              Plan
+              Categoria
               <select id="attendance-edit-plan" class="rounded-lg border-none bg-surface-container-highest px-3 py-3 text-base font-bold normal-case text-on-surface focus:ring-2 focus:ring-primary">
-                <option>Plan Gold</option>
-                <option>Plan Basico</option>
-                <option>Plan VIP</option>
+                <option>Profesores</option>
+                <option>Clientes</option>
+                <option>Encargados</option>
               </select>
             </label>
             <label class="grid gap-2 text-sm font-bold uppercase text-on-surface-variant">
@@ -256,3 +252,9 @@
     <script src="../../js/asistencias.js"></script>
   </body>
 </html>
+
+
+
+
+
+
