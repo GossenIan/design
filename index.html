@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="utf-8"/>
@@ -132,18 +132,26 @@
                     Usuario o contraseña incorrectos.
                 </p>
             </form>
-            <div class="mt-6 grid gap-3 sm:grid-cols-3" aria-label="Accesos rapidos de prueba">
+            <div class="mt-6 grid gap-3 sm:grid-cols-5" aria-label="Accesos rapidos de prueba">
                 <button type="button" class="quick-login-btn" data-user="admin">
                     <span class="material-symbols-outlined text-lg">admin_panel_settings</span>
-                    Administrador
+                    Admin
                 </button>
-                <button type="button" class="quick-login-btn" data-user="encar">
+                <button type="button" class="quick-login-btn" data-user="encarCen">
                     <span class="material-symbols-outlined text-lg">manage_accounts</span>
-                    Encargado
+                    Enc. Central
                 </button>
-                <button type="button" class="quick-login-btn" data-user="secre">
+                <button type="button" class="quick-login-btn" data-user="encarSur">
+                    <span class="material-symbols-outlined text-lg">manage_accounts</span>
+                    Enc. Sur
+                </button>
+                <button type="button" class="quick-login-btn" data-user="secreCen">
                     <span class="material-symbols-outlined text-lg">support_agent</span>
-                    Secretaria
+                    Sec. Central
+                </button>
+                <button type="button" class="quick-login-btn" data-user="secreSur">
+                    <span class="material-symbols-outlined text-lg">support_agent</span>
+                    Sec. Sur
                 </button>
             </div>
             <div class="mt-10 pt-8 border-t border-gray-200 text-center text-sm text-gray-500">
@@ -159,9 +167,11 @@
 <script>
     // LISTA DE USUARIOS -
     const usersDB = [
-        { user: "admin", pass: "1234", role: "Administrador" },
-        { user: "encar", pass: "1234", role: "Encargado" },
-        { user: "secre", pass: "1234", role: "Secretaria" }
+        { user: "admin", pass: "1234", role: "Administrador", sucursal: null },
+        { user: "encarCen", pass: "1234", role: "Encargado", sucursal: "SquatGym Central" },
+        { user: "encarSur", pass: "1234", role: "Encargado", sucursal: "Sucursal Sur" },
+        { user: "secreCen", pass: "1234", role: "Secretaria", sucursal: "SquatGym Central" },
+        { user: "secreSur", pass: "1234", role: "Secretaria", sucursal: "Sucursal Sur" }
     ];
 
     const loginForm = document.getElementById('loginForm');
@@ -198,7 +208,8 @@
         errorMessage.classList.add('hidden');
         sessionStorage.setItem('squatgym-user', JSON.stringify({
             user: validUser.user,
-            role: validUser.role
+            role: validUser.role,
+            sucursal: validUser.sucursal || null
         }));
         window.location.href = "home/home.html";
     }

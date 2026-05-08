@@ -6,9 +6,6 @@ const LAST_RESTOCK_STORAGE_KEY = 'squatgym-inventory-last-restock';
 const SUCURSALES = ['SquatGym Central', 'Sucursal Sur'];
 const CATEGORIAS = ['Suplementos', 'Bebidas', 'Alimentos', 'Indumentaria', 'Preparados'];
 const LOW_STOCK_DEFAULT = 5;
-const DAY_MS = 24 * 60 * 60 * 1000;
-const LOT_WARNING_DAYS = 30;
-const LOT_HEALTHY_DAYS = 180;
 const PEDIDO_REPOSICION_EJEMPLO = {
   codigo: 'PED-GENERAL-001',
   proveedor: 'Proveedor general',
@@ -19,80 +16,7 @@ const PEDIDO_REPOSICION_EJEMPLO = {
   ]
 };
 
-const productosBaseInventario = [
-  {
-    id: 1,
-    nombre: 'Gold Standard 100% Whey',
-    codigoBarras: '7790001000010',
-    categoria: 'Suplementos',
-    sucursal: 'SquatGym Central',
-    precio: 45,
-    stock: 18,
-    stockMinimo: 6,
-    descripcion: 'Proteina premium para recuperacion muscular.',
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAZe1qJ5tvQvqdz1O1tKulwx4oc3dW_d3hln0r67XL6k1ySLv3VWblO_2960LjqrKXFcm3VOVwhgIFdF-hv8CFnubrL6tzTnpmvF3CoFelFLm4OkPyDEheIcECeqW5DqEddHBocLbJ6269w9Tg945mI2bz-ysyZtRkNlxRmjKmx85BkF2o-S-0usyG9qN-2yBxcatAlqzB-z3Td4cdAncXNmlqfKNerhnG9sPsYf2DE-kuKSHU3ZwZ9ktcwD2HFEhybnJhX7lr5fw'
-  },
-  {
-    id: 2,
-    nombre: 'Platinum Creatine 400g',
-    codigoBarras: '7790001000027',
-    categoria: 'Suplementos',
-    sucursal: 'Sucursal Sur',
-    precio: 22.5,
-    stock: 7,
-    stockMinimo: 8,
-    descripcion: 'Creatina monohidratada para rendimiento.',
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBnmb2_pU2BGAsOrSukg8jBXG2tjLO8bAnDrHWtMH0dL6uAq0yVenf6Uq8X5nhN9wDsu13HzBgqnudTndy7g8ZyASZiTNTQNAgb0pZG7rfk3VchyNJUlO6HJG70UArlfY8UHOqQrtaZLCFKg1DSk639aMEqMMZUGX6EalDxkyptIi0909zr_NUyORwP_2D2jnSOK11xKY_l4sAuT86r4apjWy7QLPoXjj2cXk7ReKA5MjbOo9Vd0tGtBpQe2fVEE_ro1UGnb-KxTw'
-  },
-  {
-    id: 3,
-    nombre: 'Original BCAA - Fresa Kiwi',
-    codigoBarras: '7790001000034',
-    categoria: 'Suplementos',
-    sucursal: 'SquatGym Central',
-    precio: 30,
-    stock: 0,
-    stockMinimo: 4,
-    descripcion: 'Aminoacidos para recuperacion.',
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBN6ljKm4E3r51_4gQAJU4mMU_1X05Nl903Zakxpuc4ya5qEDb03om371edVpAOBu6sTV3fyj9y9E48sT6GeB4W6wX45PE0b2KYEdFDNRpRHUSv6bPnLU_uqv8xnCWt5_floGKGoVAeCYg1dduoJGwExTsa-CT7wzHOQmzsgMdqRZY5ws_caxhnzyjU6DUtBjbBQkcx32Xoj8iPoRm3N9J1IBNYBzAhUq13xorIUWTqYLhXK3VpDmRD9TUMDqFMqvUJW1R1VZbXuA'
-  },
-  {
-    id: 4,
-    nombre: 'C4 Original Pre-Workout',
-    codigoBarras: '7790001000041',
-    categoria: 'Suplementos',
-    sucursal: 'Sucursal Sur',
-    precio: 28.99,
-    stock: 12,
-    stockMinimo: 6,
-    descripcion: 'Pre entrenamiento sabor frutal.',
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCr20_qcQM1WvJ-yV6pa0HahbQgE3iX4iGoKiiRTvvwud2twpOe1WFj6YrJGgNhh1zNVmm3ORyWc9R06XP2QqDZZkRptfxkkiMQrL6-fO21f71k7It8PDyQuEdJqk-ErEsVmuvikp-pH2mA3N1lvKNH-o6STWZjVLinlvTj4wcBtxSqSdsrmgboPnQnTG36ciWes5e7cA-11UjOf7rlhM9XQyMmsBFIE4VGSyGmEmEK6OCgkR0IX2Jr_NBpdyuUy3QWE-yHcvbaLg'
-  },
-  {
-    id: 5,
-    nombre: 'Shaker SquatGym Pro 700ml',
-    codigoBarras: '7790002000019',
-    categoria: 'Bebidas',
-    sucursal: 'SquatGym Central',
-    precio: 12.5,
-    stock: 36,
-    stockMinimo: 10,
-    descripcion: 'Shaker plastico con tapa hermetica.',
-    img: ''
-  },
-  {
-    id: 5,
-    nombre: 'Shaker SquatGym Pro 700ml',
-    codigoBarras: '7790002000019',
-    categoria: 'Bebidas',
-    sucursal: 'Sucursal Sur',
-    precio: 12.5,
-    stock: 14,
-    stockMinimo: 10,
-    descripcion: 'Shaker plastico con tapa hermetica.',
-    img: ''
-  }
-];
+const productosBaseInventario = [];
 
 let productosInventario = [];
 let listaPedidoProveedor = [];
@@ -130,54 +54,7 @@ function esCodigoBarrasNumerico(value) {
   return /^\d+$/.test(String(value || '').trim());
 }
 
-function normalizarFechaSolo(value) {
-  const fecha = String(value || '').trim();
 
-  if (!fecha) {
-    return '';
-  }
-
-  const parsed = new Date(`${fecha}T00:00:00`);
-
-  if (Number.isNaN(parsed.getTime())) {
-    return '';
-  }
-
-  return fecha.slice(0, 10);
-}
-
-function normalizarLotes(rawLotes = [], stock = 0, vencimientoFallback = '') {
-  const lotesFuente = Array.isArray(rawLotes) ? rawLotes : [];
-  const lotes = lotesFuente
-    .map((lote, index) => {
-      const cantidad = Math.max(Math.floor(Number(lote?.cantidad ?? lote?.stock ?? 0)), 0);
-      const fechaVencimiento = normalizarFechaSolo(lote?.fechaVencimiento ?? lote?.vencimiento ?? lote?.fecha);
-
-      if (!cantidad && !fechaVencimiento) {
-        return null;
-      }
-
-      return {
-        id: String(lote?.id || `lote-${Date.now()}-${index}`),
-        cantidad,
-        fechaVencimiento,
-        fechaIngreso: normalizarFechaSolo(lote?.fechaIngreso) || normalizarFechaSolo(new Date().toISOString())
-      };
-    })
-    .filter(Boolean);
-  const vencimiento = normalizarFechaSolo(vencimientoFallback);
-
-  if (!lotes.length && vencimiento) {
-    return [{
-      id: `lote-${Date.now()}`,
-      cantidad: Math.max(Math.floor(Number(stock) || 0), 0),
-      fechaVencimiento: vencimiento,
-      fechaIngreso: normalizarFechaSolo(new Date().toISOString())
-    }];
-  }
-
-  return lotes;
-}
 
 function normalizarReposicionActiva(value) {
   if (value === false || value === 'false' || value === 0 || value === '0') {
@@ -187,132 +64,7 @@ function normalizarReposicionActiva(value) {
   return true;
 }
 
-function obtenerLotesConVencimiento(producto) {
-  return (Array.isArray(producto?.lotes) ? producto.lotes : [])
-    .map((lote) => ({
-      ...lote,
-      fechaVencimiento: normalizarFechaSolo(lote.fechaVencimiento)
-    }))
-    .filter((lote) => lote.fechaVencimiento && Number(lote.cantidad || 0) > 0)
-    .sort((a, b) => new Date(`${a.fechaVencimiento}T00:00:00`) - new Date(`${b.fechaVencimiento}T00:00:00`));
-}
 
-function obtenerFechaProximoVencimiento(producto) {
-  return obtenerLotesConVencimiento(producto)[0]?.fechaVencimiento || '';
-}
-
-function obtenerDiasHastaFecha(fecha) {
-  if (!fecha) {
-    return null;
-  }
-
-  const hoy = new Date();
-  const base = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate());
-  const objetivo = new Date(`${fecha}T00:00:00`);
-
-  if (Number.isNaN(objetivo.getTime())) {
-    return null;
-  }
-
-  return Math.ceil((objetivo - base) / DAY_MS);
-}
-
-function obtenerEstadoLote(producto) {
-  const proximoVencimiento = obtenerFechaProximoVencimiento(producto);
-  const dias = obtenerDiasHastaFecha(proximoVencimiento);
-
-  if (dias === null) {
-    return {
-      estado: 'sin-vencimiento',
-      texto: 'Sin vencimiento',
-      detalle: 'No hay lotes con fecha cargada.',
-      clase: 'inventory-lot inventory-lot-none',
-      bloqueaVenta: false
-    };
-  }
-
-  if (dias < 0) {
-    return {
-      estado: 'vencido',
-      texto: 'Vencido',
-      detalle: `Vencio el ${proximoVencimiento}`,
-      clase: 'inventory-lot inventory-lot-expired',
-      bloqueaVenta: true
-    };
-  }
-
-  if (dias <= LOT_WARNING_DAYS) {
-    return {
-      estado: 'por-vencer',
-      texto: `Vence en ${dias} dias`,
-      detalle: `Proximo vencimiento: ${proximoVencimiento}`,
-      clase: 'inventory-lot inventory-lot-warning',
-      bloqueaVenta: false
-    };
-  }
-
-  if (dias >= LOT_HEALTHY_DAYS) {
-    return {
-      estado: 'saludable',
-      texto: '+6 meses',
-      detalle: `Proximo vencimiento: ${proximoVencimiento}`,
-      clase: 'inventory-lot inventory-lot-ok',
-      bloqueaVenta: false
-    };
-  }
-
-  return {
-    estado: 'vigente',
-    texto: proximoVencimiento,
-    detalle: `Proximo vencimiento: ${proximoVencimiento}`,
-    clase: 'inventory-lot inventory-lot-valid',
-    bloqueaVenta: false
-  };
-}
-
-function productoBloqueadoPorVencimiento(producto) {
-  const lotes = obtenerLotesConVencimiento(producto);
-  const lotesConCantidad = (Array.isArray(producto?.lotes) ? producto.lotes : [])
-    .filter((lote) => Number(lote.cantidad || 0) > 0);
-
-  if (!lotes.length || Number(producto.stock || 0) <= 0) {
-    return false;
-  }
-
-  if (lotes.length !== lotesConCantidad.length) {
-    return false;
-  }
-
-  return lotes.every((lote) => {
-    const dias = obtenerDiasHastaFecha(lote.fechaVencimiento);
-
-    return dias !== null && dias < 0;
-  });
-}
-
-function construirTooltipLotes(producto) {
-  const lotes = Array.isArray(producto.lotes) ? producto.lotes : [];
-
-  if (!lotes.length) {
-    return 'Sin lotes cargados';
-  }
-
-  return lotes
-    .map((lote, index) => {
-      const fecha = normalizarFechaSolo(lote.fechaVencimiento);
-      const dias = obtenerDiasHastaFecha(fecha);
-      const estado = !fecha
-        ? 'sin vencimiento'
-        : dias < 0
-          ? 'vencido'
-          : dias === 0
-            ? 'vence hoy'
-            : `vence en ${dias} dias`;
-
-      return `Lote ${index + 1}: ${Number(lote.cantidad || 0)} unidades (${estado})`;
-    })
-    .join(' | ');
-}
 
 function obtenerClaveProducto(producto) {
   return `${Number(producto.id)}__${producto.sucursal}`;
@@ -354,11 +106,6 @@ function normalizarProducto(producto) {
   const sucursal = SUCURSALES.includes(sucursalGuardada) ? sucursalGuardada : SUCURSALES[0];
   const nombre = String(producto.nombre || '').trim();
   const codigoBarras = String(producto.codigoBarras ?? producto.barcode ?? producto.sku ?? '').trim();
-  const lotes = normalizarLotes(
-    producto.lotes,
-    stockEntero,
-    producto.proximoVencimiento ?? producto.vencimiento ?? producto.fechaVencimiento
-  );
 
   if (!nombre || !codigoBarras || !Number.isFinite(precio) || precio <= 0 || !Number.isFinite(stock) || stock < 0) {
     return null;
@@ -377,7 +124,6 @@ function normalizarProducto(producto) {
     descripcion: String(producto.descripcion || '').trim(),
     img: String(producto.img || '').trim(),
     imgNombre: String(producto.imgNombre || '').trim(),
-    lotes,
     reposicionActiva: normalizarReposicionActiva(producto.reposicionActiva)
   };
 }
@@ -403,8 +149,6 @@ function cargarProductosDesdeKiosco() {
         descripcion: producto.descripcion,
         img: producto.img,
         imgNombre: producto.imgNombre,
-        lotes: producto.lotes,
-        proximoVencimiento: producto.proximoVencimiento,
         reposicionActiva: producto.reposicionActiva
       }))
       .filter(Boolean);
@@ -471,10 +215,7 @@ function guardarProductos(mostrarError = false) {
 
 function sincronizarKiosco() {
   const productosKiosco = productosInventario
-    .map((producto) => {
-      const estadoLote = obtenerEstadoLote(producto);
-
-      return {
+    .map((producto) => ({
         id: producto.id,
         nombre: producto.nombre,
         marca: producto.categoria,
@@ -490,13 +231,8 @@ function sincronizarKiosco() {
         stock: producto.stock,
         stockMinimo: producto.stockMinimo,
         descripcion: producto.descripcion,
-        lotes: producto.lotes,
-        proximoVencimiento: obtenerFechaProximoVencimiento(producto),
-        estadoLote: estadoLote.estado,
-        reposicionActiva: producto.reposicionActiva,
-        ventaBloqueada: productoBloqueadoPorVencimiento(producto)
-      };
-    });
+        reposicionActiva: producto.reposicionActiva
+    }));
   const clavesEnKiosco = new Set(productosKiosco.map((producto) => obtenerClaveProducto(producto)));
   const clavesBaseOcultas = productosBaseInventario
     .filter((producto) => !clavesEnKiosco.has(obtenerClaveProducto(producto)))
@@ -585,6 +321,15 @@ function renderizarOpciones() {
       .join('');
   }
 
+  // Si tiene sucursal fija, desactivar selector de sucursal
+  if (tieneSucursalFija()) {
+    if (branchTabs) branchTabs.classList.add('hidden');
+    if (branchContextSelect) branchContextSelect.classList.add('hidden');
+  } else {
+    if (branchTabs) branchTabs.classList.remove('hidden');
+    if (branchContextSelect) branchContextSelect.classList.remove('hidden');
+  }
+
   if (categoryFilter) {
     categoryFilter.innerHTML = '<option value="todas">Todas las categorias</option>'
       + CATEGORIAS.map((categoria) => `<option value="${escapeHtml(categoria)}">${escapeHtml(categoria)}</option>`).join('');
@@ -617,9 +362,13 @@ function renderizarSelectorSucursalContexto() {
   const branchContextSelect = document.getElementById('branch-context-select');
 
   if (titulo) {
-    titulo.textContent = estadoInventario.sucursal === 'todas'
-      ? 'Todas las sucursales'
-      : estadoInventario.sucursal;
+    if (tieneSucursalFija()) {
+      titulo.textContent = obtenerSucursalUsuario();
+    } else {
+      titulo.textContent = estadoInventario.sucursal === 'todas'
+        ? 'Todas las sucursales'
+        : estadoInventario.sucursal;
+    }
   }
 
   if (branchContextSelect) {
@@ -658,13 +407,14 @@ function cambiarSucursalInventario(sucursal) {
 }
 
 function formatFechaEmision(value = new Date()) {
+  const dateObj = value instanceof Date ? value : new Date(value);
   return new Intl.DateTimeFormat('es-AR', {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',
     hour: '2-digit',
     minute: '2-digit'
-  }).format(value);
+  }).format(dateObj);
 }
 
 function obtenerFechaUltimaReposicion() {
@@ -789,16 +539,27 @@ function renderizarFilaInforme(producto) {
   const clave = obtenerClaveProducto(producto);
   const claveJson = escapeHtml(JSON.stringify(clave));
   const estadoVisual = obtenerEstadoInventarioVisual(producto);
-  const estadoLote = obtenerEstadoLote(producto);
   const resumenMultisucursal = obtenerResumenMultisucursal(producto);
   const estaDestacado = estadoInventario.filaDestacada === clave;
   const esStockBajo = obtenerEstadoStock(producto) !== 'ok';
-  const botonReordenar = `
+  const botonReordenar = esEncargadoOSuperior() ? `
     <button type="button" onclick='agregarAListaPedido(${claveJson})' class="inventory-action-button inventory-action-reorder" aria-label="Agregar ${escapeHtml(producto.nombre)} a pedido al proveedor" title="Agregar a pedido">
       <span class="material-symbols-outlined text-base">shopping_cart</span>
     </button>
-  `;
-  const stockCell = `<span title="${escapeHtml(construirTooltipLotes(producto))}">${escapeHtml(producto.stock)}</span>`;
+  ` : '';
+
+  const accionesHtml = esEncargadoOSuperior() ? `
+    <span class="inventory-row-actions">
+      ${botonReordenar}
+      <button type="button" onclick='abrirModalProducto(${claveJson})' class="inventory-action-button inventory-action-edit" aria-label="Editar ${escapeHtml(producto.nombre)}">
+        <span class="material-symbols-outlined text-base">edit</span>
+      </button>
+      <button type="button" onclick='eliminarProducto(${claveJson})' class="inventory-action-button inventory-action-delete" aria-label="Eliminar ${escapeHtml(producto.nombre)}">
+        <span class="material-symbols-outlined text-base">delete</span>
+      </button>
+    </span>
+  ` : '';
+
 
   return `
     <tr class="inventory-report-row ${esStockBajo ? 'inventory-report-row-low' : ''} ${estaDestacado ? 'inventory-report-row-highlight' : ''}" data-product-row="${escapeHtml(clave)}">
@@ -809,24 +570,13 @@ function renderizarFilaInforme(producto) {
         ${resumenMultisucursal ? `<div class="text-[11px] font-black text-primary">Stock sedes: ${escapeHtml(resumenMultisucursal)}</div>` : ''}
         <div class="text-[11px] font-semibold text-secondary">${escapeHtml(producto.descripcion || 'Sin descripcion')}</div>
       </td>
-      <td class="text-right font-black">${stockCell}</td>
+      <td class="text-right font-black">${escapeHtml(producto.stock)}</td>
       <td class="text-right font-bold">${escapeHtml(producto.stockMinimo)}</td>
-      <td title="${escapeHtml(estadoLote.detalle)}">
-        <span class="${estadoLote.clase}">${escapeHtml(estadoLote.texto)}</span>
-      </td>
       <td>
         <span class="${estadoVisual.clase}">${estadoVisual.texto}</span>
       </td>
       <td>
-        <span class="inventory-row-actions">
-          ${botonReordenar}
-          <button type="button" onclick='abrirModalProducto(${claveJson})' class="inventory-action-button inventory-action-edit" aria-label="Editar ${escapeHtml(producto.nombre)}">
-            <span class="material-symbols-outlined text-base">edit</span>
-          </button>
-          <button type="button" onclick='eliminarProducto(${claveJson})' class="inventory-action-button inventory-action-delete" aria-label="Eliminar ${escapeHtml(producto.nombre)}">
-            <span class="material-symbols-outlined text-base">delete</span>
-          </button>
-        </span>
+        ${accionesHtml}
       </td>
     </tr>
   `;
@@ -850,7 +600,6 @@ function renderizarBloqueSucursal({ sucursal, productos }) {
               <th>Producto</th>
               <th class="text-right">Stock</th>
               <th class="text-right">Stock Minimo</th>
-              <th>Prox. vencimiento</th>
               <th>Estado</th>
               <th>Acciones</th>
             </tr>
@@ -1011,7 +760,6 @@ function abrirModalProducto(clave = null) {
     asignarValor('product-price', producto.precio);
     asignarValor('product-stock', producto.stock);
     asignarValor('product-min-stock', producto.stockMinimo);
-    asignarValor('product-expiration', obtenerFechaProximoVencimiento(producto));
     asignarValor('product-description', producto.descripcion);
     setImagePreview(producto.img, producto.imgNombre);
   } else {
@@ -1021,7 +769,6 @@ function abrirModalProducto(clave = null) {
     asignarValor('product-branch', SUCURSALES[0]);
     asignarValor('product-category', CATEGORIAS[0]);
     asignarValor('product-min-stock', LOW_STOCK_DEFAULT);
-    asignarValor('product-expiration', '');
     setImagePreview('', '');
   }
 
@@ -1139,8 +886,7 @@ function guardarProductoDesdeFormulario(event) {
     stockMinimo: obtenerValorFormulario('product-min-stock'),
     descripcion: obtenerValorFormulario('product-description'),
     img: obtenerValorFormulario('product-image'),
-    imgNombre: obtenerValorFormulario('product-image-name'),
-    lotes: construirLotesFormulario(productoEditado, stockFormulario, obtenerValorFormulario('product-expiration'))
+    imgNombre: obtenerValorFormulario('product-image-name')
   });
 
   if (!producto) {
@@ -1628,11 +1374,7 @@ function renderizarListaReposicionModal() {
           </div>
           <label class="flex flex-col gap-1 text-xs font-black uppercase tracking-wider text-secondary">
             Cantidad llegada
-            <input data-restock-qty="${escapeHtml(clave)}" class="inventory-restock-input" type="number" min="0" step="1" value="${escapeHtml(reposicion.cantidad || '')}" placeholder="+0" oninput='actualizarReposicion(${claveJson}, this.value, null)' onkeydown="if (event.key === 'Enter') enfocarSiguienteReposicion('${escapeHtml(clave)}')">
-          </label>
-          <label class="flex flex-col gap-1 text-xs font-black uppercase tracking-wider text-secondary">
-            Vencimiento
-            <input data-restock-expiration="${escapeHtml(clave)}" class="inventory-restock-date" type="date" value="${escapeHtml(reposicion.vencimiento || '')}" oninput='actualizarReposicion(${claveJson}, null, this.value)'>
+            <input data-restock-qty="${escapeHtml(clave)}" class="inventory-restock-input" type="number" min="0" step="1" value="${escapeHtml(reposicion.cantidad || '')}" placeholder="+0" oninput='actualizarReposicion(${claveJson}, this.value)' onkeydown="if (event.key === 'Enter') enfocarSiguienteReposicion('${escapeHtml(clave)}')">
           </label>
         </article>
       `;
@@ -1820,19 +1562,16 @@ function alternarModoControlStock(force = null) {
   }
 }
 
-function actualizarReposicion(clave, cantidad, vencimiento) {
-  const actual = reposicionPendiente[clave] || {};
-  const nuevaCantidad = cantidad === null ? actual.cantidad : Math.max(Math.floor(Number(cantidad) || 0), 0);
-  const nuevoVencimiento = vencimiento === null ? actual.vencimiento : normalizarFechaSolo(vencimiento);
+function actualizarReposicion(clave, cantidad) {
+  const nuevaCantidad = Math.max(Math.floor(Number(cantidad) || 0), 0);
 
-  if (!nuevaCantidad && !nuevoVencimiento) {
+  if (!nuevaCantidad) {
     delete reposicionPendiente[clave];
     return;
   }
 
   reposicionPendiente[clave] = {
-    cantidad: nuevaCantidad || '',
-    vencimiento: nuevoVencimiento || ''
+    cantidad: nuevaCantidad
   };
 }
 
@@ -1984,7 +1723,7 @@ function guardarControlStock() {
     return;
   }
 
-  const productosPrevios = productosInventario.map((producto) => ({ ...producto, lotes: [...(producto.lotes || [])] }));
+  const productosPrevios = productosInventario.map((producto) => ({ ...producto }));
   let ajustes = 0;
 
   entradas.forEach((entrada) => {
@@ -2022,8 +1761,7 @@ function guardarReposicion() {
   const entradas = Object.entries(reposicionPendiente)
     .map(([clave, data]) => ({
       clave,
-      cantidad: Math.max(Math.floor(Number(data.cantidad) || 0), 0),
-      vencimiento: normalizarFechaSolo(data.vencimiento)
+      cantidad: Math.max(Math.floor(Number(data.cantidad) || 0), 0)
     }))
     .filter((entrada) => entrada.cantidad > 0);
 
@@ -2032,7 +1770,7 @@ function guardarReposicion() {
     return;
   }
 
-  const productosPrevios = productosInventario.map((producto) => ({ ...producto, lotes: [...(producto.lotes || [])] }));
+  const productosPrevios = productosInventario.map((producto) => ({ ...producto }));
 
   entradas.forEach((entrada) => {
     const producto = buscarProductoPorClave(entrada.clave);
@@ -2042,18 +1780,6 @@ function guardarReposicion() {
     }
 
     producto.stock += entrada.cantidad;
-
-    if (entrada.vencimiento) {
-      producto.lotes = [
-        ...(producto.lotes || []),
-        {
-          id: `lote-${Date.now()}-${entrada.clave}`,
-          cantidad: entrada.cantidad,
-          fechaVencimiento: entrada.vencimiento,
-          fechaIngreso: normalizarFechaSolo(new Date().toISOString())
-        }
-      ];
-    }
   });
 
   if (!guardarProductos(true)) {
@@ -2082,22 +1808,7 @@ function filtrarCodigoBarrasNumerico(event) {
   }
 }
 
-function construirLotesFormulario(productoEditado, stock, vencimiento) {
-  const fechaVencimiento = normalizarFechaSolo(vencimiento);
 
-  if (!fechaVencimiento) {
-    return [];
-  }
-
-  const loteExistente = Array.isArray(productoEditado?.lotes) ? productoEditado.lotes[0] : null;
-
-  return [{
-    id: String(loteExistente?.id || `lote-${Date.now()}`),
-    cantidad: Math.max(Math.floor(Number(stock) || 0), 0),
-    fechaVencimiento,
-    fechaIngreso: normalizarFechaSolo(loteExistente?.fechaIngreso) || normalizarFechaSolo(new Date().toISOString())
-  }];
-}
 
 function imprimirInformeInventario() {
   document.body.classList.add('inventory-print-mode');
@@ -2105,11 +1816,24 @@ function imprimirInformeInventario() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  requerirAutenticacion();
+  
+  // Configurar sucursal fija si existe
+  const sucursalFija = obtenerSucursalUsuario();
+  if (sucursalFija) {
+    estadoInventario.sucursal = sucursalFija;
+    // Si la secretaria no puede ver todas, debe ver solo su sucursal.
+  }
+
   renderizarOpciones();
   productosInventario = cargarProductos();
   listaPedidoProveedor = cargarListaPedidoProveedor();
   guardarProductos();
   renderizarInventario();
+  
+  aplicarPermisosInventario();
+  inicializarSidebarInventario();
+  inicializarModalPedidos();
 
   document.getElementById('open-product-modal')?.addEventListener('click', () => abrirModalProducto());
   document.getElementById('toggle-restock-mode')?.addEventListener('click', () => alternarModoReposicion());
@@ -2262,3 +1986,352 @@ window.enfocarSiguienteControlStock = enfocarSiguienteControlStock;
 window.alternarExpansionOperacion = alternarExpansionOperacion;
 window.actualizarCantidadPedidoProveedor = actualizarCantidadPedidoProveedor;
 window.eliminarItemPedidoProveedor = eliminarItemPedidoProveedor;
+
+// --- Funciones Nuevas: Roles, Navegación y Pedidos ---
+
+function aplicarPermisosInventario() {
+  actualizarHeaderUsuario();
+
+  // Ajustar UI según rol
+  const encargado = esEncargadoOSuperior();
+  aplicarPermisoVisibilidad('open-product-modal', encargado);
+  aplicarPermisoVisibilidad('toggle-stock-control-mode', encargado);
+  aplicarPermisoVisibilidad('toggle-restock-mode', encargado);
+  
+  // Ocultar sección de agregar pedido si es secretaria (solo pre-pedidos de Kiosco/Inventario)
+  // Nota: La secretaria puede armar un pedido pero solo el encargado lo "Confirma"
+  const confirmSupplierOrder = document.getElementById('confirm-supplier-order');
+  if (confirmSupplierOrder && !encargado) {
+    confirmSupplierOrder.textContent = 'Enviar a Encargado';
+  }
+
+  // Nombre de la sucursal en el sidebar
+  const sidebarBranch = document.getElementById('sidebar-branch-name');
+  if (sidebarBranch) {
+    sidebarBranch.textContent = tieneSucursalFija() ? obtenerSucursalUsuario() : 'Todas las sucursales';
+  }
+}
+
+function inicializarSidebarInventario() {
+  const sidebar = document.getElementById('inventory-sidebar');
+  const mainContent = document.getElementById('inventory-page-main');
+  const links = document.querySelectorAll('.inv-sidebar-link');
+  
+  if (!sidebar || !mainContent) return;
+
+  mainContent.classList.add('inv-has-sidebar');
+
+  links.forEach(link => {
+    link.addEventListener('click', (e) => {
+      // Remover activo de todos
+      links.forEach(l => l.classList.remove('inv-sidebar-link-active'));
+      // Agregar al actual
+      e.currentTarget.classList.add('inv-sidebar-link-active');
+
+      const target = e.currentTarget.dataset.sidebarTarget;
+      
+      if (target === 'informe') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (target === 'pedidos') {
+        document.getElementById('pedidos-modal')?.classList.remove('hidden');
+      } else if (target === 'reposicion') {
+        alternarModoReposicion();
+      }
+    });
+  });
+}
+
+function inicializarModalPedidos() {
+  const openPedidos = document.getElementById('open-pedidos-modal');
+  const closePedidos = document.getElementById('close-pedidos-modal');
+  const closePedidosFooter = document.getElementById('close-pedidos-modal-footer');
+  const modal = document.getElementById('pedidos-modal');
+
+  const printPedidos = document.getElementById('print-pedidos-report');
+
+  const openAction = () => {
+    modal?.classList.remove('hidden');
+    renderizarListaPedidosPendientes();
+  };
+  
+  const closeAction = () => {
+    modal?.classList.add('hidden');
+    // Restaurar sidebar activo a informe
+    document.querySelectorAll('.inv-sidebar-link').forEach(l => {
+      l.classList.remove('inv-sidebar-link-active');
+      if(l.dataset.sidebarTarget === 'informe') l.classList.add('inv-sidebar-link-active');
+    });
+  };
+
+  openPedidos?.addEventListener('click', openAction);
+  closePedidos?.addEventListener('click', closeAction);
+  closePedidosFooter?.addEventListener('click', closeAction);
+  printPedidos?.addEventListener('click', imprimirPedidoReposicion);
+  modal?.addEventListener('click', (e) => {
+    if (e.target === modal) closeAction();
+  });
+}
+
+function renderizarListaPedidosPendientes() {
+  const container = document.getElementById('pedidos-list');
+  const count = document.getElementById('pedidos-count');
+  
+  // Por ahora la "Lista de pedido al proveedor" se usa como el pedido actual.
+  // Vamos a mostrar si hay ítems en listaPedidoProveedor.
+  if (!listaPedidoProveedor || listaPedidoProveedor.length === 0) {
+    if (container) {
+      container.innerHTML = `
+        <div class="flex flex-col items-center justify-center gap-3 py-10 text-center text-secondary">
+          <span class="material-symbols-outlined text-4xl">inbox</span>
+          <p class="font-semibold text-on-surface">Sin pedidos pendientes</p>
+          <p class="text-sm">No hay ítems agregados a la orden.</p>
+        </div>
+      `;
+    }
+    if (count) count.textContent = '0 pedidos';
+    document.getElementById('sidebar-pedidos-badge')?.classList.add('hidden');
+    return;
+  }
+
+  // Renderizar la lista
+  const encargado = esEncargadoOSuperior();
+  const html = listaPedidoProveedor.map(item => `
+    <div class="flex items-center justify-between rounded-lg border border-outline-variant/30 bg-surface-container-lowest p-4 mb-2">
+      <div>
+        <h4 class="font-bold text-on-surface">${escapeHtml(item.nombre)}</h4>
+        <p class="text-xs text-on-surface-variant">Cant: <span class="font-bold text-primary">${item.cantidad}</span></p>
+      </div>
+      ${encargado ? `
+        <button type="button" class="text-error hover:bg-error-container p-2 rounded-lg" onclick="eliminarItemPedidoProveedor('${escapeHtml(item.clave)}')">
+          <span class="material-symbols-outlined text-sm">delete</span>
+        </button>
+      ` : ''}
+    </div>
+  `).join('');
+
+  if (container) {
+    container.innerHTML = `
+      <div class="mb-4 flex items-center justify-between">
+        <h3 class="font-bold">Borrador actual</h3>
+        ${encargado ? `<button class="text-xs bg-primary text-white px-3 py-1 rounded" onclick="document.getElementById('confirm-supplier-order').click(); document.getElementById('close-pedidos-modal').click();">Confirmar Orden</button>` : ''}
+      </div>
+      ${html}
+    `;
+  }
+  
+  if (count) count.textContent = `${listaPedidoProveedor.length} ítems en borrador`;
+  
+  const badge = document.getElementById('sidebar-pedidos-badge');
+  if (badge) {
+    badge.textContent = listaPedidoProveedor.length;
+    badge.classList.remove('hidden');
+  }
+}
+
+// Interceptar funciones originales para actualizar la vista de pedidos
+const oldAgregar = agregarProductoSeleccionadoAListaPedido;
+window.agregarProductoSeleccionadoAListaPedido = function(e) {
+  oldAgregar(e);
+  renderizarListaPedidosPendientes();
+};
+
+const oldAgregarRow = agregarAListaPedido;
+window.agregarAListaPedido = function(clave) {
+  oldAgregarRow(clave);
+  renderizarListaPedidosPendientes();
+};
+
+const oldEliminar = eliminarItemPedidoProveedor;
+window.eliminarItemPedidoProveedor = function(clave) {
+  oldEliminar(clave);
+  renderizarListaPedidosPendientes();
+};
+
+const oldLimpiar = limpiarListaPedidoProveedor;
+window.limpiarListaPedidoProveedor = function() {
+  oldLimpiar();
+  renderizarListaPedidosPendientes();
+};
+
+function imprimirInformeInventario() {
+  let printArea = document.getElementById('inventory-print-area');
+  if (!printArea) {
+    printArea = document.createElement('div');
+    printArea.id = 'inventory-print-area';
+    printArea.className = 'inventory-print-area receipt-invoice';
+    document.body.appendChild(printArea);
+  }
+
+  const productos = obtenerProductosFiltrados();
+  const valorTotal = productos.reduce((acc, p) => acc + (p.precio * p.stock), 0);
+  const fecha = formatFechaEmision(new Date());
+  const sucursalTexto = tieneSucursalFija() ? obtenerSucursalUsuario() : 
+    (estadoInventario.sucursal === 'todas' ? 'GIMNASIO CENTRAL' : estadoInventario.sucursal.toUpperCase());
+
+  const filtrosAplicados = [];
+  if (estadoInventario.categoria !== 'todas') filtrosAplicados.push(`Cat: ${estadoInventario.categoria}`);
+  if (estadoInventario.estado !== 'todos') filtrosAplicados.push(`Estado: ${estadoInventario.estado}`);
+  if (estadoInventario.busqueda) filtrosAplicados.push(`Búsqueda: "${estadoInventario.busqueda}"`);
+  const filtroTexto = filtrosAplicados.length > 0 ? filtrosAplicados.join(' | ') : 'Todos los artículos';
+
+  const porCategoria = {};
+  productos.forEach(p => {
+    if(!porCategoria[p.categoria]) porCategoria[p.categoria] = [];
+    porCategoria[p.categoria].push(p);
+  });
+
+  let htmlRows = '';
+  Object.keys(porCategoria).forEach(cat => {
+    htmlRows += `<tr><td colspan="7" style="background:#f2f2f2; font-weight:bold; color:#111;">CATEGORÍA: ${escapeHtml(cat.toUpperCase())}</td></tr>`;
+    porCategoria[cat].forEach(p => {
+      const valorizacion = p.precio * p.stock;
+      htmlRows += `
+        <tr>
+          <td>${escapeHtml(p.codigoBarras)}</td>
+          <td>${escapeHtml(p.nombre)}</td>
+          <td class="receipt-invoice-center">${p.stock}</td>
+          <td class="receipt-invoice-center">${p.stockMinimo}</td>
+          <td class="receipt-invoice-money">${formatCurrency(p.precio)}</td>
+          <td class="receipt-invoice-money">${formatCurrency(p.precio * 1.2)}</td>
+          <td class="receipt-invoice-money">${formatCurrency(valorizacion)}</td>
+        </tr>
+      `;
+    });
+  });
+
+  printArea.innerHTML = `
+    <div class="receipt-invoice-header">
+       <h1>Squat<span style="color:#27ae60">Gym</span></h1>
+    </div>
+    <div class="receipt-invoice-meta">
+       <h2>${sucursalTexto} - REPORTE DE INVENTARIO ACTUAL</h2>
+       <p>Fecha de Emisión: ${fecha} | Generado por: ${escapeHtml(obtenerNombreUsuario() || 'Admin')} | Filtro: ${escapeHtml(filtroTexto)}</p>
+    </div>
+    <div class="receipt-invoice-divider"></div>
+    <table class="receipt-invoice-table print-table">
+      <thead>
+        <tr>
+          <th>CÓDIGO</th>
+          <th>DESCRIPCIÓN</th>
+          <th class="receipt-invoice-center">STOCK ACTUAL</th>
+          <th class="receipt-invoice-center">STOCK MÍNIMO</th>
+          <th class="receipt-invoice-money">COST UNIT.</th>
+          <th class="receipt-invoice-money">PRECIO VENTA</th>
+          <th class="receipt-invoice-money">VALORIZACIÓN (COSTO)</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${htmlRows}
+      </tbody>
+    </table>
+    <div class="receipt-invoice-totals" style="max-width: 400px;">
+      <div>
+        <span>Total de Artículos en Stock:</span>
+        <strong>${productos.reduce((acc, p) => acc + p.stock, 0)} unidades</strong>
+      </div>
+      <div class="receipt-invoice-total-final">
+        <span>Valorización Total del Inventario (Costo):</span>
+        <strong>${formatCurrency(valorTotal)}</strong>
+      </div>
+    </div>
+  `;
+
+  document.body.classList.add('inventory-print-mode');
+  
+  window.setTimeout(() => {
+    window.print();
+  }, 100);
+
+  if (!window._inventoryPrintHandler) {
+    window._inventoryPrintHandler = () => {
+      document.body.classList.remove('inventory-print-mode');
+    };
+    window.addEventListener('afterprint', window._inventoryPrintHandler);
+  }
+}
+
+function imprimirPedidoReposicion() {
+  if (!listaPedidoProveedor || listaPedidoProveedor.length === 0) return;
+  
+  let printArea = document.getElementById('inventory-print-area');
+  if (!printArea) {
+    printArea = document.createElement('div');
+    printArea.id = 'inventory-print-area';
+    printArea.className = 'inventory-print-area receipt-invoice';
+    document.body.appendChild(printArea);
+  }
+
+  const fecha = formatFechaEmision(new Date());
+  const sucursalTexto = tieneSucursalFija() ? obtenerSucursalUsuario() : 'GIMNASIO CENTRAL';
+
+  let htmlRows = '';
+  listaPedidoProveedor.forEach(item => {
+    const productoOriginal = buscarProductoPorClave(item.clave);
+    const minStock = productoOriginal ? productoOriginal.stockMinimo : 0;
+    const stock = productoOriginal ? productoOriginal.stock : 0;
+    
+    htmlRows += `
+      <tr>
+        <td>Proveedor general</td>
+        <td>${escapeHtml(item.codigoBarras)}</td>
+        <td>${escapeHtml(item.nombre)}</td>
+        <td class="receipt-invoice-center">${stock}</td>
+        <td class="receipt-invoice-center">${minStock}</td>
+        <td class="receipt-invoice-center" style="font-weight:bold;">${item.cantidad}</td>
+      </tr>
+    `;
+  });
+
+  printArea.innerHTML = `
+    <div class="receipt-invoice-header">
+       <h1>Squat<span style="color:#27ae60">Gym</span></h1>
+    </div>
+    <div class="receipt-invoice-meta">
+       <h2>${sucursalTexto} - PEDIDO DE REPOSICIÓN DE STOCK</h2>
+       <p>Fecha de Emisión: ${fecha} | Generado por: ${escapeHtml(obtenerNombreUsuario() || 'Admin')} | Filtro: Stock Actual &lt;= Stock Mínimo</p>
+    </div>
+    <div class="receipt-invoice-divider"></div>
+    <table class="receipt-invoice-table print-table">
+      <thead>
+        <tr>
+          <th>PROVEEDOR PRINCIPAL</th>
+          <th>CÓDIGO</th>
+          <th>DESCRIPCIÓN</th>
+          <th class="receipt-invoice-center">STOCK ACTUAL</th>
+          <th class="receipt-invoice-center">STOCK MÍNIMO</th>
+          <th class="receipt-invoice-center">CANTIDAD A PEDIR</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${htmlRows}
+      </tbody>
+    </table>
+    <div style="margin-top: 40px;">
+      <p style="font-weight:bold;">Observaciones para Compras:</p>
+      <div style="border-bottom: 1px dotted #cfcfcf; height: 30px; margin-bottom: 10px;"></div>
+      <div style="border-bottom: 1px dotted #cfcfcf; height: 30px; margin-bottom: 50px;"></div>
+      
+      <div style="width: 250px; text-align: center; margin-left: auto;">
+        <div style="border-top: 1px solid #111; padding-top: 10px; font-weight:bold;">
+          Firma del Encargado
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.body.classList.add('inventory-print-mode');
+  
+  window.setTimeout(() => {
+    window.print();
+  }, 100);
+
+  if (!window._inventoryPrintHandler) {
+    window._inventoryPrintHandler = () => {
+      document.body.classList.remove('inventory-print-mode');
+    };
+    window.addEventListener('afterprint', window._inventoryPrintHandler);
+  }
+}
+
+window.imprimirInformeInventario = imprimirInformeInventario;
+window.imprimirPedidoReposicion = imprimirPedidoReposicion;

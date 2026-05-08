@@ -1,4 +1,4 @@
-﻿const ASISTENCIAS_STORAGE_KEY = 'squatgym-attendance-records';
+const ASISTENCIAS_STORAGE_KEY = 'squatgym-attendance-records';
 const asistenciasDemo = [
   { id: 'as-1', socio: '30123456', plan: 'Clientes', estado: 'activa', fechaISO: new Date(Date.now() - 2 * 60 * 1000).toISOString() },
   { id: 'as-2', socio: '28987654', plan: 'Profesores', estado: 'vencido', fechaISO: new Date(Date.now() - 15 * 60 * 1000).toISOString() },
@@ -9,6 +9,8 @@ let asistencias = [];
 
 let attendanceFilter = 'todos';
 let attendanceSearch = '';
+let asistenciasPaginaActual = 1;
+const ASISTENCIAS_ITEMS_PER_PAGE = 5;
 
 function escapeHtml(value) {
   return String(value ?? '')
@@ -131,6 +133,8 @@ function renderTabla() {
   }
 
   const items = obtenerAsistenciasFiltradas();
+  const countLabel = document.getElementById('attendance-count');
+  const paginationDiv = document.getElementById('attendance-pagination');
 
   if (!items.length) {
     body.innerHTML = `
@@ -141,10 +145,16 @@ function renderTabla() {
         </td>
       </tr>
     `;
+    if (countLabel) countLabel.textContent = '0 asistencias';
+    if (paginationDiv) paginationDiv.innerHTML = '';
     return;
   }
 
-  body.innerHTML = items
+  const startIndex = (asistenciasPaginaActual - 1) * ASISTENCIAS_ITEMS_PER_PAGE;
+  const endIndex = startIndex + ASISTENCIAS_ITEMS_PER_PAGE;
+  const itemsPagina = items.slice(startIndex, endIndex);
+
+  body.innerHTML = itemsPagina
     .map((item) => `
       <tr class="hover:bg-surface-container-low transition-colors">
         <td class="px-5 py-4 text-sm font-bold text-on-surface">${escapeHtml(item.socio)}</td>
@@ -159,7 +169,34 @@ function renderTabla() {
       </tr>
     `)
     .join('');
+
+  if (countLabel) {
+     countLabel.textContent = \`Mostrando \${startIndex + 1}-\${Math.min(endIndex, items.length)} de \${items.length} asistencias\`;
+  }
+  
+  if (paginationDiv) {
+      if (items.length <= ASISTENCIAS_ITEMS_PER_PAGE) {
+          paginationDiv.innerHTML = '';
+      } else {
+          const totalPages = Math.ceil(items.length / ASISTENCIAS_ITEMS_PER_PAGE);
+          let html = \`<button onclick="cambiarPaginaAsistencias(\${asistenciasPaginaActual - 1})" class="flex h-8 w-8 items-center justify-center rounded-lg text-secondary hover:bg-surface-container active:scale-95 disabled:opacity-50" \${asistenciasPaginaActual === 1 ? 'disabled' : ''}><span class="material-symbols-outlined text-sm">chevron_left</span></button>\`;
+          for(let i=1; i<=totalPages; i++) {
+              if (i === asistenciasPaginaActual) {
+                 html += \`<button class="flex h-8 w-8 items-center justify-center rounded-lg bg-primary font-bold text-on-primary">\${i}</button>\`;
+              } else {
+                 html += \`<button onclick="cambiarPaginaAsistencias(\${i})" class="flex h-8 w-8 items-center justify-center rounded-lg font-bold text-on-surface hover:bg-surface-container">\${i}</button>\`;
+              }
+          }
+          html += \`<button onclick="cambiarPaginaAsistencias(\${asistenciasPaginaActual + 1})" class="flex h-8 w-8 items-center justify-center rounded-lg text-secondary hover:bg-surface-container active:scale-95 disabled:opacity-50" \${asistenciasPaginaActual === totalPages ? 'disabled' : ''}><span class="material-symbols-outlined text-sm">chevron_right</span></button>\`;
+          paginationDiv.innerHTML = html;
+      }
+  }
 }
+
+window.cambiarPaginaAsistencias = function(page) {
+  asistenciasPaginaActual = page;
+  renderTabla();
+};
 
 function renderTodo() {
   renderMetricas();
@@ -229,6 +266,7 @@ function guardarManual(event) {
   document.getElementById('attendance-plan-input').value = 'Clientes';
   document.getElementById('attendance-status-input').value = 'activa';
   guardarAsistencias();
+  asistenciasPaginaActual = 1;
   renderTodo();
   mostrarToast('Asistencia manual registrada.');
 }
@@ -239,11 +277,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.getElementById('attendance-search')?.addEventListener('input', (event) => {
     attendanceSearch = event.target.value;
+    asistenciasPaginaActual = 1;
     renderTabla();
   });
 
   document.getElementById('attendance-filter')?.addEventListener('change', (event) => {
     attendanceFilter = event.target.value;
+    asistenciasPaginaActual = 1;
     renderTabla();
   });
 

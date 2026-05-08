@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
   <head>
     <meta charset="utf-8"/>
@@ -85,13 +85,13 @@
               light_mode</span></button>
           <div class="relative ml-1 flex items-center border-l border-outline-variant pl-2 sm:ml-2 sm:pl-4">
             <button type="button" class="flex h-10 items-center gap-3 rounded-lg px-1 hover:bg-surface-container-low sm:px-2" id="profile-menu-button" aria-expanded="false" aria-controls="profile-dropdown">
-              <span class="hidden flex-col items-end sm:flex"><span class="text-xs font-bold text-on-surface">Admin Squat</span><span class="text-[10px] uppercase tracking-wider text-on-surface-variant">Administrador</span></span>
+              <span class="hidden flex-col items-end sm:flex"><span class="text-xs font-bold text-on-surface" data-auth-user-name>Admin Squat</span><span class="text-[10px] uppercase tracking-wider text-on-surface-variant" data-auth-user-role>Administrador</span></span>
               <span class="flex h-9 w-9 items-center justify-center rounded-lg border border-outline-variant bg-primary-container/15 text-primary shadow-sm">
                 <span class="material-symbols-outlined">
                   person</span></span></button>
             <div class="profile-dropdown-panel absolute right-0 top-full z-[100] mt-2 hidden w-56 max-w-[calc(100vw-2rem)] overflow-hidden rounded-lg border" id="profile-dropdown" role="menu">
               <div class="border-b border-outline-variant p-4">
-                <p class="text-sm font-bold text-on-surface">Admin Squat</p><p class="text-xs text-on-surface-variant">Administrador</p>
+                <p class="text-sm font-bold text-on-surface" data-auth-user-name>Admin Squat</p><p class="text-xs text-on-surface-variant" data-auth-user-role>Administrador</p>
               </div>
               <div class="p-2">
                 <button type="button" class="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-on-surface hover:bg-surface-container" role="menuitem">
@@ -184,11 +184,15 @@
                   </h1>
                 </div>
               </div>
-              <label class="flex min-w-0 flex-col gap-1 text-xs font-bold uppercase tracking-wider text-secondary sm:w-64">
+              <label id="branch-select-label" class="flex min-w-0 flex-col gap-1 text-xs font-bold uppercase tracking-wider text-secondary sm:w-64">
                 Cambiar sucursal
                 <select id="branch-select" class="rounded-lg border-none bg-surface-container-highest px-3 py-3 text-sm font-bold normal-case tracking-normal text-on-surface focus:ring-2 focus:ring-primary">
                 </select>
               </label>
+              <div id="branch-fixed-label" class="hidden flex min-w-0 flex-col gap-1 text-xs font-bold uppercase tracking-wider text-secondary sm:w-64">
+                Sucursal asignada
+                <span id="branch-fixed-name" class="text-sm font-bold normal-case tracking-normal text-on-surface"></span>
+              </div>
             </section>
             <!-- Search & Filter -->
             <div class="flex gap-4">
@@ -225,6 +229,12 @@
             <!-- Products Grid -->
             <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 min-[1900px]:grid-cols-4 gap-6">
             </div>
+            
+            <div id="kiosco-pagination-container" class="mt-2 flex flex-col gap-3 border-t border-outline-variant/15 pt-5 sm:flex-row sm:items-center sm:justify-between">
+              <p id="kiosco-count" class="text-sm font-semibold text-on-surface-variant">0 productos</p>
+              <div id="kiosco-pagination" class="flex flex-wrap items-center gap-1">
+              </div>
+            </div>
           </div>
           <!-- Right Column: Cart / Checkout -->
           <div class="flex w-full flex-col xl:h-fit xl:w-[25rem] xl:shrink-0 2xl:w-[30rem]" id="carrito">
@@ -260,7 +270,7 @@
                   </div>
                   <div id="discount-options" class="mt-4 grid grid-cols-2 gap-2" aria-label="Seleccionar descuento">
                   </div>
-                  <div class="mt-3 grid gap-2">
+                <div id="discount-edit-controls" class="mt-3 grid gap-2">
                     <label class="text-xs font-bold uppercase tracking-wider text-secondary">
                       Tipo de descuento
                       <input id="discount-name-input" class="mt-1 w-full rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-2 text-sm font-semibold normal-case tracking-normal text-on-surface focus:border-primary focus:ring-primary" type="text" value="Venta rápida" aria-label="Nombre del tipo de descuento">
@@ -802,6 +812,7 @@
     <!-- Shared scripts -->
     <script src="../../js/squatgym-header.js"></script>
     <script src="../../js/image-upload.js"></script>
+    <script src="../../js/auth.js"></script>
     <!-- Page scripts -->
     <script src="../../js/kiosco.js"></script>
   </body>

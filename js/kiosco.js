@@ -88,7 +88,7 @@ const productosBase = [
     codigoBarras: '7790002000019',
     precio: 12.50,
     descuento: 0,
-    img: '',
+    img: '../../img/shaker.png',
     icono: 'water_bottle',
     categoria: 'Bebidas',
     sucursal: 'SquatGym Central',
@@ -101,7 +101,7 @@ const productosBase = [
     codigoBarras: '7790002000019',
     precio: 12.50,
     descuento: 0,
-    img: '',
+    img: '../../img/shaker.png',
     icono: 'water_bottle',
     categoria: 'Bebidas',
     sucursal: 'Sucursal Sur',
@@ -129,6 +129,8 @@ let descuentoGlobal = 10;
 let sucursalActiva = SUCURSAL_DEFAULT;
 let categoriaActiva = 'Todos';
 let terminoBusqueda = '';
+let kioscoPaginaActual = 1;
+const KIOSCO_ITEMS_PER_PAGE = 8;
 let productoEnEdicionId = null;
 let turnoInicioISO = null;
 let ultimaVentaRegistrada = null;
@@ -431,14 +433,39 @@ function guardarSucursalActiva() {
 
 function renderizarSucursalActiva() {
   const branchSelect = document.getElementById('branch-select');
+  const branchSelectLabel = document.getElementById('branch-select-label');
+  const branchFixedLabel = document.getElementById('branch-fixed-label');
+  const branchFixedName = document.getElementById('branch-fixed-name');
 
   asignarTexto('active-branch-title', sucursalActiva);
 
-  if (branchSelect) {
-    branchSelect.innerHTML = SUCURSALES_KIOSCO
-      .map((sucursal) => `<option value="${escapeHtml(sucursal)}">${escapeHtml(sucursal)}</option>`)
-      .join('');
-    branchSelect.value = sucursalActiva;
+  if (tieneSucursalFija()) {
+    if (branchSelectLabel) {
+      branchSelectLabel.classList.add('hidden');
+    }
+
+    if (branchFixedLabel) {
+      branchFixedLabel.classList.remove('hidden');
+    }
+
+    if (branchFixedName) {
+      branchFixedName.textContent = sucursalActiva;
+    }
+  } else {
+    if (branchSelectLabel) {
+      branchSelectLabel.classList.remove('hidden');
+    }
+
+    if (branchFixedLabel) {
+      branchFixedLabel.classList.add('hidden');
+    }
+
+    if (branchSelect) {
+      branchSelect.innerHTML = SUCURSALES_KIOSCO
+        .map((sucursal) => `<option value="${escapeHtml(sucursal)}">${escapeHtml(sucursal)}</option>`)
+        .join('');
+      branchSelect.value = sucursalActiva;
+    }
   }
 }
 
@@ -472,6 +499,8 @@ function cambiarSucursalActiva(nuevaSucursal) {
   if (productSearch) {
     productSearch.value = '';
   }
+  
+  kioscoPaginaActual = 1;
 
   renderizarSucursalActiva();
   renderizarProductos();
@@ -1002,6 +1031,7 @@ function agregarProductoPersonalizado(event) {
   } else {
     categoriaActiva = 'Todos';
     terminoBusqueda = '';
+    kioscoPaginaActual = 1;
 
     const productSearch = document.getElementById('product-search');
 
@@ -1074,8 +1104,12 @@ function renderizarProductos() {
   }
 
   const productosFiltrados = obtenerProductosFiltrados();
+  
+  const startIndex = (kioscoPaginaActual - 1) * KIOSCO_ITEMS_PER_PAGE;
+  const endIndex = startIndex + KIOSCO_ITEMS_PER_PAGE;
+  const productosPagina = productosFiltrados.slice(startIndex, endIndex);
 
-  grid.innerHTML = productosFiltrados.length ? productosFiltrados.map((producto) => {
+  grid.innerHTML = productosPagina.length ? productosPagina.map((producto) => {
     const precioFinal = obtenerPrecioFinal(producto);
     const mediaProducto = renderizarImagenProducto(producto, 'w-full h-full');
     const nombreSeguro = escapeHtml(producto.nombre);
@@ -1092,7 +1126,7 @@ function renderizarProductos() {
     const claveProducto = obtenerClaveProducto(producto);
     const claveProductoJson = escapeHtml(JSON.stringify(claveProducto));
     const claveProductoHtml = escapeHtml(claveProducto);
-    const menuProducto = `
+    const menuProducto = esEncargadoOSuperior() ? `
         <div class="absolute right-3 top-3 z-30">
           <button type="button" onclick='toggleProductMenu(event, ${claveProductoJson})' class="flex h-9 w-9 items-center justify-center rounded-full bg-surface-container-lowest/90 text-secondary shadow-sm ring-1 ring-outline-variant/30 backdrop-blur hover:bg-surface-container hover:text-on-surface active:scale-95" aria-label="Opciones de ${nombreSeguro}" aria-haspopup="menu" aria-expanded="false" data-product-menu-button="${claveProductoHtml}">
             <span class="material-symbols-outlined text-xl">more_vert</span>
@@ -1107,8 +1141,7 @@ function renderizarProductos() {
               Eliminar
             </button>
           </div>
-        </div>`;
-
+        </div>` : '';
     return `
       <div class="bg-surface-container-lowest rounded-xl p-4 flex flex-col gap-4 relative group hover:bg-surface-container-low transition-colors border border-outline-variant/15">
         ${menuProducto}
@@ -1123,18 +1156,63 @@ function renderizarProductos() {
           <div class="flex justify-between items-end mt-2">
             <div class="flex flex-col">
               ${precioAnterior}
-              <span class="font-headline font-bold text-xl text-primary">${formatCurrency(precioFinal)}</span>
+              <span class="font-headline text-xl font-black text-on-surface leading-none">${formatCurrency(precioFinal)}</span>
             </div>
-            <button type="button" onclick='agregarAlCarrito(${claveProductoJson})' class="${botonColor} w-10 h-10 rounded-full flex items-center justify-center transition-colors active:scale-95" aria-label="Agregar ${nombreSeguro}">
-              <span class="material-symbols-outlined">add</span>
+            <button type="button" onclick='agregarAlCarrito(${claveProductoJson})' class="flex items-center justify-center gap-2 px-3 py-2 rounded-lg font-bold transition-all active:scale-95 ${botonColor}" aria-label="Agregar ${nombreSeguro}">
+              <span class="material-symbols-outlined text-[20px]" data-icon="add_shopping_cart">add_shopping_cart</span>
             </button>
           </div>
         </div>
-      </div>`;
-  }).join('') : `<div class="col-span-full rounded-xl border border-dashed border-outline-variant/40 bg-surface-container-lowest p-10 text-center text-secondary"><span class="material-symbols-outlined mb-2 text-3xl">search_off</span><p class="font-semibold text-on-surface">No hay productos para ${escapeHtml(sucursalActiva)}</p><p class="mt-1 text-sm">Probá con otra búsqueda, categoría o sucursal.</p></div>`;
+      </div>
+    `;
+  }).join('') : `
+    <div class="col-span-full flex flex-col items-center justify-center py-20 text-center text-secondary">
+      <span class="material-symbols-outlined text-5xl opacity-50 mb-4" data-icon="search_off">search_off</span>
+      <h3 class="font-headline font-bold text-xl text-on-surface">No hay productos</h3>
+      <p class="mt-2 text-sm max-w-sm">No encontramos productos que coincidan con los filtros o en esta sucursal.</p>
+      <button type="button" onclick="document.getElementById('toggle-filters').click()" class="mt-6 text-sm font-bold text-primary hover:text-primary-container">Cambiar filtros</button>
+    </div>
+  `;
+
+  const container = document.getElementById('kiosco-pagination-container');
+  const countLabel = document.getElementById('kiosco-count');
+  const paginationDiv = document.getElementById('kiosco-pagination');
+
+  if (container) {
+    if (productosFiltrados.length <= KIOSCO_ITEMS_PER_PAGE) {
+       container.classList.add('hidden');
+    } else {
+       container.classList.remove('hidden');
+       
+       const totalPages = Math.ceil(productosFiltrados.length / KIOSCO_ITEMS_PER_PAGE);
+       if (countLabel) {
+         countLabel.textContent = `Mostrando ${startIndex + 1}-${Math.min(endIndex, productosFiltrados.length)} de ${productosFiltrados.length} productos`;
+       }
+       
+       let paginationHtml = `<button onclick="cambiarPaginaKiosco(${kioscoPaginaActual - 1})" class="flex h-8 w-8 items-center justify-center rounded-lg text-secondary hover:bg-surface-container active:scale-95 disabled:opacity-50" ${kioscoPaginaActual === 1 ? 'disabled' : ''}><span class="material-symbols-outlined text-sm">chevron_left</span></button>`;
+       
+       for(let i=1; i<=totalPages; i++) {
+         if (i === kioscoPaginaActual) {
+           paginationHtml += `<button class="flex h-8 w-8 items-center justify-center rounded-lg bg-primary font-bold text-on-primary">${i}</button>`;
+         } else {
+           paginationHtml += `<button onclick="cambiarPaginaKiosco(${i})" class="flex h-8 w-8 items-center justify-center rounded-lg font-bold text-on-surface hover:bg-surface-container">${i}</button>`;
+         }
+       }
+       
+       paginationHtml += `<button onclick="cambiarPaginaKiosco(${kioscoPaginaActual + 1})" class="flex h-8 w-8 items-center justify-center rounded-lg text-secondary hover:bg-surface-container active:scale-95 disabled:opacity-50" ${kioscoPaginaActual === totalPages ? 'disabled' : ''}><span class="material-symbols-outlined text-sm">chevron_right</span></button>`;
+       
+       if (paginationDiv) paginationDiv.innerHTML = paginationHtml;
+    }
+  }
 
   actualizarFiltrosCategoria();
 }
+
+window.cambiarPaginaKiosco = function(page) {
+  kioscoPaginaActual = page;
+  renderizarProductos();
+  document.getElementById('product-grid')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+};
 
 function agregarAlCarrito(clave) {
   const producto = obtenerProductoPorClave(clave);
@@ -1143,8 +1221,8 @@ function agregarAlCarrito(clave) {
     return;
   }
 
-  if (producto.ventaBloqueada) {
-    window.alert('Este producto tiene lotes vencidos y no se puede vender hasta actualizar el stock.');
+  if (producto.stock <= 0) {
+    window.alert('Este producto no tiene stock disponible.');
     return;
   }
 
@@ -2264,12 +2342,23 @@ document.addEventListener('DOMContentLoaded', () => {
   historialVentas = cargarHistorialVentas();
   turnoInicioISO = obtenerTurnoInicio();
   descuentosDisponibles = cargarDescuentosGuardados();
-  sucursalActiva = cargarSucursalActiva();
+
+  // Fijar sucursal según rol
+  const sucursalFija = obtenerSucursalUsuario();
+
+  if (sucursalFija) {
+    sucursalActiva = sucursalFija;
+    guardarSucursalActiva();
+  } else {
+    sucursalActiva = cargarSucursalActiva();
+  }
+
   renderizarSucursalActiva();
   sincronizarDescuentoActivo();
   recargarCatalogoDesdeInventario({ forzar: true, renderizar: false });
   renderizarProductos();
   actualizarInterfaz();
+  aplicarPermisosKiosco();
 
   branchSelect?.addEventListener('change', (event) => cambiarSucursalActiva(event.target.value));
   openProductModal?.addEventListener('click', () => abrirModalProducto());
@@ -2417,6 +2506,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   window.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') {
+      const productModalOpen = !document.getElementById('product-modal')?.classList.contains('hidden');
+      const discountModalOpen = !document.getElementById('discount-modal')?.classList.contains('hidden');
+      const paymentModalOpen = !document.getElementById('payment-modal')?.classList.contains('hidden');
+
+      if (productModalOpen) {
+        cerrarModalProducto();
+        return;
+      }
       cerrarModalProducto();
       cerrarModalPago();
       cerrarModalBajaProducto();
@@ -2445,3 +2542,16 @@ window.actualizarCantidadCarrito = actualizarCantidadCarrito;
 window.cambiarCantidad = cambiarCantidad;
 window.toggleProductMenu = toggleProductMenu;
 window.eliminarProducto = eliminarProducto;
+
+function aplicarPermisosKiosco() {
+  actualizarHeaderUsuario();
+
+  // Cerrar caja: solo encargado o superior
+  aplicarPermisoVisibilidad('open-cash-close', esEncargadoOSuperior());
+
+  // Dar de baja: solo encargado o superior
+  aplicarPermisoVisibilidad('open-product-loss-modal', esEncargadoOSuperior());
+
+  // Descuentos: secretaria solo selecciona, no edita
+  aplicarPermisoVisibilidad('discount-edit-controls', esEncargadoOSuperior());
+}

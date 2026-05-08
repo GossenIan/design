@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html class="light" lang="es">
   <head>
     <meta charset="utf-8">
@@ -97,23 +97,28 @@
         </div>
       </nav>
     </header>
+    
+    <div class="flex min-h-[calc(100vh-8rem)] flex-1 overflow-hidden pt-32">
+      <!-- Sidebar Navigation -->
+      <nav id="asistencias-sidebar" class="hidden md:flex flex-col h-[calc(100vh-8rem)] py-8 px-4 w-64 fixed left-0 top-32 bg-[#F6F3F2] dark:bg-zinc-900 border-r border-surface-container-high z-40 overflow-y-auto">
+      <div class="mb-8 px-4">
+        <h2 class="font-['Manrope'] font-extrabold text-[#1C1B1B] dark:text-zinc-100 text-lg">Asistencias</h2>
+        <p class="text-secondary text-sm font-['Inter']">Gestión de accesos</p>
+      </div>
+      <div class="flex flex-col gap-4 flex-1">
+        <a class="inv-sidebar-link inv-sidebar-link-active flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-colors hover:bg-surface-container" href="#attendance-table-panel">
+          <span class="material-symbols-outlined">history</span>
+          Últimas asistencias
+        </a>
+        <a class="inv-sidebar-link flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-colors hover:bg-surface-container text-on-surface-variant" href="#manual-entry-panel">
+          <span class="material-symbols-outlined">edit_note</span>
+          Ingreso manual
+        </a>
+      </div>
+    </nav>
 
-    <main class="mx-auto grid w-full max-w-[92rem] gap-6 px-4 pb-10 pt-36 sm:px-6 lg:grid-cols-[15rem_minmax(0,1fr)] lg:px-10">
-      <aside class="h-max rounded-xl border border-outline-variant/15 bg-surface-container-lowest p-3 shadow-[0px_10px_24px_rgba(28,27,27,0.04)] lg:sticky lg:top-32">
-        <p class="px-3 py-2 text-xs font-black uppercase tracking-wider text-primary">Asistencias</p>
-        <nav class="grid gap-1" aria-label="Navegacion de asistencias">
-          <a class="users-side-link" href="#attendance-table-panel">
-            <span class="material-symbols-outlined text-lg">history</span>
-            Ultimas asistencias
-          </a>
-          <a class="users-side-link" href="#manual-entry-panel">
-            <span class="material-symbols-outlined text-lg">edit_note</span>
-            Ingreso manual
-          </a>
-        </nav>
-      </aside>
-
-      <div class="grid gap-6">
+    <main class="flex-1 md:ml-64 p-6 lg:p-10 bg-surface overflow-y-auto">
+      <div class="grid gap-6 w-full max-w-[92rem] mx-auto">
         <section class="flex flex-col gap-5 rounded-xl border border-outline-variant/15 bg-surface-container-low p-5 shadow-[0px_12px_32px_rgba(28,27,27,0.06)] lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p class="text-sm font-bold uppercase tracking-widest text-primary">Control diario</p>
@@ -200,9 +205,15 @@
               <tbody id="attendance-table-body" class="divide-y divide-outline-variant/15"></tbody>
             </table>
           </div>
+          <div class="flex flex-col gap-2 border-t border-outline-variant/15 bg-surface-container-low px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+            <p id="attendance-count" class="text-sm font-semibold text-on-surface-variant">0 asistencias</p>
+            <div id="attendance-pagination" class="flex flex-wrap items-center gap-1">
+            </div>
+          </div>
         </section>
       </div>
     </main>
+    </div>
 
     <div id="attendance-modal" class="inventory-modal-backdrop fixed inset-0 z-[130] hidden items-center justify-center bg-black/45 px-4 py-6">
       <section class="w-full max-w-xl rounded-xl bg-background p-5 shadow-2xl">
