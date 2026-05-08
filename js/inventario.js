@@ -1924,7 +1924,7 @@ document.addEventListener('DOMContentLoaded', () => {
       renderizarInventario();
     });
   });
-  document.getElementById('print-inventory-report')?.addEventListener('click', imprimirInformeInventario);
+  document.querySelectorAll('#print-inventory-report').forEach((button) => button.addEventListener('click', imprimirInformeInventario));
   document.querySelectorAll('[data-sort-shortcut]').forEach((button) => {
     button.addEventListener('click', () => {
       estadoInventario.orden = button.dataset.sortShortcut;
@@ -2153,101 +2153,163 @@ window.limpiarListaPedidoProveedor = function() {
   renderizarListaPedidosPendientes();
 };
 
+function obtenerNumeroInforme(value, fallback = 0) {
+  const numero = Number(value);
+  return Number.isFinite(numero) ? numero : fallback;
+}
+
+function obtenerCostoUnitarioInforme(producto) {
+  const costo = obtenerNumeroInforme(producto.costoUnitario ?? producto.costo ?? producto.precioCosto, NaN);
+  return Number.isFinite(costo) && costo > 0 ? costo : obtenerNumeroInforme(producto.precio, 0);
+}
+
+function obtenerPrecioVentaInforme(producto) {
+  const precioVenta = obtenerNumeroInforme(producto.precioVenta ?? producto.precioPublico ?? producto.precioFinal, NaN);
+  const costo = obtenerCostoUnitarioInforme(producto);
+  return Number.isFinite(precioVenta) && precioVenta > 0 ? precioVenta : costo * 1.2;
+}
+
+function obtenerTituloSucursalInforme() {
+  const sucursal = tieneSucursalFija() ? obtenerSucursalUsuario() : estadoInventario.sucursal;
+
+  if (!sucursal || sucursal === 'todas') {
+    return 'GIMNASIO CENTRAL';
+  }
+
+  return String(sucursal).toUpperCase();
+}
+
+function obtenerFiltroInformeInventario() {
+  const filtros = [];
+  const estados = {
+    ok: 'Stock saludable',
+    bajo: 'Stock bajo',
+    'sin-stock': 'Sin stock'
+  };
+
+  if (estadoInventario.categoria !== 'todas') {
+    filtros.push(`Categoria: ${estadoInventario.categoria}`);
+  }
+
+  if (estadoInventario.estado !== 'todos') {
+    filtros.push(`Estado: ${estados[estadoInventario.estado] || estadoInventario.estado}`);
+  }
+
+  if (estadoInventario.busqueda) {
+    filtros.push(`Busqueda: "${estadoInventario.busqueda}"`);
+  }
+
+  return filtros.length ? filtros.join(' | ') : 'Todos los articulos';
+}
+
+function renderizarFilasInformeImpresion(productos) {
+  const grupos = new Map();
+
+  productos
+    .slice()
+    .sort((a, b) => {
+      const categoria = a.categoria.localeCompare(b.categoria, 'es');
+      return categoria || a.nombre.localeCompare(b.nombre, 'es');
+    })
+    .forEach((producto) => {
+      const categoria = producto.categoria || 'Sin categoria';
+
+      if (!grupos.has(categoria)) {
+        grupos.set(categoria, []);
+      }
+
+      grupos.get(categoria).push(producto);
+    });
+
+  if (!grupos.size) {
+    return '<tr><td colspan="7" class="inventory-report-print-empty">Sin productos para imprimir.</td></tr>';
+  }
+
+  return [...grupos.entries()]
+    .map(([categoria, productosCategoria]) => `
+      <tr class="inventory-report-print-category">
+        <td colspan="7">CATEGOR&Iacute;A: ${escapeHtml(categoria.toUpperCase())}</td>
+      </tr>
+      ${productosCategoria.map((producto) => {
+        const stock = obtenerNumeroInforme(producto.stock, 0);
+        const stockMinimo = obtenerNumeroInforme(producto.stockMinimo, 0);
+        const costoUnitario = obtenerCostoUnitarioInforme(producto);
+        const precioVenta = obtenerPrecioVentaInforme(producto);
+        const valorizacion = costoUnitario * stock;
+        const stockClass = stock <= stockMinimo ? 'inventory-report-print-low-stock' : '';
+
+        return `
+          <tr>
+            <td>${escapeHtml(producto.codigoBarras)}</td>
+            <td>${escapeHtml(producto.nombre)}</td>
+            <td class="inventory-report-print-number ${stockClass}">${escapeHtml(stock)}</td>
+            <td class="inventory-report-print-number">${escapeHtml(stockMinimo)}</td>
+            <td class="inventory-report-print-money">${formatCurrency(costoUnitario)}</td>
+            <td class="inventory-report-print-money">${formatCurrency(precioVenta)}</td>
+            <td class="inventory-report-print-money">${formatCurrency(valorizacion)}</td>
+          </tr>
+        `;
+      }).join('')}
+    `)
+    .join('');
+}
+
 function imprimirInformeInventario() {
   let printArea = document.getElementById('inventory-print-area');
+
   if (!printArea) {
-    printArea = document.createElement('div');
+    printArea = document.createElement('section');
     printArea.id = 'inventory-print-area';
-    printArea.className = 'inventory-print-area receipt-invoice';
     document.body.appendChild(printArea);
   }
 
   const productos = obtenerProductosFiltrados();
-  const valorTotal = productos.reduce((acc, p) => acc + (p.precio * p.stock), 0);
+  const totalStock = productos.reduce((acc, producto) => acc + obtenerNumeroInforme(producto.stock, 0), 0);
+  const valorTotal = productos.reduce((acc, producto) => acc + (obtenerCostoUnitarioInforme(producto) * obtenerNumeroInforme(producto.stock, 0)), 0);
   const fecha = formatFechaEmision(new Date());
-  const sucursalTexto = tieneSucursalFija() ? obtenerSucursalUsuario() : 
-    (estadoInventario.sucursal === 'todas' ? 'GIMNASIO CENTRAL' : estadoInventario.sucursal.toUpperCase());
+  const usuario = obtenerNombreUsuario() || 'Admin';
+  const filtroTexto = obtenerFiltroInformeInventario();
 
-  const filtrosAplicados = [];
-  if (estadoInventario.categoria !== 'todas') filtrosAplicados.push(`Cat: ${estadoInventario.categoria}`);
-  if (estadoInventario.estado !== 'todos') filtrosAplicados.push(`Estado: ${estadoInventario.estado}`);
-  if (estadoInventario.busqueda) filtrosAplicados.push(`Búsqueda: "${estadoInventario.busqueda}"`);
-  const filtroTexto = filtrosAplicados.length > 0 ? filtrosAplicados.join(' | ') : 'Todos los artículos';
-
-  const porCategoria = {};
-  productos.forEach(p => {
-    if(!porCategoria[p.categoria]) porCategoria[p.categoria] = [];
-    porCategoria[p.categoria].push(p);
-  });
-
-  let htmlRows = '';
-  Object.keys(porCategoria).forEach(cat => {
-    htmlRows += `<tr><td colspan="7" style="background:#f2f2f2; font-weight:bold; color:#111;">CATEGORÍA: ${escapeHtml(cat.toUpperCase())}</td></tr>`;
-    porCategoria[cat].forEach(p => {
-      const valorizacion = p.precio * p.stock;
-      htmlRows += `
-        <tr>
-          <td>${escapeHtml(p.codigoBarras)}</td>
-          <td>${escapeHtml(p.nombre)}</td>
-          <td class="receipt-invoice-center">${p.stock}</td>
-          <td class="receipt-invoice-center">${p.stockMinimo}</td>
-          <td class="receipt-invoice-money">${formatCurrency(p.precio)}</td>
-          <td class="receipt-invoice-money">${formatCurrency(p.precio * 1.2)}</td>
-          <td class="receipt-invoice-money">${formatCurrency(valorizacion)}</td>
-        </tr>
-      `;
-    });
-  });
-
+  printArea.className = 'inventory-print-area inventory-report-print';
   printArea.innerHTML = `
-    <div class="receipt-invoice-header">
-       <h1>Squat<span style="color:#27ae60">Gym</span></h1>
-    </div>
-    <div class="receipt-invoice-meta">
-       <h2>${sucursalTexto} - REPORTE DE INVENTARIO ACTUAL</h2>
-       <p>Fecha de Emisión: ${fecha} | Generado por: ${escapeHtml(obtenerNombreUsuario() || 'Admin')} | Filtro: ${escapeHtml(filtroTexto)}</p>
-    </div>
-    <div class="receipt-invoice-divider"></div>
-    <table class="receipt-invoice-table print-table">
+    <header class="inventory-report-print-header">
+      <h1>Squat <span>Gym</span></h1>
+      <h2>${escapeHtml(obtenerTituloSucursalInforme())} - REPORTE DE INVENTARIO ACTUAL</h2>
+      <div class="inventory-report-print-line"></div>
+      <p>
+        <strong>Fecha de Emisi&oacute;n:</strong> ${escapeHtml(fecha)}
+        <span>|</span>
+        <strong>Generado por:</strong> ${escapeHtml(usuario)}
+        <span>|</span>
+        <strong>Filtro:</strong> ${escapeHtml(filtroTexto)}
+      </p>
+    </header>
+
+    <table class="inventory-report-print-table">
       <thead>
         <tr>
-          <th>CÓDIGO</th>
-          <th>DESCRIPCIÓN</th>
-          <th class="receipt-invoice-center">STOCK ACTUAL</th>
-          <th class="receipt-invoice-center">STOCK MÍNIMO</th>
-          <th class="receipt-invoice-money">COST UNIT.</th>
-          <th class="receipt-invoice-money">PRECIO VENTA</th>
-          <th class="receipt-invoice-money">VALORIZACIÓN (COSTO)</th>
+          <th>C&Oacute;DIGO</th>
+          <th>DESCRIPCI&Oacute;N</th>
+          <th>STOCK<br>ACTUAL</th>
+          <th>STOCK<br>M&Iacute;NIMO</th>
+          <th>COST<br>UNIT.</th>
+          <th>PRECIO<br>VENTA</th>
+          <th>VALORIZACI&Oacute;N (COSTO)</th>
         </tr>
       </thead>
       <tbody>
-        ${htmlRows}
+        ${renderizarFilasInformeImpresion(productos)}
       </tbody>
     </table>
-    <div class="receipt-invoice-totals" style="max-width: 400px;">
-      <div>
-        <span>Total de Artículos en Stock:</span>
-        <strong>${productos.reduce((acc, p) => acc + p.stock, 0)} unidades</strong>
-      </div>
-      <div class="receipt-invoice-total-final">
-        <span>Valorización Total del Inventario (Costo):</span>
-        <strong>${formatCurrency(valorTotal)}</strong>
-      </div>
-    </div>
+
+    <footer class="inventory-report-print-footer">
+      <p><strong>Total de Art&iacute;culos en Stock:</strong> ${escapeHtml(totalStock)} unidades</p>
+      <p><strong>Valorizaci&oacute;n Total del Inventario (Costo):</strong> ${formatCurrency(valorTotal)}</p>
+    </footer>
   `;
 
   document.body.classList.add('inventory-print-mode');
-  
-  window.setTimeout(() => {
-    window.print();
-  }, 100);
-
-  if (!window._inventoryPrintHandler) {
-    window._inventoryPrintHandler = () => {
-      document.body.classList.remove('inventory-print-mode');
-    };
-    window.addEventListener('afterprint', window._inventoryPrintHandler);
-  }
+  window.setTimeout(() => window.print(), 100);
 }
 
 function imprimirPedidoReposicion() {

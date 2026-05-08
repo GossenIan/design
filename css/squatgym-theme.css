@@ -1619,3 +1619,187 @@ h6,
     display: none;
   }
 }
+
+
+#inventory-print-area {
+  display: none;
+}
+
+@media print {
+  @page {
+    size: A4 landscape;
+    margin: 14mm 16mm;
+  }
+
+  body.inventory-print-mode {
+    background: #ffffff !important;
+    color: #444444 !important;
+  }
+
+  body.inventory-print-mode > *:not(#inventory-print-area) {
+    display: none !important;
+  }
+
+  body.inventory-print-mode #inventory-print-area {
+    display: block !important;
+  }
+
+  .inventory-report-print {
+    color: #444444;
+    font-family: Arial, Inter, sans-serif;
+    font-size: 14px;
+    line-height: 1.25;
+    margin: 0 auto;
+    max-width: 1030px;
+    padding: 0;
+    width: 100%;
+  }
+
+  .inventory-report-print-header h1 {
+    color: #000000;
+    font-family: Arial, Manrope, sans-serif !important;
+    font-size: 36px;
+    font-weight: 900;
+    letter-spacing: 0;
+    line-height: 1;
+    margin: 0 0 12px;
+  }
+
+  .inventory-report-print-header h1 span {
+    color: #27ae60;
+  }
+
+  .inventory-report-print-header h2 {
+    color: #145a99;
+    font-family: Arial, Manrope, sans-serif !important;
+    font-size: 25px;
+    font-weight: 900;
+    letter-spacing: 0;
+    line-height: 1.15;
+    margin: 0 0 28px;
+    text-transform: uppercase;
+  }
+
+  .inventory-report-print-line {
+    border-top: 4px solid #77aede;
+    margin: 0 0 8px;
+    width: 100%;
+  }
+
+  .inventory-report-print-header p {
+    color: #666666;
+    font-size: 14px;
+    font-weight: 700;
+    margin: 0 0 30px;
+  }
+
+  .inventory-report-print-header p span {
+    color: #777777;
+    margin: 0 4px;
+  }
+
+  .inventory-report-print-table {
+    border-collapse: collapse;
+    font-size: 14px;
+    table-layout: fixed;
+    width: 100%;
+  }
+
+  .inventory-report-print-table th {
+    background: #145a99 !important;
+    border-right: 1px solid rgb(255 255 255 / 0.14);
+    color: #ffffff !important;
+    font-size: 14px;
+    font-weight: 900;
+    line-height: 1.08;
+    padding: 9px 8px;
+    text-align: left;
+    text-transform: uppercase;
+    vertical-align: middle;
+  }
+
+  .inventory-report-print-table th:nth-child(1),
+  .inventory-report-print-table td:nth-child(1) {
+    width: 10%;
+  }
+
+  .inventory-report-print-table th:nth-child(2),
+  .inventory-report-print-table td:nth-child(2) {
+    width: 28%;
+  }
+
+  .inventory-report-print-table th:nth-child(3),
+  .inventory-report-print-table td:nth-child(3),
+  .inventory-report-print-table th:nth-child(4),
+  .inventory-report-print-table td:nth-child(4) {
+    width: 9%;
+  }
+
+  .inventory-report-print-table th:nth-child(5),
+  .inventory-report-print-table td:nth-child(5),
+  .inventory-report-print-table th:nth-child(6),
+  .inventory-report-print-table td:nth-child(6) {
+    width: 11%;
+  }
+
+  .inventory-report-print-table th:nth-child(7),
+  .inventory-report-print-table td:nth-child(7) {
+    width: 22%;
+  }
+
+  .inventory-report-print-table td {
+    border-bottom: 1px solid #cfcfcf;
+    color: #4a4a4a;
+    font-size: 14px;
+    padding: 8px 8px;
+    vertical-align: middle;
+  }
+
+  .inventory-report-print-category td {
+    background: #cfe2f3 !important;
+    border-bottom: 0;
+    color: #145a99 !important;
+    font-weight: 900;
+    padding: 8px;
+    text-transform: uppercase;
+  }
+
+  .inventory-report-print-number {
+    text-align: center;
+  }
+
+  .inventory-report-print-money {
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .inventory-report-print-low-stock {
+    color: #ff0000 !important;
+    font-weight: 900;
+  }
+
+  .inventory-report-print-empty {
+    padding: 24px 8px;
+    text-align: center;
+  }
+
+  .inventory-report-print-footer {
+    border-top: 3px solid #676767;
+    display: grid;
+    gap: 8px;
+    justify-items: end;
+    margin-top: 34px;
+    padding-top: 24px;
+    text-align: right;
+  }
+
+  .inventory-report-print-footer p {
+    color: #444444;
+    font-size: 15px;
+    margin: 0;
+  }
+
+  .inventory-report-print-footer strong {
+    font-weight: 900;
+  }
+}
