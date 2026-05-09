@@ -192,6 +192,49 @@
     updateNotificationState();
   }
 
+  function createDataToolButton(icon, label, onClick) {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-on-surface hover:bg-surface-container';
+    button.setAttribute('role', 'menuitem');
+    button.innerHTML = '<span class="material-symbols-outlined text-lg">' + icon + '</span>' + label;
+    button.addEventListener('click', onClick);
+    return button;
+  }
+
+  function setupDataTools(profileDropdown) {
+    if (!profileDropdown || profileDropdown.querySelector('[data-squatgym-data-tools]')) {
+      return;
+    }
+
+    const section = document.createElement('div');
+    section.className = 'border-t border-outline-variant p-2';
+    section.dataset.squatgymDataTools = 'true';
+
+    const importInput = document.createElement('input');
+    importInput.type = 'file';
+    importInput.accept = 'application/json';
+    importInput.className = 'hidden';
+
+    section.append(
+      createDataToolButton('save', 'Guardar datos', () => window.SquatGymDataSync?.persistData({ silent: false })),
+      createDataToolButton('download', 'Exportar datos', () => window.SquatGymDataSync?.exportData()),
+      createDataToolButton('upload_file', 'Importar datos', () => importInput.click()),
+      importInput
+    );
+
+    importInput.addEventListener('change', () => {
+      const file = importInput.files?.[0];
+      if (file) {
+        window.SquatGymDataSync?.importFile(file);
+      }
+      importInput.value = '';
+    });
+
+    const logoutSection = profileDropdown.querySelector('button[onclick*="index.html"]')?.closest('div');
+    profileDropdown.insertBefore(section, logoutSection || null);
+  }
+
   function getPageNotification() {
     const { notificationIcon, notificationTitle, notificationBody, notificationTime } = document.body.dataset;
 
@@ -218,6 +261,7 @@
     setTheme(readSavedTheme());
     updateNotificationState();
     applyRoleVisibility();
+    setupDataTools(profileDropdown);
 
     themeButton?.addEventListener('click', toggleTheme);
 

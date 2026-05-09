@@ -8,14 +8,17 @@ using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Web.Script.Serialization;
 using System.Windows.Forms;
 
 internal static class SquatGymLauncher
 {
     private const int StartPort = 5500;
     private const int MaxUploadBytes = 8 * 1024 * 1024;
+    private const int MaxSnapshotBytes = 10 * 1024 * 1024;
     private static readonly string RootDir = AppDomain.CurrentDomain.BaseDirectory.TrimEnd(Path.DirectorySeparatorChar);
     private static readonly string UploadDir = Path.Combine(RootDir, "img", "uploads");
+    private static readonly string DataBackupFile = Path.Combine(RootDir, "js", "squatgym-data-backup.js");
     private static TcpListener listener;
     private static int activePort;
     private static string appUrl;
@@ -132,6 +135,12 @@ internal static class SquatGymLauncher
             if (method == "OPTIONS")
             {
                 SendOptions(stream);
+                return;
+            }
+
+            if (method == "POST" && GetPath(rawPath) == "/api/persist-data")
+            {
+                HandlePersistData(stream, headers);
                 return;
             }
 
@@ -279,6 +288,74 @@ internal static class SquatGymLauncher
             File.WriteAllBytes(Path.Combine(UploadDir, fileName), uploaded.Data);
 
             SendJson(stream, 200, "OK", "{\"ok\":true,\"url\":\"/img/uploads/" + JsonEscape(fileName) + "\",\"fileName\":\"uploads/" + JsonEscape(fileName) + "\"}");
+        }
+        catch (Exception ex)
+        {
+            SendJson(stream, 400, "Bad Request", "{\"ok\":false,\"error\":\"" + JsonEscape(ex.Message) + "\"}");
+        }
+    }
+
+    private static void HandlePersistData(NetworkStream stream, Dictionary<string, string> headers)
+    {
+        try
+        {
+            int length = headers.ContainsKey("Content-Length") ? int.Parse(headers["Content-Length"]) : 0;
+
+            if (length <= 0)
+            {
+                throw new InvalidOperationException("No se recibieron datos.");
+            }
+
+            if (length > MaxSnapshotBytes)
+            {
+                throw new InvalidOperationException("El backup supera los 10 MB.");
+            }
+
+            string rawJson = Encoding.UTF8.GetString(ReadBody(stream, length));
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            serializer.MaxJsonLength = MaxSnapshotBytes;
+            Dictionary<string, object> snapshot = serializer.DeserializeObject(rawJson) as Dictionary<string, object>;
+
+            if (snapshot == null || !snapshot.ContainsKey("data"))
+            {
+                throw new InvalidOperationException("Backup invalido.");
+            }
+
+            Dictionary<string, object> rawData = snapshot["data"] as Dictionary<string, object>;
+
+            if (rawData == null)
+            {
+                throw new InvalidOperationException("Backup invalido.");
+            }
+
+            Dictionary<string, object> safeData = new Dictionary<string, object>();
+
+            foreach (KeyValuePair<string, object> item in rawData)
+            {
+                if (item.Key.StartsWith("squatgym-", StringComparison.Ordinal)
+                    && item.Key != "squatgym-data-snapshot-version"
+                    && item.Key != "squatgym-data-snapshot-applied-at")
+                {
+                    safeData[item.Key] = item.Value == null ? "" : Convert.ToString(item.Value);
+                }
+            }
+
+            string version = snapshot.ContainsKey("version") && snapshot["version"] != null
+                ? Convert.ToString(snapshot["version"])
+                : ((long)(DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalMilliseconds).ToString();
+            Dictionary<string, object> safeSnapshot = new Dictionary<string, object>();
+            safeSnapshot["version"] = version;
+            safeSnapshot["createdAt"] = snapshot.ContainsKey("createdAt") && snapshot["createdAt"] != null
+                ? Convert.ToString(snapshot["createdAt"])
+                : DateTime.Now.ToString("o");
+            safeSnapshot["origin"] = snapshot.ContainsKey("origin") && snapshot["origin"] != null
+                ? Convert.ToString(snapshot["origin"])
+                : "";
+            safeSnapshot["data"] = safeData;
+
+            Directory.CreateDirectory(Path.GetDirectoryName(DataBackupFile));
+            File.WriteAllText(DataBackupFile, "window.SquatGymDataBackup = " + serializer.Serialize(safeSnapshot) + ";\r\n", new UTF8Encoding(false));
+            SendJson(stream, 200, "OK", "{\"ok\":true,\"version\":\"" + JsonEscape(version) + "\",\"keys\":" + safeData.Count + "}");
         }
         catch (Exception ex)
         {

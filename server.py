@@ -14,7 +14,9 @@ from uuid import uuid4
 
 ROOT_DIR = Path(__file__).resolve().parent
 UPLOAD_DIR = ROOT_DIR / "img" / "uploads"
+DATA_BACKUP_FILE = ROOT_DIR / "js" / "squatgym-data-backup.js"
 MAX_UPLOAD_BYTES = 8 * 1024 * 1024
+MAX_DATA_BACKUP_BYTES = 10 * 1024 * 1024
 
 
 def json_response(handler: SimpleHTTPRequestHandler, status: int, payload: dict) -> None:
@@ -88,6 +90,36 @@ def safe_filename(original_name: str, extension: str) -> str:
   return f"{stem}-{stamp}-{token}{extension}"
 
 
+def persist_data_backup(raw_body: bytes) -> dict:
+  if len(raw_body) > MAX_DATA_BACKUP_BYTES:
+    raise ValueError("El backup supera los 10 MB.")
+
+  snapshot = json.loads(raw_body.decode("utf-8"))
+  data = snapshot.get("data")
+
+  if not isinstance(data, dict):
+    raise ValueError("Backup invalido.")
+
+  safe_data = {
+    str(key): str(value)
+    for key, value in data.items()
+    if str(key).startswith("squatgym-")
+    and str(key) not in {"squatgym-data-snapshot-version", "squatgym-data-snapshot-applied-at"}
+  }
+  version = str(snapshot.get("version") or int(datetime.now().timestamp() * 1000))
+  safe_snapshot = {
+    "version": version,
+    "createdAt": str(snapshot.get("createdAt") or datetime.now().isoformat()),
+    "origin": str(snapshot.get("origin") or ""),
+    "data": safe_data
+  }
+  js_payload = "window.SquatGymDataBackup = " + json.dumps(safe_snapshot, ensure_ascii=True, indent=2) + ";\n"
+  DATA_BACKUP_FILE.parent.mkdir(parents=True, exist_ok=True)
+  DATA_BACKUP_FILE.write_text(js_payload, encoding="utf-8")
+
+  return {"ok": True, "version": version, "keys": len(safe_data)}
+
+
 class SquatGymHandler(SimpleHTTPRequestHandler):
   def do_OPTIONS(self) -> None:
     self.send_response(204)
@@ -98,6 +130,20 @@ class SquatGymHandler(SimpleHTTPRequestHandler):
 
   def do_POST(self) -> None:
     route = urlparse(self.path).path
+
+    if route == "/api/persist-data":
+      try:
+        length = int(self.headers.get("Content-Length", "0"))
+
+        if length <= 0:
+          raise ValueError("No se recibieron datos.")
+
+        json_response(self, 200, persist_data_backup(self.rfile.read(length)))
+      except (ValueError, json.JSONDecodeError) as error:
+        json_response(self, 400, {"ok": False, "error": str(error)})
+      except OSError:
+        json_response(self, 500, {"ok": False, "error": "No se pudo escribir js/squatgym-data-backup.js."})
+      return
 
     if route != "/api/upload-image":
       json_response(self, 404, {"ok": False, "error": "Endpoint no encontrado."})
