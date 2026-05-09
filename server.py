@@ -4,6 +4,7 @@ import argparse
 import json
 import os
 import re
+import socket
 from datetime import datetime
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -138,9 +139,18 @@ class SquatGymHandler(SimpleHTTPRequestHandler):
       json_response(self, 500, {"ok": False, "error": "No se pudo escribir la imagen en img/uploads."})
 
 
+def port_is_busy(host: str, port: int) -> bool:
+  try:
+    with socket.create_connection((host, port), timeout=0.35):
+      return True
+  except OSError:
+    return False
+
+
 def run_server(host: str, port: int) -> None:
   server = ThreadingHTTPServer((host, port), SquatGymHandler)
-  print(f"SquatGym listo en http://{host}:{port}/home/kiosco/kiosco.html")
+  print(f"SquatGym listo en http://{host}:{port}/home/home.html")
+  print(f"Kiosco disponible en http://{host}:{port}/home/kiosco/kiosco.html")
   print("Las imagenes subidas se guardan en img/uploads.")
   server.serve_forever()
 
@@ -154,6 +164,10 @@ def main() -> None:
   os.chdir(ROOT_DIR)
 
   for port in range(args.port, args.port + 10):
+    if port_is_busy(args.host, port):
+      print(f"Puerto {port} ocupado, probando {port + 1}...")
+      continue
+
     try:
       run_server(args.host, port)
       return

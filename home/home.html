@@ -117,7 +117,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/squatgym-header.css">
+  <link rel="stylesheet" href="../css/squatgym-header.css?v=dark-final-1">
 
   <style>
     :root,
@@ -190,55 +190,55 @@
       --neutral: 186 197 187;
       --secondary-black: 0 0 0;
       --tertiary-white: 255 255 255;
-      --panel-surface: 14 52 31;
-      --sale-card: 184 255 197;
-      --on-sale-card: 4 39 19;
-      --on-sale-card-muted: 24 64 38;
-      --sale-card-button: 4 39 19;
-      --on-sale-card-button: 239 250 241;
-      --sale-card-icon: 4 39 19;
-      --on-sale-card-icon: 184 255 197;
+      --panel-surface: 37 37 37;
+      --sale-card: 37 37 37;
+      --on-sale-card: 239 250 241;
+      --on-sale-card-muted: 186 197 187;
+      --sale-card-button: 92 236 136;
+      --on-sale-card-button: 4 39 19;
+      --sale-card-icon: 92 236 136;
+      --on-sale-card-icon: 4 39 19;
       --primary-fixed: 119 239 154;
-      --outline-variant: 58 111 74;
+      --outline-variant: 78 86 80;
       --on-secondary-fixed-variant: 226 226 226;
       --primary: 46 211 109;
       --on-secondary-fixed: 27 27 27;
-      --surface-bright: 38 105 61;
+      --surface-bright: 42 42 42;
       --on-tertiary-fixed-variant: 226 226 226;
       --secondary: 255 255 255;
       --on-tertiary-container: 226 226 226;
       --on-primary-fixed-variant: 0 82 40;
       --on-tertiary-fixed: 26 28 28;
       --on-primary-fixed: 0 33 12;
-      --surface-container-lowest: 12 47 27;
+      --surface-container-lowest: 37 37 37;
       --secondary-fixed: 226 226 226;
       --tertiary-fixed-dim: 198 198 199;
-      --surface-container-highest: 33 95 55;
+      --surface-container-highest: 66 66 66;
       --on-surface: 239 250 241;
       --on-primary: 4 39 19;
-      --secondary-container: 18 66 39;
+      --secondary-container: 36 55 43;
       --on-surface-variant: 186 197 187;
       --on-secondary-container: 226 226 226;
       --primary-fixed-dim: 78 220 127;
       --error-container: 147 0 10;
-      --surface-container: 20 70 42;
+      --surface-container: 53 53 53;
       --surface-tint: 46 211 109;
-      --surface: 6 32 18;
+      --surface: 30 30 30;
       --on-primary-container: 205 255 214;
       --inverse-on-surface: 43 50 44;
       --on-background: 239 250 241;
       --on-tertiary: 26 28 28;
-      --background: 1 18 10;
-      --surface-container-high: 26 82 49;
-      --tertiary-container: 20 62 38;
-      --surface-variant: 15 52 31;
+      --background: 30 30 30;
+      --surface-container-high: 61 61 61;
+      --tertiary-container: 45 45 45;
+      --surface-variant: 53 53 53;
       --tertiary-fixed: 226 226 226;
       --on-secondary: 27 27 27;
-      --surface-container-low: 15 56 33;
+      --surface-container-low: 45 45 45;
       --inverse-primary: 0 109 55;
-      --surface-dim: 0 14 8;
+      --surface-dim: 24 24 24;
       --secondary-fixed-dim: 198 198 198;
-      --outline: 96 152 111;
+      --outline: 112 120 114;
       --error: 255 180 171;
       --tertiary: 255 255 255;
       --inverse-surface: 236 243 233;
@@ -337,6 +337,55 @@
       white-space: nowrap;
     }
 
+    .dark .dashboard-panel {
+      border-color: rgb(var(--outline-variant) / 0.78);
+      box-shadow: 0 18px 42px rgb(0 0 0 / 0.24);
+    }
+
+    .dark .compact-action-card,
+    .dark .home-attendance-card {
+      background:
+        linear-gradient(180deg, rgb(var(--surface-container-lowest)), rgb(var(--surface-container-low)));
+    }
+
+    .dark .home-attendance-card {
+      border-color: rgb(var(--brand-gym) / 0.28);
+      box-shadow: 0 22px 50px rgb(0 0 0 / 0.34);
+    }
+
+    .dark .home-attendance-row {
+      background-color: rgb(var(--surface-container));
+      box-shadow: inset 0 0 0 1px rgb(var(--brand-gym) / 0.10);
+    }
+
+    .dark .home-attendance-row:hover {
+      background-color: rgb(var(--surface-container-high));
+    }
+
+    .dark .home-attendance-avatar {
+      background:
+        radial-gradient(circle at 35% 30%, rgb(var(--brand-gym) / 0.44), transparent 34%),
+        linear-gradient(135deg, rgb(var(--surface-container-high)), rgb(var(--surface-container-highest)));
+      box-shadow: inset 0 0 0 1px rgb(var(--brand-gym) / 0.25);
+    }
+
+    .dark .home-attendance-view-all,
+    .dark .home-attendance-avatar {
+      color: rgb(var(--brand-gym));
+    }
+
+    .dark .bg-primary-container\/15 {
+      background-color: rgb(var(--brand-gym) / 0.16);
+    }
+
+    .dark .bg-error-container\/20 {
+      background-color: rgb(var(--error) / 0.14);
+    }
+
+    .dark .text-error {
+      color: rgb(var(--error));
+    }
+
     @media (max-width: 640px) {
       .home-attendance-card {
         border-radius: 1.5rem;
@@ -352,6 +401,11 @@
       border-color: rgb(var(--outline-variant));
       color: rgb(var(--on-sale-card));
       box-shadow: 0 18px 36px rgb(var(--sale-card) / 0.12);
+    }
+
+    .dark .sale-card {
+      border-color: rgb(var(--brand-gym) / 0.30);
+      box-shadow: 0 22px 52px rgb(0 0 0 / 0.36);
     }
 
     .sale-card-bg-icon {

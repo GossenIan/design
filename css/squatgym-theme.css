@@ -30,16 +30,16 @@ body {
 }
 
 .dark .inv-sidebar-link {
-  color: #a1a1aa;
+  color: #9aa0a6;
 }
 
 .dark .inv-sidebar-link:hover {
-  background: #27272a;
+  background: #353535;
 }
 
 .dark .inv-sidebar-link-active {
-  background: #27272a;
-  color: #2ecc71;
+  background: #353535;
+  color: #5cec88;
 }
 
 /* Layout shift when inventory sidebar is visible */
@@ -1075,22 +1075,22 @@ h6,
 }
 
 .dark body {
-  background-color: #061f12;
-  color: #f4fbf1;
+  background-color: #1e1e1e;
+  color: #e8eaed;
 }
 
 .dark .bg-background,
 .dark .bg-surface {
-  background-color: #061f12 !important;
+  background-color: #1e1e1e !important;
 }
 
 .dark .bg-surface-bright,
 .dark .bg-surface-container-lowest {
-  background-color: #0f2d1c !important;
+  background-color: #252525 !important;
 }
 
 .dark .bg-surface-container-low {
-  background-color: #123621 !important;
+  background-color: #2d2d2d !important;
 }
 
 .dark .bg-surface-container,
@@ -1098,23 +1098,56 @@ h6,
 .dark .bg-surface-container-highest,
 .dark .dark\:bg-zinc-800,
 .dark .dark\:bg-zinc-900 {
-  background-color: #1a5231 !important;
+  background-color: #353535 !important;
 }
 
 .dark .dark\:hover\:bg-zinc-800:hover,
 .dark .hover\:bg-\[\#EAE7E7\]:hover {
-  background-color: #215f39 !important;
+  background-color: #3d3d3d !important;
+}
+
+.dark .hover\:bg-surface-container:hover {
+  background-color: #3d3d3d !important;
+}
+
+.dark .hover\:bg-surface-container-low:hover {
+  background-color: #353535 !important;
+}
+
+.dark .hover\:bg-surface-container-high:hover {
+  background-color: #424242 !important;
+}
+
+.dark .hover\:bg-surface-container-highest:hover {
+  background-color: #4a4a4a !important;
+}
+
+.dark .hover\:bg-primary-container:hover {
+  background-color: #2a6b4a !important;
+  color: #ffffff !important;
+}
+
+.dark .hover\:bg-error-container:hover {
+  background-color: rgb(242 139 130 / 0.18) !important;
+}
+
+.dark .hover\:bg-error-container\/15:hover {
+  background-color: rgb(242 139 130 / 0.12) !important;
+}
+
+.dark .hover\:bg-primary-container\/10:hover {
+  background-color: rgb(92 236 136 / 0.1) !important;
 }
 
 .dark .text-on-surface,
 .dark .dark\:text-zinc-100 {
-  color: #f4fbf1 !important;
+  color: #e8eaed !important;
 }
 
 .dark .text-on-surface-variant,
 .dark .text-secondary,
 .dark .dark\:text-zinc-400 {
-  color: #c7d8c5 !important;
+  color: #9aa0a6 !important;
 }
 
 .dark .text-primary,
@@ -1124,12 +1157,12 @@ h6,
 
 .dark .border-outline-variant,
 .dark .border-surface-container-high {
-  border-color: rgb(92 236 136 / 0.24) !important;
+  border-color: rgb(255 255 255 / 0.12) !important;
 }
 
 .dark .profile-dropdown-panel,
 .dark .notifications-panel {
-  border-color: rgb(92 236 136 / 0.24);
+  border-color: rgb(255 255 255 / 0.12);
 }
 
 .dark img.mix-blend-multiply {
@@ -1137,7 +1170,7 @@ h6,
 }
 
 .dark .discount-option {
-  background: #0f2d1c;
+  background: #2d2d2d;
   border-color: rgb(92 236 136 / 0.28);
   color: #5cec88;
 }
@@ -1148,70 +1181,70 @@ h6,
 
 .dark .discount-option-active {
   background: #5cec88;
-  color: #041f13;
+  color: #1e1e1e;
   box-shadow: 0 8px 20px rgb(92 236 136 / 0.22);
 }
 
 .dark .cash-close-status-balanced {
-  background: rgb(92 236 136 / 0.14);
-  color: #5cec88;
+  background: rgb(129 201 149 / 0.14);
+  color: #81c995;
 }
 
 .dark .cash-close-status-shortage {
-  background: rgb(255 218 214 / 0.12);
-  color: #ffb4ab;
+  background: rgb(242 139 130 / 0.14);
+  color: #f28b82;
 }
 
 .dark .cash-close-status-surplus {
-  background: rgb(255 246 214 / 0.12);
-  color: #f2c94c;
+  background: rgb(253 214 99 / 0.14);
+  color: #fdd663;
 }
 
 .dark .inventory-branch-report {
-  border-color: rgb(92 236 136 / 0.24);
-  background: #0f2d1c;
+  border-color: rgb(255 255 255 / 0.12);
+  background: #252525;
 }
 
 .dark .inventory-branch-header,
 .dark .inventory-report-table th {
-  background: #123621;
+  background: #2d2d2d;
 }
 
 .dark .inventory-branch-header h3,
 .dark .inventory-branch-summary dd {
-  color: #f4fbf1;
+  color: #e8eaed;
 }
 
 .dark .inventory-branch-header p,
 .dark .inventory-report-table th,
 .dark .inventory-code-cell,
 .dark .inventory-branch-summary dt {
-  color: #c7d8c5;
+  color: #9aa0a6;
 }
 
 .dark .inventory-branch-tab {
-  background: #123621;
-  color: #c7d8c5;
+  background: #2d2d2d;
+  color: #9aa0a6;
 }
 
 .dark .inventory-quick-filter {
-  background: #123621;
-  color: #9de9b6;
+  background: #2d2d2d;
+  color: #5cec88;
 }
 
 .dark .inventory-quick-filter:hover {
   background: rgb(92 236 136 / 0.18);
-  color: #d8ffe2;
+  color: #b8ffd0;
 }
 
 .dark .inventory-quick-filter-active {
   background: #5cec88;
-  color: #041f13;
+  color: #1e1e1e;
 }
 
 .dark .inventory-active-filters-summary {
-  background: #123621;
-  color: #c7d8c5;
+  background: #2d2d2d;
+  color: #9aa0a6;
 }
 
 .dark .inventory-branch-tab:hover {
@@ -1221,40 +1254,40 @@ h6,
 
 .dark .inventory-branch-tab-active {
   background: #5cec88;
-  color: #041f13;
+  color: #1e1e1e;
 }
 
 .dark .inventory-report-table th,
 .dark .inventory-report-table td,
 .dark .inventory-branch-header {
-  border-color: rgb(92 236 136 / 0.24);
+  border-color: rgb(255 255 255 / 0.12);
 }
 
 .dark .inventory-report-row:hover {
-  background: rgb(92 236 136 / 0.08);
+  background: rgb(255 255 255 / 0.04);
 }
 
 .dark .inventory-table-product-image,
 .dark .inventory-table-product-placeholder {
-  border-color: rgb(202 196 208 / 0.24);
+  border-color: rgb(255 255 255 / 0.12);
 }
 
 .dark .inventory-table-product-image {
-  background: #1f2937;
+  background: #2d2d2d;
 }
 
 .dark .inventory-table-product-placeholder {
-  background: rgb(0 109 55 / 0.18);
-  color: #6ee7a8;
+  background: rgb(92 236 136 / 0.12);
+  color: #5cec88;
 }
 
 .dark .inventory-image-preview-frame {
-  background: #111c16;
-  border-color: rgb(192 201 193 / 0.2);
+  background: #252525;
+  border-color: rgb(255 255 255 / 0.12);
 }
 
 .dark .inventory-image-preview-placeholder {
-  color: #6ee7a8;
+  color: #5cec88;
 }
 
 .dark .inventory-report-row-highlight {
@@ -1268,47 +1301,47 @@ h6,
 
 .dark .inventory-action-edit:hover {
   background: #5cec88;
-  color: #041f13;
+  color: #1e1e1e;
 }
 
 .dark .inventory-action-delete {
-  background: rgb(255 180 171 / 0.12);
-  color: #ffb4ab;
+  background: rgb(242 139 130 / 0.14);
+  color: #f28b82;
 }
 
 .dark .inventory-action-delete:hover {
-  background: #ffb4ab;
-  color: #1f0704;
+  background: #f28b82;
+  color: #1e1e1e;
 }
 
 .dark .inventory-action-reorder {
-  background: rgb(129 140 248 / 0.14);
-  color: #c7d2fe;
+  background: rgb(179 136 255 / 0.14);
+  color: #b388ff;
 }
 
 .dark .inventory-action-reorder:hover {
-  background: #c7d2fe;
-  color: #141036;
+  background: #b388ff;
+  color: #1e1e1e;
 }
 
 .dark .supplier-order-row:hover {
-  border-color: rgb(92 236 136 / 0.24);
-  background: rgb(92 236 136 / 0.08);
+  border-color: rgb(255 255 255 / 0.12);
+  background: rgb(255 255 255 / 0.04);
 }
 
 .dark .inventory-operation-row {
-  border-color: rgb(92 236 136 / 0.18);
-  background: #0f2d1c;
+  border-color: rgb(255 255 255 / 0.12);
+  background: #252525;
 }
 
 .dark .inventory-operation-row:hover,
 .dark .inventory-operation-row-expanded {
-  border-color: rgb(129 140 248 / 0.45);
+  border-color: rgb(92 236 136 / 0.45);
 }
 
 .dark .inventory-operation-media {
-  border-color: rgb(92 236 136 / 0.18);
-  background: #123621;
+  border-color: rgb(255 255 255 / 0.12);
+  background: #2d2d2d;
 }
 
 .dark .inventory-operation-image {
@@ -1316,7 +1349,7 @@ h6,
 }
 
 .dark .users-side-link {
-  color: #c7d8c5;
+  color: #9aa0a6;
 }
 
 .dark .users-side-link:hover {
@@ -1330,18 +1363,18 @@ h6,
 }
 
 .dark .users-change-chip {
-  background: rgb(255 246 214 / 0.12);
-  color: #f2c94c;
+  background: rgb(253 214 99 / 0.14);
+  color: #fdd663;
 }
 
 .dark .users-suggestions-panel {
-  background: #122019;
-  border-color: rgb(199 216 197 / 0.18);
+  background: #2d2d2d;
+  border-color: rgb(255 255 255 / 0.12);
   box-shadow: 0 18px 42px rgb(0 0 0 / 0.34);
 }
 
 .dark .users-suggestion-row {
-  color: #e3f0e3;
+  color: #e8eaed;
 }
 
 .dark .users-suggestion-row:hover,
@@ -1355,12 +1388,12 @@ h6,
 
 .dark .users-suggestion-row-meta,
 .dark .users-suggestion-row-empty {
-  color: #c7d8c5;
+  color: #9aa0a6;
 }
 
 .dark .users-date-range-trigger {
-  background: #26342b;
-  color: #e3f0e3;
+  background: #353535;
+  color: #e8eaed;
 }
 
 .dark .users-date-range-trigger:hover,
@@ -1369,19 +1402,19 @@ h6,
 }
 
 .dark .users-calendar-popover {
-  background: #122019;
-  border-color: rgb(199 216 197 / 0.18);
+  background: #2d2d2d;
+  border-color: rgb(255 255 255 / 0.12);
   box-shadow: 0 22px 48px rgb(0 0 0 / 0.38);
 }
 
 .dark .users-calendar-title,
 .dark .users-calendar-weekdays,
 .dark .users-calendar-day {
-  color: #e3f0e3;
+  color: #e8eaed;
 }
 
 .dark .users-calendar-nav {
-  color: #c7d8c5;
+  color: #9aa0a6;
 }
 
 .dark .users-calendar-nav:hover {
@@ -1395,7 +1428,7 @@ h6,
 }
 
 .dark .users-calendar-day-muted {
-  color: #7f8f82;
+  color: #5f6368;
 }
 
 .dark .users-calendar-day-today {
@@ -1404,7 +1437,7 @@ h6,
 
 .dark .users-calendar-day-in-range {
   background: rgb(92 236 136 / 0.18);
-  color: #d5ffd9;
+  color: #b8ffd0;
 }
 
 .dark .users-calendar-day-selected,
@@ -1427,28 +1460,28 @@ h6,
 }
 
 .dark .users-date-range-panel-muted {
-  color: #c7d8c5;
+  color: #9aa0a6;
 }
 
 .dark .users-date-range-panel-error {
-  background: rgb(255 180 171 / 0.1);
-  border-color: rgb(255 180 171 / 0.28);
-  color: #ffb4ab;
+  background: rgb(242 139 130 / 0.1);
+  border-color: rgb(242 139 130 / 0.28);
+  color: #f28b82;
 }
 
 .dark .users-date-chip {
-  background: #122019;
+  background: #353535;
   border-color: rgb(92 236 136 / 0.22);
-  color: #e3f0e3;
+  color: #e8eaed;
 }
 
 .dark .users-date-chip-index {
   background: #5cec88;
-  color: #041f13;
+  color: #1e1e1e;
 }
 
 .dark .users-page-button {
-  color: #c7d8c5;
+  color: #9aa0a6;
 }
 
 .dark .users-page-button:hover:not(:disabled) {
@@ -1459,44 +1492,44 @@ h6,
 .dark .users-page-button-active,
 .dark .users-page-button-active:hover:not(:disabled) {
   background: #5cec88;
-  color: #041f13;
+  color: #1e1e1e;
 }
 
 .dark .inventory-lot-none {
-  background: #123621;
-  color: #c7d8c5;
+  background: #353535;
+  color: #9aa0a6;
 }
 
 .dark .inventory-lot-ok,
 .dark .inventory-lot-valid {
-  background: rgb(92 236 136 / 0.14);
-  color: #5cec88;
+  background: rgb(129 201 149 / 0.14);
+  color: #81c995;
 }
 
 .dark .inventory-lot-warning {
-  background: rgb(255 246 214 / 0.12);
-  color: #f2c94c;
+  background: rgb(253 214 99 / 0.14);
+  color: #fdd663;
 }
 
 .dark .inventory-lot-expired {
-  background: rgb(255 218 214 / 0.12);
-  color: #ffb4ab;
+  background: rgb(242 139 130 / 0.14);
+  color: #f28b82;
 }
 
 .dark .inventory-restock-input,
 .dark .inventory-restock-date {
-  background: #0f2d1c;
-  border-color: rgb(129 140 248 / 0.34);
-  color: #f4fbf1;
+  background: #2d2d2d;
+  border-color: rgb(92 236 136 / 0.34);
+  color: #e8eaed;
 }
 
 .dark .inventory-restock-paused {
-  background: rgb(255 246 214 / 0.12);
-  color: #f2c94c;
+  background: rgb(253 214 99 / 0.14);
+  color: #fdd663;
 }
 
 .dark .inventory-branch-summary dd {
-  border-bottom-color: #f4fbf1;
+  border-bottom-color: #e8eaed;
 }
 
 #cash-close-print-area {
@@ -1903,5 +1936,145 @@ h6,
 
   .inventory-report-print-footer strong {
     font-weight: 900;
+  }
+}
+
+
+/* Dark mode final polish */
+.dark {
+  --brand-gym: 92 236 136;
+  --primary: 92 236 136;
+  --primary-container: 35 154 85;
+  --on-primary: 4 39 19;
+  --on-primary-container: 239 250 241;
+}
+
+.dark .text-primary,
+.dark .dark\:text-\[\#2ecc71\] {
+  color: #5cec88 !important;
+}
+
+.dark .bg-primary {
+  background-color: #5cec88 !important;
+  color: #041f13 !important;
+}
+
+.dark .bg-primary-container {
+  background-color: #239a55 !important;
+  color: #ffffff !important;
+}
+
+.dark .hover\:bg-primary:hover {
+  background-color: #5cec88 !important;
+  color: #041f13 !important;
+}
+
+.dark .hover\:bg-primary-container:hover {
+  background-color: #2ecc71 !important;
+  color: #041f13 !important;
+}
+
+.dark .inventory-quick-filter-active,
+.dark .inventory-branch-tab-active,
+.dark .discount-option-active {
+  background: #5cec88 !important;
+  color: #041f13 !important;
+}
+
+.dark .discount-option,
+.dark .inventory-quick-filter,
+.dark .inventory-branch-tab:hover {
+  border-color: rgb(92 236 136 / 0.26);
+  color: #5cec88;
+}
+
+.dark #product-grid > div {
+  border-color: rgb(255 255 255 / 0.14);
+  background: #252525 !important;
+}
+
+.dark #product-grid > div:hover {
+  border-color: rgb(92 236 136 / 0.34);
+  background: #2d2d2d !important;
+}
+
+.dark #product-grid button.bg-surface-container-highest,
+.dark #cart-items .border-dashed {
+  background-color: #303030 !important;
+  border-color: rgb(255 255 255 / 0.14) !important;
+}
+
+.dark #restock-panel > section,
+.dark #stock-control-panel > section {
+  background: #252525 !important;
+  border: 1px solid rgb(255 255 255 / 0.12);
+}
+
+.dark #restock-panel header,
+.dark #restock-panel footer,
+.dark #stock-control-panel header,
+.dark #stock-control-panel footer {
+  background: #252525 !important;
+  border-color: rgb(255 255 255 / 0.12) !important;
+}
+
+.dark #restock-panel [class*="bg-[#eef2ff]"],
+.dark #restock-panel #restock-order-summary,
+.dark #restock-panel #restock-feedback {
+  background: #1f3027 !important;
+  border-color: rgb(92 236 136 / 0.26) !important;
+  color: #e8eaed !important;
+}
+
+.dark #restock-panel [class*="text-[#312e81]"],
+.dark #restock-panel [class*="text-[#4f46e5]"] {
+  color: #5cec88 !important;
+}
+
+.dark #restock-panel [class*="border-[#c7d2fe]"],
+.dark #restock-panel input,
+.dark #restock-scan-input,
+.dark #restock-order-input {
+  border-color: rgb(92 236 136 / 0.28) !important;
+}
+
+.dark #restock-panel input,
+.dark #restock-order-summary [class*="bg-white"] {
+  background: #2d2d2d !important;
+  color: #e8eaed !important;
+}
+
+.dark #restock-order-summary .text-on-surface {
+  color: #e8eaed !important;
+}
+
+.dark #restock-order-summary .text-secondary {
+  color: #b7c6bd !important;
+}
+
+.dark #restock-order-summary [class*="bg-[#4f46e5]"],
+.dark #restock-panel button.bg-\[\#4f46e5\],
+.dark #save-restock-changes {
+  background: #5cec88 !important;
+  color: #041f13 !important;
+}
+
+.dark #restock-panel button.hover\:bg-\[\#4338ca\]:hover,
+.dark #save-restock-changes:hover {
+  background: #7af0a0 !important;
+  color: #041f13 !important;
+}
+
+
+/* Inventory management buttons equal sizing */
+#inventory-management-buttons > button {
+  min-height: 4.5rem;
+  line-height: 1.15;
+}
+
+@media (min-width: 640px) {
+  #inventory-management-buttons > button {
+    width: 12rem;
+    min-width: 12rem;
   }
 }

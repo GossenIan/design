@@ -6,19 +6,19 @@ if "%PORT%"=="" set PORT=5500
 
 where python >nul 2>nul
 if %errorlevel%==0 (
-  python server.py --port %PORT%
+  python -B server.py --port %PORT%
   goto :eof
 )
 
 where py >nul 2>nul
 if %errorlevel%==0 (
-  py server.py --port %PORT%
+  py -B server.py --port %PORT%
   goto :eof
 )
 
 set BUNDLED_PYTHON=%USERPROFILE%\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe
 if exist "%BUNDLED_PYTHON%" (
-  "%BUNDLED_PYTHON%" server.py --port %PORT%
+  "%BUNDLED_PYTHON%" -B server.py --port %PORT%
   goto :eof
 )
 

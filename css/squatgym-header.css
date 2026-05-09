@@ -7,27 +7,27 @@
 }
 
 .dark header {
-  background-color: #0f2d1c;
-  border-color: rgb(92 236 136 / 0.24);
+  background-color: #252525;
+  border-color: rgb(255 255 255 / 0.12);
   box-shadow: 0 10px 30px rgb(0 0 0 / 0.28);
 }
 
 .dark header .bg-surface-container-lowest\/95,
 .dark header nav {
-  background-color: rgb(15 45 28 / 0.96) !important;
+  background-color: rgb(37 37 37 / 0.96) !important;
 }
 
 .dark header .text-on-surface,
 .dark header .text-on-surface-variant {
-  color: #f4fbf1 !important;
+  color: #e8eaed !important;
 }
 
 .dark header .border-outline-variant {
-  border-color: rgb(92 236 136 / 0.24) !important;
+  border-color: rgb(255 255 255 / 0.12) !important;
 }
 
 .dark header button:hover {
-  background-color: rgb(92 236 136 / 0.12);
+  background-color: rgb(255 255 255 / 0.08);
 }
 
 .nav-tab {
@@ -48,7 +48,7 @@
 }
 
 .dark .nav-tab {
-  color: #c7d8c5;
+  color: #9aa0a6;
 }
 
 .dark .nav-tab:hover {
@@ -135,7 +135,7 @@
 
 .dark .profile-dropdown-panel,
 .dark .notifications-panel {
-  background-color: rgb(var(--surface-container-high, 26 82 49));
+  background-color: #2d2d2d;
   box-shadow: 0 24px 70px rgb(0 0 0 / 0.55);
 }
 
