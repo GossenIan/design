@@ -263,31 +263,36 @@ h6,
 
 .inventory-report-table th:nth-child(1),
 .inventory-report-table td:nth-child(1) {
-  width: 14%;
+  width: 13%;
 }
 
 .inventory-report-table th:nth-child(2),
 .inventory-report-table td:nth-child(2) {
-  width: 34%;
+  width: 7%;
 }
 
 .inventory-report-table th:nth-child(3),
 .inventory-report-table td:nth-child(3) {
-  width: 14%;
+  width: 31%;
 }
 
 .inventory-report-table th:nth-child(4),
 .inventory-report-table td:nth-child(4) {
-  width: 14%;
+  width: 10%;
 }
 
 .inventory-report-table th:nth-child(5),
 .inventory-report-table td:nth-child(5) {
-  width: 12%;
+  width: 13%;
 }
 
 .inventory-report-table th:nth-child(6),
 .inventory-report-table td:nth-child(6) {
+  width: 14%;
+}
+
+.inventory-report-table th:nth-child(7),
+.inventory-report-table td:nth-child(7) {
   width: 12%;
 }
 
@@ -325,6 +330,80 @@ h6,
 .inventory-table-wrap {
   overflow: hidden;
   width: 100%;
+}
+
+.inventory-table-image-cell {
+  text-align: center;
+}
+
+.inventory-table-image-button {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  cursor: zoom-in;
+  display: inline-flex;
+  justify-content: center;
+  padding: 0;
+}
+
+.inventory-table-image-button:focus-visible {
+  outline: 3px solid rgb(0 109 55 / 0.35);
+  outline-offset: 3px;
+}
+
+.inventory-table-product-image,
+.inventory-table-product-placeholder {
+  align-items: center;
+  border: 1px solid rgb(121 116 126 / 0.18);
+  border-radius: 0.55rem;
+  display: inline-flex;
+  height: 3.4rem;
+  justify-content: center;
+  transition: border-color 0.18s ease, transform 0.18s ease;
+  width: 3.4rem;
+}
+
+.inventory-table-image-button:hover .inventory-table-product-image {
+  border-color: rgb(0 109 55 / 0.45);
+  transform: scale(1.04);
+}
+
+.inventory-table-product-image {
+  background: #ffffff;
+  object-fit: contain;
+  padding: 0.25rem;
+}
+
+.inventory-table-product-placeholder {
+  background: #f1f8f3;
+  color: #006d37;
+  font-size: 1.7rem;
+}
+
+.inventory-image-preview-frame {
+  align-items: center;
+  background: #ffffff;
+  border: 1px solid rgb(121 116 126 / 0.18);
+  border-radius: 0.75rem;
+  display: flex;
+  justify-content: center;
+  min-height: 22rem;
+  overflow: hidden;
+  padding: 1rem;
+}
+
+.inventory-image-preview-img {
+  max-height: 62vh;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.inventory-image-preview-placeholder {
+  align-items: center;
+  color: #006d37;
+  display: inline-flex;
+  font-size: 5rem;
+  justify-content: center;
 }
 
 .inventory-code-cell {
@@ -1153,6 +1232,29 @@ h6,
 
 .dark .inventory-report-row:hover {
   background: rgb(92 236 136 / 0.08);
+}
+
+.dark .inventory-table-product-image,
+.dark .inventory-table-product-placeholder {
+  border-color: rgb(202 196 208 / 0.24);
+}
+
+.dark .inventory-table-product-image {
+  background: #1f2937;
+}
+
+.dark .inventory-table-product-placeholder {
+  background: rgb(0 109 55 / 0.18);
+  color: #6ee7a8;
+}
+
+.dark .inventory-image-preview-frame {
+  background: #111c16;
+  border-color: rgb(192 201 193 / 0.2);
+}
+
+.dark .inventory-image-preview-placeholder {
+  color: #6ee7a8;
 }
 
 .dark .inventory-report-row-highlight {

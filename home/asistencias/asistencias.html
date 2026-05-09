@@ -137,11 +137,11 @@
             <p id="metric-total-today" class="mt-4 font-headline text-3xl font-black text-primary">0</p>
           </article>
           <article class="rounded-xl bg-surface-container-lowest p-5 shadow-sm">
-            <p class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Activas</p>
+            <p class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Presentes</p>
             <p id="metric-active-membership" class="mt-4 font-headline text-3xl font-black">0</p>
           </article>
           <article class="rounded-xl bg-surface-container-lowest p-5 shadow-sm">
-            <p class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Vencidas</p>
+            <p class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Ausentes</p>
             <p id="metric-expired-membership" class="mt-4 font-headline text-3xl font-black text-error">0</p>
           </article>
         </section>
@@ -153,49 +153,43 @@
               <h2 class="font-headline text-2xl font-black">Registrar nueva asistencia</h2>
             </div>
           </div>
-          <form id="manual-attendance-form" class="mt-4 grid gap-3 lg:grid-cols-[minmax(0,1fr)_minmax(12rem,0.6fr)_minmax(12rem,0.6fr)_auto]">
+                    <form id="manual-attendance-form" class="mt-4 grid gap-3 sm:grid-cols-[minmax(12rem,22rem)_auto] sm:items-end">
             <label class="grid gap-2 text-sm font-bold uppercase text-on-surface-variant">
               DNI
-              <input id="attendance-member-input" class="rounded-lg border-none bg-surface-container-highest px-3 py-3 text-base font-medium normal-case text-on-surface focus:ring-2 focus:ring-primary" type="text" placeholder="Ej. 30123456" inputmode="numeric" pattern="[0-9]{7,8}" maxlength="8" required>
+              <input id="attendance-member-input" class="rounded-lg border-none bg-surface-container-highest px-3 py-3 text-base font-medium normal-case text-on-surface focus:ring-2 focus:ring-primary" type="text" placeholder="30123456" inputmode="numeric" pattern="[0-9]{7,8}" maxlength="8" autocomplete="off" required>
             </label>
-            <label class="grid gap-2 text-sm font-bold uppercase text-on-surface-variant">
-              Categoria
-              <select id="attendance-plan-input" class="rounded-lg border-none bg-surface-container-highest px-3 py-3 text-base font-bold normal-case text-on-surface focus:ring-2 focus:ring-primary">
-                <option>Profesores</option>
-                <option>Clientes</option>
-                <option>Encargados</option>
-              </select>
-            </label>
-            <label class="grid gap-2 text-sm font-bold uppercase text-on-surface-variant">
-              Estado
-              <select id="attendance-status-input" class="rounded-lg border-none bg-surface-container-highest px-3 py-3 text-base font-bold normal-case text-on-surface focus:ring-2 focus:ring-primary">
-                <option value="activa">Activa</option>
-                <option value="vencido">Vencido</option>
-              </select>
-            </label>
-            <button type="submit" class="rounded-lg bg-primary px-4 py-3 text-sm font-bold text-on-primary hover:bg-primary-container hover:text-on-primary-container lg:self-end">
-              Guardar
+            <button type="submit" class="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 text-sm font-bold text-on-primary hover:bg-primary-container hover:text-on-primary-container">
+              <span class="material-symbols-outlined text-lg">how_to_reg</span>
+              Registrar
             </button>
           </form>
         </section>
 
         <section id="attendance-table-panel" class="rounded-xl border border-outline-variant/15 bg-surface-container-lowest shadow-[0px_12px_32px_rgba(28,27,27,0.06)]">
-          <div class="grid gap-3 border-b border-outline-variant/15 p-4 lg:grid-cols-[minmax(0,1fr)_14rem]">
+          <div class="grid gap-3 border-b border-outline-variant/15 p-4 lg:grid-cols-[minmax(0,1fr)_13rem_14rem]">
             <div class="relative">
               <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-secondary">search</span>
-              <input id="attendance-search" class="w-full rounded-lg border-none bg-surface-container-highest py-3 pl-11 pr-4 text-sm font-medium text-on-surface placeholder:text-secondary focus:ring-2 focus:ring-primary" type="search" placeholder="Buscar por DNI o categoria">
+              <input id="attendance-search" class="w-full rounded-lg border-none bg-surface-container-highest py-3 pl-11 pr-4 text-sm font-medium text-on-surface placeholder:text-secondary focus:ring-2 focus:ring-primary" type="search" placeholder="Buscar por DNI, nombre o categoria">
             </div>
-            <select id="attendance-filter" class="rounded-lg border-none bg-surface-container-highest px-3 py-3 text-sm font-bold text-on-surface focus:ring-2 focus:ring-primary">
-              <option value="todos">Todas</option>
-              <option value="activa">Activas</option>
-              <option value="vencido">Vencidas</option>
+            <select id="attendance-filter" class="rounded-lg border-none bg-surface-container-highest px-3 py-3 text-sm font-bold text-on-surface focus:ring-2 focus:ring-primary" aria-label="Filtrar por categoria">
+              <option value="todos">Todas las categorias</option>
+              <option value="Clientes">Clientes</option>
+              <option value="Profesores">Profesores</option>
+              <option value="Encargados">Encargados</option>
+            </select>
+            <select id="attendance-status-filter" class="rounded-lg border-none bg-surface-container-highest px-3 py-3 text-sm font-bold text-on-surface focus:ring-2 focus:ring-primary" aria-label="Filtrar por estado">
+              <option value="todos">Todos los estados</option>
+              <option value="presente">Presente</option>
+              <option value="ausente">Ausente</option>
+              <option value="ausente-sin-justificativo">Ausente sin justificativo</option>
             </select>
           </div>
           <div class="overflow-x-auto">
-            <table class="w-full min-w-[54rem] text-left">
+            <table class="w-full min-w-[64rem] text-left">
               <thead class="bg-surface-container-low">
                 <tr>
                   <th class="px-5 py-4 text-xs font-black uppercase tracking-wider text-on-surface-variant">DNI</th>
+                  <th class="px-5 py-4 text-xs font-black uppercase tracking-wider text-on-surface-variant">Nombre</th>
                   <th class="px-5 py-4 text-xs font-black uppercase tracking-wider text-on-surface-variant">Categoria</th>
                   <th class="px-5 py-4 text-xs font-black uppercase tracking-wider text-on-surface-variant">Ingreso</th>
                   <th class="px-5 py-4 text-xs font-black uppercase tracking-wider text-on-surface-variant">Estado</th>
@@ -228,10 +222,16 @@
         </header>
         <form id="attendance-edit-form" class="mt-5 grid gap-4">
           <input id="attendance-edit-id" type="hidden">
-          <label class="grid gap-2 text-sm font-bold uppercase text-on-surface-variant">
-            DNI
-            <input id="attendance-edit-member" class="rounded-lg border-none bg-surface-container-highest px-3 py-3 text-base font-medium normal-case text-on-surface focus:ring-2 focus:ring-primary" type="text" inputmode="numeric" pattern="[0-9]{7,8}" maxlength="8" required>
-          </label>
+          <div class="grid gap-4 sm:grid-cols-2">
+            <label class="grid gap-2 text-sm font-bold uppercase text-on-surface-variant">
+              DNI
+              <input id="attendance-edit-member" class="rounded-lg border-none bg-surface-container-highest px-3 py-3 text-base font-medium normal-case text-on-surface focus:ring-2 focus:ring-primary" type="text" inputmode="numeric" pattern="[0-9]{7,8}" maxlength="8" required>
+            </label>
+            <label class="grid gap-2 text-sm font-bold uppercase text-on-surface-variant">
+              Nombre
+              <input id="attendance-edit-name" class="rounded-lg border-none bg-surface-container-highest px-3 py-3 text-base font-medium normal-case text-on-surface focus:ring-2 focus:ring-primary" type="text" required>
+            </label>
+          </div>
           <div class="grid gap-4 sm:grid-cols-2">
             <label class="grid gap-2 text-sm font-bold uppercase text-on-surface-variant">
               Categoria
@@ -244,8 +244,9 @@
             <label class="grid gap-2 text-sm font-bold uppercase text-on-surface-variant">
               Estado
               <select id="attendance-edit-status" class="rounded-lg border-none bg-surface-container-highest px-3 py-3 text-base font-bold normal-case text-on-surface focus:ring-2 focus:ring-primary">
-                <option value="activa">Activa</option>
-                <option value="vencido">Vencido</option>
+                <option value="presente">Presente</option>
+                <option value="ausente">Ausente</option>
+                <option value="ausente-sin-justificativo">Ausente sin justificativo</option>
               </select>
             </label>
           </div>
@@ -260,7 +261,7 @@
     <div id="attendance-toast" class="fixed bottom-5 right-5 z-[140] hidden max-w-sm rounded-xl border border-primary-container bg-primary-container px-4 py-3 text-sm font-bold text-primary shadow-2xl"></div>
 
     <script src="../../js/squatgym-header.js"></script>
-    <script src="../../js/asistencias.js"></script>
+    <script src="../../js/asistencias.js?v=attendance-dni-only-1"></script>
   </body>
 </html>
 

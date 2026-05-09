@@ -15,7 +15,7 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="../../css/squatgym-theme.css">
+  <link rel="stylesheet" href="../../css/squatgym-theme.css?v=inventory-image-popup-1">
   <link rel="stylesheet" href="../../css/squatgym-header.css">
 </head>
 
@@ -282,7 +282,7 @@
                   Carga de stock
                 </h2>
                 <p class="mt-1 text-sm font-medium text-on-surface-variant">
-                  Escanea, carga cantidad y guarda. Al guardar se suma al stock de la sucursal seleccionada.
+                  Escanea y revisa cantidades. Esta reposicion queda como simulacion y no modifica el stock actual.
                 </p>
               </div>
               <button id="close-restock-modal" type="button"
@@ -354,7 +354,7 @@
               <button id="save-restock-changes" type="button"
                 class="rounded-lg bg-[#4f46e5] px-5 py-3 font-bold text-white hover:bg-[#4338ca] disabled:cursor-not-allowed disabled:opacity-50"
                 disabled>
-                Guardar cambios</button>
+                Guardar simulacion</button>
             </footer>
           </section>
         </div>
@@ -371,7 +371,7 @@
                   Conteo fisico por sucursal
                 </h2>
                 <p class="mt-1 text-sm font-medium text-on-surface-variant">
-                  Carga el stock contado. Al guardar, el sistema ajusta la existencia real.
+                  Carga el stock contado para control interno. Al guardar, el sistema ajusta la existencia real.
                 </p>
               </div>
               <button id="close-stock-control-modal" type="button"
@@ -439,7 +439,7 @@
               Limpiar lista</button>
             <button id="confirm-supplier-order" type="button"
               class="rounded-lg bg-primary px-5 py-3 text-sm font-bold text-on-primary hover:bg-primary-container hover:text-on-primary-container disabled:cursor-not-allowed disabled:opacity-50">
-              Confirmar</button>
+              Enviar a pedidos</button>
           </div>
           <div id="supplier-order-toast"
             class="mt-4 hidden rounded-xl border border-primary-container bg-primary-container/15 px-4 py-3 text-primary">
@@ -450,6 +450,34 @@
               <p class="text-sm font-black">
                 El pedido de reposicion fue enviado al encargado.
               </p>
+            </div>
+          </div>
+        </section>
+        <section id="inventory-report-heading"
+          class="rounded-xl border border-outline-variant/15 bg-surface-container-low p-5 shadow-[0px_12px_32px_rgba(28,27,27,0.06)] mb-4">
+          <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+              <p class="text-xs font-black uppercase tracking-wider text-primary">
+                Listado por sucursal
+              </p>
+              <h2 class="font-headline text-2xl font-black text-on-surface">
+                Informe de inventario
+              </h2>
+            </div>
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+              <div class="rounded-lg border border-outline-variant/30 bg-surface-container-lowest px-4 py-3">
+                <p class="text-[11px] font-black uppercase tracking-wider text-on-surface-variant">
+                  Fecha de ultima reposicion
+                </p>
+                <p id="inventory-issued-date" class="font-headline text-base font-black text-on-surface">
+                  --/--/----
+                </p>
+              </div>
+              <button id="print-inventory-report" type="button"
+                class="flex items-center justify-center gap-2 rounded-lg bg-surface-container px-4 py-3 text-sm font-bold text-on-surface hover:bg-surface-container-high active:scale-95">
+                <span class="material-symbols-outlined text-lg">print</span>
+                Imprimir
+              </button>
             </div>
           </div>
         </section>
@@ -494,6 +522,8 @@
                 Precio menor</option>
               <option value="precio-desc">
                 Precio mayor</option>
+              <option value="categoria-asc">
+                Categoria A-Z</option>
               <option value="stock-asc">
                 Stock menor</option>
               <option value="stock-desc">
@@ -505,34 +535,6 @@
             </select>
           </div>
         </section>
-        <section id="inventory-report-heading"
-          class="rounded-xl border border-outline-variant/15 bg-surface-container-low p-5 shadow-[0px_12px_32px_rgba(28,27,27,0.06)] mb-4">
-          <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <div>
-              <p class="text-xs font-black uppercase tracking-wider text-primary">
-                Listado por sucursal
-              </p>
-              <h2 class="font-headline text-2xl font-black text-on-surface">
-                Informe de inventario
-              </h2>
-            </div>
-            <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
-              <div class="rounded-lg border border-outline-variant/30 bg-surface-container-lowest px-4 py-3">
-                <p class="text-[11px] font-black uppercase tracking-wider text-on-surface-variant">
-                  Fecha de ultima reposicion
-                </p>
-                <p id="inventory-issued-date" class="font-headline text-base font-black text-on-surface">
-                  --/--/----
-                </p>
-              </div>
-              <button id="print-inventory-report" type="button"
-                class="flex items-center justify-center gap-2 rounded-lg bg-surface-container px-4 py-3 text-sm font-bold text-on-surface hover:bg-surface-container-high active:scale-95">
-                <span class="material-symbols-outlined text-lg">print</span>
-                Imprimir
-              </button>
-            </div>
-          </div>
-        </section>
         <section id="inventory-report"
           class="inventory-report overflow-hidden rounded-xl border border-outline-variant/15 bg-surface-container-lowest shadow-[0px_12px_32px_rgba(28,27,27,0.06)]">
           <div id="inventory-list" class="space-y-8 p-5">
@@ -541,174 +543,15 @@
             class="flex flex-col gap-3 border-t border-outline-variant/15 bg-surface-container-low px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
             <p id="inventory-count" class="text-sm font-semibold text-on-surface-variant">
               0 productos
-            <div class="flex flex-col md:ml-64">
-              <main class="flex-1 p-4 lg:p-8">
-                <section id="supplier-order-panel"
-                  class="rounded-xl border border-outline-variant/15 bg-surface-container-lowest p-4 shadow-[0px_12px_32px_rgba(28,27,27,0.06)]">
-                  <div class="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
-                    <div class="min-w-0 flex-1">
-                      <p class="text-xs font-black uppercase tracking-wider text-primary">
-                        Lista de pedido al proveedor
-                      </p>
-                      <h2 id="supplier-order-title" class="font-headline text-xl font-black text-on-surface">
-                        0 productos por reordenar
-                      </h2>
-                    </div>
-                    <div class="grid w-full gap-2 sm:grid-cols-[minmax(14rem,1fr)_7rem_auto] xl:max-w-2xl">
-                      <select id="supplier-product-select"
-                        class="rounded-lg border-none bg-surface-container-highest px-3 py-3 text-sm font-bold text-on-surface focus:ring-2 focus:ring-primary">
-                      </select>
-                      <input id="supplier-quantity-input"
-                        class="rounded-lg border-none bg-surface-container-highest px-3 py-3 text-sm font-bold text-on-surface focus:ring-2 focus:ring-primary"
-                        type="number" min="1" step="1" value="1" aria-label="Cantidad para pedido">
-                      <button id="add-supplier-order-item" type="button"
-                        class="rounded-lg bg-primary px-4 py-3 text-sm font-bold text-on-primary hover:bg-primary-container hover:text-on-primary-container">
-                        Anadir</button>
-                    </div>
-                  </div>
-                  <div id="supplier-order-list" class="mt-4 grid gap-2">
-                  </div>
-                  <div class="mt-4 flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-end">
-                    <button id="clear-supplier-order" type="button"
-                      class="rounded-lg bg-surface-container px-4 py-3 text-sm font-bold text-on-surface hover:bg-surface-container-high">
-                      Limpiar lista</button>
-                    <button id="confirm-supplier-order" type="button"
-                      class="rounded-lg bg-primary px-5 py-3 text-sm font-bold text-on-primary hover:bg-primary-container hover:text-on-primary-container disabled:cursor-not-allowed disabled:opacity-50">
-                      Confirmar</button>
-                  </div>
-                  <div id="supplier-order-toast"
-                    class="mt-4 hidden rounded-xl border border-primary-container bg-primary-container/15 px-4 py-3 text-primary">
-                    <div class="flex items-center gap-3">
-                      <span
-                        class="material-symbols-outlined flex h-9 w-9 items-center justify-center rounded-full bg-primary text-on-primary">
-                        check</span>
-                      <p class="text-sm font-black">
-                        El pedido de reposicion fue enviado al encargado.
-                      </p>
-                    </div>
-                  </div>
-                </section>
-                <section id="inventory-search-panel"
-                  class="mt-6 rounded-xl bg-surface-container-lowest p-4 shadow-[0px_12px_32px_rgba(28,27,27,0.06)]">
-                  <div class="grid gap-3 lg:grid-cols-[1.7fr_1fr_1fr_auto]">
-                    <label class="relative"><span
-                        class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-secondary">
-                        search</span>
-                      <input id="inventory-search"
-                        class="w-full rounded-lg border-none bg-surface-container-highest py-3 pl-11 pr-4 text-sm font-medium text-on-surface placeholder:text-secondary focus:ring-2 focus:ring-primary"
-                        type="search" placeholder="Buscar por producto, codigo de barras, categoria...">
-                    </label>
-                    <select id="category-filter"
-                      class="rounded-lg border-none bg-surface-container-highest px-3 py-3 text-sm font-bold text-on-surface focus:ring-2 focus:ring-primary">
-                    </select>
-                    <select id="status-filter"
-                      class="rounded-lg border-none bg-surface-container-highest px-3 py-3 text-sm font-bold text-on-surface focus:ring-2 focus:ring-primary">
-                      <option value="todos">
-                        Todos los estados</option>
-                      <option value="ok">
-                        Stock saludable</option>
-                      <option value="bajo">
-                        Stock bajo</option>
-                      <option value="sin-stock">
-                        Sin stock</option>
-                    </select>
-                    <button id="clear-filters" type="button"
-                      class="rounded-lg bg-surface-container px-4 py-3 text-sm font-bold text-on-surface hover:bg-surface-container-high active:scale-95">
-                      Limpiar</button>
-                  </div>
-                  <div class="mt-4 flex flex-wrap items-center gap-3"><span
-                      class="text-xs font-bold uppercase tracking-wider text-secondary">
-                      Ordenar por</span>
-                    <select id="sort-select"
-                      class="rounded-lg border-none bg-surface-container-highest px-3 py-2 text-sm font-bold text-on-surface focus:ring-2 focus:ring-primary">
-                      <option value="sucursal-asc">
-                        Sucursal A-Z</option>
-                      <option value="sucursal-desc">
-                        Sucursal Z-A</option>
-                      <option value="precio-asc">
-                        Precio menor</option>
-                      <option value="precio-desc">
-                        Precio mayor</option>
-                      <option value="stock-asc">
-                        Stock menor</option>
-                      <option value="stock-desc">
-                        Stock mayor</option>
-                      <option value="nombre-asc">
-                        Nombre A-Z</option>
-                      <option value="nombre-desc">
-                        Nombre Z-A</option>
-                    </select>
-                  </div>
-                </section>
-                <section id="inventory-report-heading"
-                  class="mt-6 rounded-xl border border-outline-variant/15 bg-surface-container-low p-5 shadow-[0px_12px_32px_rgba(28,27,27,0.06)]">
-                  <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-                    <div>
-                      <p class="text-xs font-black uppercase tracking-wider text-primary">
-                        Listado por sucursal
-                      </p>
-                      <h2 class="font-headline text-2xl font-black text-on-surface">
-                        Informe de inventario
-                      </h2>
-                    </div>
-                    <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
-                      <div class="rounded-lg border border-outline-variant/30 bg-surface-container-lowest px-4 py-3">
-                        <p class="text-[11px] font-black uppercase tracking-wider text-on-surface-variant">
-                          Fecha de ultima reposicion
-                        </p>
-                        <p id="inventory-issued-date" class="font-headline text-base font-black text-on-surface">
-                          --/--/----
-                        </p>
-                      </div>
-                      <button id="print-inventory-report" type="button"
-                        class="flex items-center justify-center gap-2 rounded-lg bg-surface-container px-4 py-3 text-sm font-bold text-on-surface hover:bg-surface-container-high active:scale-95">
-                        <span class="material-symbols-outlined text-lg">print</span>
-                        Imprimir
-                      </button>
-                    </div>
-                  </div>
-                </section>
-                <section id="inventory-report"
-                  class="inventory-report mt-6 overflow-hidden rounded-xl border border-outline-variant/15 bg-surface-container-lowest shadow-[0px_12px_32px_rgba(28,27,27,0.06)]">
-                  <div id="inventory-list" class="space-y-8 p-5">
-                  </div>
-                  <div
-                    class="flex flex-col gap-3 border-t border-outline-variant/15 bg-surface-container-low px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
-                    <p id="inventory-count" class="text-sm font-semibold text-on-surface-variant">
-                      0 productos
-                    </p>
-                    <p class="text-xs font-medium text-secondary">
-                      Los registros se guardan localmente y alimentan el catalogo del kiosco por sucursal.
-                    </p>
-                  </div>
-                </section>
-              </main>
-            </div>
-            <!-- Sidebar Navigation -->
-            <nav id="inventory-sidebar"
-              class="hidden md:flex flex-col h-[calc(100vh-7rem)] py-8 px-4 w-64 fixed left-0 top-28 bg-[#F6F3F2] dark:bg-zinc-900 border-r border-surface-container-high z-40 overflow-y-auto">
-              <div class="mb-8 px-4">
-                <h2 class="font-['Manrope'] font-extrabold text-[#1C1B1B] dark:text-zinc-100 text-lg">Inventario</h2>
-                <p id="sidebar-branch-name" class="text-secondary text-sm font-['Inter']">Todas las sucursales</p>
-              </div>
-              <div class="flex flex-col gap-4 flex-1">
-                <button type="button" class="inv-sidebar-link inv-sidebar-link-active" data-sidebar-target="informe">
-                  <span class="material-symbols-outlined">assessment</span>
-                  Informe
-                </button>
-                <button type="button" class="inv-sidebar-link" data-sidebar-target="pedidos" id="sidebar-pedidos-btn">
-                  <span class="material-symbols-outlined">list_alt</span>
-                  Pedidos
-                  <span id="sidebar-pedidos-badge"
-                    class="ml-auto rounded-full bg-primary px-2 py-0.5 text-[10px] font-bold text-on-primary hidden">0</span>
-                </button>
-                <button type="button" class="inv-sidebar-link" data-sidebar-target="reposicion"
-                  id="sidebar-reposicion-btn">
-                  <span class="material-symbols-outlined">add_shopping_cart</span>
-                  Reposición
-                </button>
-              </div>
-            </nav>
+            </p>
+            <p class="text-xs font-medium text-secondary">
+              Los registros se guardan localmente y alimentan el catalogo del kiosco por sucursal.
+            </p>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
             <!-- Pedidos Pendientes Modal -->
             <div id="pedidos-modal"
               class="fixed inset-0 z-[120] hidden flex items-center justify-center bg-black/45 px-4 py-6">
@@ -719,7 +562,7 @@
                     <p class="text-xs font-black uppercase tracking-wider text-primary">Gestion de pedidos</p>
                     <h2 class="font-headline text-3xl font-black">Pedidos pendientes</h2>
                     <p class="mt-1 text-sm font-medium text-on-surface-variant">
-                      La secretaria crea pre-pedidos. El encargado los revisa, modifica y confirma.
+                      Los carritos enviados quedan pendientes hasta que el encargado los confirme.
                     </p>
                   </div>
                   <button id="close-pedidos-modal" type="button"
@@ -883,12 +726,46 @@
                 </form>
               </div>
             </div>
+            <div id="inventory-image-modal"
+              class="fixed inset-0 z-[130] hidden items-center justify-center bg-black/55 px-4 py-6">
+              <section
+                class="w-full max-w-2xl overflow-hidden rounded-xl bg-background text-on-surface shadow-2xl">
+                <header class="flex items-start justify-between gap-4 border-b border-outline-variant/20 p-5">
+                  <div class="min-w-0">
+                    <p class="text-xs font-black uppercase tracking-wider text-primary">
+                      Vista del producto
+                    </p>
+                    <h2 id="inventory-image-modal-name"
+                      class="mt-1 truncate font-headline text-2xl font-black text-on-surface">
+                      Producto
+                    </h2>
+                    <p id="inventory-image-modal-code" class="mt-1 text-sm font-bold text-on-surface-variant">
+                      Codigo de barras: --
+                    </p>
+                  </div>
+                  <button id="close-inventory-image-modal" type="button"
+                    class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-secondary hover:bg-surface-container"
+                    aria-label="Cerrar vista de imagen">
+                    <span class="material-symbols-outlined">
+                      close</span></button>
+                </header>
+                <div class="p-5">
+                  <div class="inventory-image-preview-frame">
+                    <img id="inventory-image-modal-img" class="inventory-image-preview-img hidden" alt="">
+                    <span id="inventory-image-modal-placeholder"
+                      class="inventory-image-preview-placeholder material-symbols-outlined hidden" aria-hidden="true">
+                      inventory_2
+                    </span>
+                  </div>
+                </div>
+              </section>
+            </div>
             <!-- Shared scripts -->
             <script src="../../js/squatgym-header.js"></script>
             <script src="../../js/image-upload.js"></script>
             <script src="../../js/auth.js"></script>
             <!-- Page scripts -->
-            <script src="../../js/inventario.js?v=print-report-1"></script>
+            <script src="../../js/inventario.js?v=inventory-image-popup-1"></script>
 </body>
 
 </html>

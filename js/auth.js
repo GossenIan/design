@@ -41,7 +41,11 @@ function obtenerRol() {
 function obtenerSucursalUsuario() {
   const sesion = obtenerSesion();
 
-  return sesion?.sucursal || null;
+  if (!sesion || sesion.role === ROLES.ADMINISTRADOR) {
+    return null;
+  }
+
+  return sesion.sucursal || 'SquatGym Central';
 }
 
 function obtenerNombreUsuario() {
@@ -69,7 +73,9 @@ function esEncargadoOSuperior() {
 }
 
 function tieneSucursalFija() {
-  return obtenerSucursalUsuario() !== null;
+  const sesion = obtenerSesion();
+
+  return Boolean(sesion && sesion.role !== ROLES.ADMINISTRADOR);
 }
 
 function aplicarPermisoVisibilidad(elementId, visible) {
@@ -88,13 +94,22 @@ function aplicarPermisoVisibilidad(elementId, visible) {
   }
 }
 
+function obtenerRutaLogin() {
+  const partes = window.location.pathname.replace(/\\/g, '/').split('/').filter(Boolean);
+  const indiceHome = partes.lastIndexOf('home');
+
+  if (indiceHome === -1) {
+    return 'index.html';
+  }
+
+  const profundidadDesdeHome = partes.length - indiceHome - 1;
+  return profundidadDesdeHome > 1 ? '../../index.html' : '../index.html';
+}
+
 function requerirAutenticacion() {
   const sesion = obtenerSesion();
   if (!sesion) {
-    // Si no hay sesión, redirigir al login
-    // Calcula la ruta relativa a index.html según si estamos en /home/inventario o /home/kiosco
-    const isHomeSubdir = window.location.pathname.includes('/home/');
-    window.location.href = isHomeSubdir ? '../../index.html' : 'index.html';
+    window.location.href = obtenerRutaLogin();
   }
 }
 

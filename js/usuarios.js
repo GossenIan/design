@@ -15,6 +15,8 @@ const PERMISOS_USUARIO = [
 const USUARIOS_PAGE_SIZE = 3;
 const SUCURSAL_USUARIO_DEFAULT = 'SquatGym Central';
 const AUDITORIAS_STORAGE_KEY = 'squatgym-users-audits';
+const AUDITORIAS_VERSION_KEY = 'squatgym-users-audits-version';
+const AUDITORIAS_DATA_VERSION = '2026-05-09-user-report';
 
 const usuariosDemo = [
   {
@@ -24,7 +26,7 @@ const usuariosDemo = [
     nombre: 'Alejandro Moreno',
     email: 'amoreno@squatgym.com',
     rol: 'Administrador',
-    sucursal: 'SquatGym Central',
+    sucursal: null,
     estado: 'Activo',
     iniciales: 'AM',
     permisos: ['kiosco', 'inventario', 'usuarios', 'auditoria', 'caja', 'asistencias']
@@ -110,6 +112,102 @@ const auditoriasDemo = [
     modulo: 'Kiosco',
     accion: 'Cierre de caja',
     detalle: 'Cierre de caja 04/05/2026 12:00'
+  },
+  {
+    id: 'a-5',
+    userId: 'u-1',
+    fechaISO: '2026-05-05T08:05:00',
+    modulo: 'Usuarios',
+    accion: 'Alta de usuario',
+    detalle: 'Creo la cuenta secre con rol Secretaria'
+  },
+  {
+    id: 'a-6',
+    userId: 'u-1',
+    fechaISO: '2026-05-05T08:18:00',
+    modulo: 'Usuarios',
+    accion: 'Permisos',
+    detalle: 'Habilito Inventario y Asistencias para encargado'
+  },
+  {
+    id: 'a-7',
+    userId: 'u-2',
+    fechaISO: '2026-05-05T09:42:00',
+    modulo: 'Inventario',
+    accion: 'Pedido proveedor',
+    detalle: 'Armo borrador con 4 productos para reorden'
+  },
+  {
+    id: 'a-8',
+    userId: 'u-3',
+    fechaISO: '2026-05-05T10:10:00',
+    modulo: 'Asistencias',
+    accion: 'Registro manual',
+    detalle: 'Cargo asistencia de cliente DNI 30123456'
+  },
+  {
+    id: 'a-9',
+    userId: 'u-3',
+    fechaISO: '2026-05-05T10:35:00',
+    modulo: 'Asistencias',
+    accion: 'Filtro',
+    detalle: 'Filtro asistencias por Profesores'
+  },
+  {
+    id: 'a-10',
+    userId: 'u-4',
+    fechaISO: '2026-05-05T11:20:00',
+    modulo: 'Inventario',
+    accion: 'Informe',
+    detalle: 'Imprimio reporte de inventario de Sucursal Sur'
+  },
+  {
+    id: 'a-11',
+    userId: 'u-2',
+    fechaISO: '2026-05-06T08:30:00',
+    modulo: 'Kiosco',
+    accion: 'Apertura caja',
+    detalle: 'Inicio turno de caja en SquatGym Central'
+  },
+  {
+    id: 'a-12',
+    userId: 'u-1',
+    fechaISO: '2026-05-06T09:15:00',
+    modulo: 'Auditoria',
+    accion: 'Reporte individual',
+    detalle: 'Consulto actividad del usuario Beatriz Sanchez'
+  },
+  {
+    id: 'a-13',
+    userId: 'u-3',
+    fechaISO: '2026-05-06T09:50:00',
+    modulo: 'Asistencias',
+    accion: 'Edicion',
+    detalle: 'Cambio estado a Ausente sin justificativo'
+  },
+  {
+    id: 'a-14',
+    userId: 'u-4',
+    fechaISO: '2026-05-06T10:25:00',
+    modulo: 'Inventario',
+    accion: 'Control de stock',
+    detalle: 'Reviso conteo fisico sin aplicar ajustes'
+  },
+  {
+    id: 'a-15',
+    userId: 'u-2',
+    fechaISO: '2026-05-06T12:05:00',
+    modulo: 'Pedidos',
+    accion: 'Confirmacion',
+    detalle: 'Envio pedido de reposicion al encargado'
+  },
+  {
+    id: 'a-16',
+    userId: 'u-1',
+    fechaISO: '2026-05-07T08:00:00',
+    modulo: 'Seguridad',
+    accion: 'Cambio de clave',
+    detalle: 'Restablecio contrasena temporal para cruiz'
   }
 ];
 let auditorias = [];
@@ -458,7 +556,10 @@ function normalizarAuditoria(audit) {
 
 function cargarAuditorias() {
   try {
-    const saved = JSON.parse(localStorage.getItem(AUDITORIAS_STORAGE_KEY) || '[]');
+    const version = localStorage.getItem(AUDITORIAS_VERSION_KEY);
+    const saved = version === AUDITORIAS_DATA_VERSION
+      ? JSON.parse(localStorage.getItem(AUDITORIAS_STORAGE_KEY) || '[]')
+      : [];
     const normalizadas = Array.isArray(saved)
       ? saved.map(normalizarAuditoria).filter(Boolean)
       : [];
@@ -466,14 +567,20 @@ function cargarAuditorias() {
     auditorias = normalizadas.length
       ? normalizadas
       : auditoriasDemo.map((audit) => ({ ...audit }));
+
+    if (version !== AUDITORIAS_DATA_VERSION) {
+      guardarAuditorias();
+    }
   } catch (error) {
     auditorias = auditoriasDemo.map((audit) => ({ ...audit }));
+    guardarAuditorias();
   }
 }
 
 function guardarAuditorias() {
   try {
     localStorage.setItem(AUDITORIAS_STORAGE_KEY, JSON.stringify(auditorias));
+    localStorage.setItem(AUDITORIAS_VERSION_KEY, AUDITORIAS_DATA_VERSION);
   } catch (error) {
     return false;
   }
@@ -1123,7 +1230,7 @@ function renderizarTablaUsuarios() {
               <button type="button" onclick="abrirModalResetPassword('${escapeHtml(usuario.id)}')" class="users-icon-button text-[#7a5700]" title="Restablecer contrasena">
                 <span class="material-symbols-outlined text-lg">key</span>
               </button>
-              <button type="button" onclick="imprimirReporteAuditoria()" class="users-icon-button text-on-surface" title="Imprimir reporte general">
+              <button type="button" onclick="imprimirReporteAuditoria('${escapeHtml(usuario.id)}')" class="users-icon-button text-on-surface" title="Imprimir reporte del usuario">
                 <span class="material-symbols-outlined text-lg">print</span>
               </button>
             </div>
@@ -1411,7 +1518,7 @@ function crearUsuarioDesdeDatos({ usuario, contrasena, nombre, email, rol = ROLE
     nombre: nombreLimpio,
     email: String(email || `${usuarioNormalizado}@squatgym.com`).trim(),
     rol: rolValido,
-    sucursal: SUCURSAL_USUARIO_DEFAULT,
+    sucursal: rolValido === 'Administrador' ? null : SUCURSAL_USUARIO_DEFAULT,
     estado: estado === 'Inactivo' ? 'Inactivo' : 'Activo',
     iniciales: generarIniciales(nombreLimpio).toUpperCase(),
     permisos: permisos.length ? permisos : obtenerPermisosPorRol(rolValido)
@@ -1672,11 +1779,23 @@ function guardarAuditoriaInline(event) {
 function obtenerSucursalAuditoria(audit) {
   const usuario = buscarUsuarioPorId(audit.userId);
 
-  return audit.sucursal || usuario?.sucursal || SUCURSAL_USUARIO_DEFAULT;
+  if (audit.sucursal) {
+    return audit.sucursal;
+  }
+
+  if (usuario?.rol === 'Administrador') {
+    return 'Administracion general';
+  }
+
+  return usuario?.sucursal || SUCURSAL_USUARIO_DEFAULT;
 }
 
-function construirReporteAuditoria(rango = obtenerRangoReporte()) {
-  const registros = filtrarRegistrosPorRango(auditorias, rango.desde, rango.hasta)
+function construirReporteAuditoria(rango = obtenerRangoReporte(), userId = '') {
+  const usuarioAlcance = userId ? buscarUsuarioPorId(userId) : null;
+  const registrosBase = userId
+    ? auditorias.filter((audit) => audit.userId === userId)
+    : auditorias;
+  const registros = filtrarRegistrosPorRango(registrosBase, rango.desde, rango.hasta)
     .map((audit) => ({
       ...audit,
       usuario: buscarUsuarioPorId(audit.userId),
@@ -1691,6 +1810,15 @@ function construirReporteAuditoria(rango = obtenerRangoReporte()) {
   const sucursales = Object.keys(registrosPorSucursal).sort((a, b) => a.localeCompare(b));
   const desde = rango.desde ? `${rango.desde}T00:00:00` : registros[0]?.fechaISO || new Date().toISOString();
   const hasta = rango.hasta ? `${rango.hasta}T23:59:59` : registros[registros.length - 1]?.fechaISO || new Date().toISOString();
+  const alcance = usuarioAlcance
+    ? `${usuarioAlcance.nombre} (${usuarioAlcance.rol}) - ${usuarioAlcance.usuario}`
+    : 'Todas las personas registradas';
+  const titulo = usuarioAlcance
+    ? `Reporte de Auditoria de ${usuarioAlcance.nombre}`
+    : 'Reporte de Auditoria de Actividad del Sistema';
+  const totalLabel = usuarioAlcance
+    ? 'Total de acciones del usuario'
+    : 'Total general de accesos registrados';
   const seccionesSucursal = sucursales.length
     ? sucursales.map((sucursal) => {
       const filas = registrosPorSucursal[sucursal]
@@ -1744,23 +1872,24 @@ function construirReporteAuditoria(rango = obtenerRangoReporte()) {
   return `
     <div class="audit-print-document">
       <div class="audit-print-date">${escapeHtml(formatFechaAuditoria(new Date()))}</div>
-      <h1>Reporte de Auditoria de Actividad del Sistema</h1>
+      <h1>${escapeHtml(titulo)}</h1>
       <p><strong>Generado por:</strong> Administrador</p>
       <p><strong>Periodo evaluado:</strong> ${escapeHtml(formatFechaAuditoria(desde))} - ${escapeHtml(formatFechaAuditoria(hasta))}</p>
-      <p><strong>Alcance:</strong> Todas las personas registradas</p>
+      <p><strong>Alcance:</strong> ${escapeHtml(alcance)}</p>
       <p><strong>Orden:</strong> Corte por sucursal y fecha/hora</p>
       ${seccionesSucursal}
-      <p class="audit-print-total"><strong>Total general de accesos registrados:</strong> ${registros.length}</p>
+      <p class="audit-print-total"><strong>${escapeHtml(totalLabel)}:</strong> ${registros.length}</p>
       <p class="audit-print-page">Pagina 1 de 1</p>
     </div>
   `;
 }
 
-function imprimirReporteAuditoria() {
+function imprimirReporteAuditoria(userId = '') {
   const printArea = document.getElementById('audit-print-area');
   const rango = obtenerRangoReporte();
   const desdeDate = crearFechaLocal(rango.desde);
   const hastaDate = crearFechaLocal(rango.hasta);
+  const usuarioId = String(userId || '').trim();
 
   if (!printArea) {
     return;
@@ -1772,7 +1901,7 @@ function imprimirReporteAuditoria() {
     return;
   }
 
-  printArea.innerHTML = construirReporteAuditoria(rango);
+  printArea.innerHTML = construirReporteAuditoria(rango, usuarioId);
   document.body.classList.add('users-print-mode');
   window.print();
 }
