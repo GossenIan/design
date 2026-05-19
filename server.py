@@ -40,7 +40,11 @@ def parse_boundary(content_type: str) -> Optional[bytes]:
   return f"--{boundary}".encode("utf-8")
 
 
-def parse_multipart_file(body: bytes, boundary: bytes) -> tuple[str, bytes]:
+def parse_multipart_file(body: bytes, boundary: bytes) -> tuple[str, bytes, str]:
+  image_filename = ""
+  image_data = b""
+  target_name = ""
+
   for raw_part in body.split(boundary):
     part = raw_part.strip(b"\r\n")
 
@@ -49,21 +53,26 @@ def parse_multipart_file(body: bytes, boundary: bytes) -> tuple[str, bytes]:
 
     raw_headers, content = part.split(b"\r\n\r\n", 1)
     header_text = raw_headers.decode("utf-8", errors="replace")
-
-    if 'name="image"' not in header_text:
-      continue
-
-    filename_match = re.search(r'filename="([^"]*)"', header_text)
-    filename = filename_match.group(1).strip() if filename_match else "producto"
     content = content.rstrip(b"\r\n")
 
     if content.endswith(b"--"):
       content = content[:-2].rstrip(b"\r\n")
 
-    return filename, content
+    if 'name="targetName"' in header_text:
+      target_name = content.decode("utf-8", errors="replace").strip()
+      continue
+
+    if 'name="image"' not in header_text:
+      continue
+
+    filename_match = re.search(r'filename="([^"]*)"', header_text)
+    image_filename = filename_match.group(1).strip() if filename_match else "producto"
+    image_data = content
+
+  if image_data:
+    return image_filename or "producto", image_data, target_name
 
   raise ValueError("No se encontro el archivo de imagen.")
-
 
 def detect_extension(data: bytes) -> str:
   if data.startswith(b"\xff\xd8\xff"):
@@ -81,14 +90,34 @@ def detect_extension(data: bytes) -> str:
   raise ValueError("Formato de imagen no soportado. Usa JPG, PNG, WEBP o GIF.")
 
 
-def safe_filename(original_name: str, extension: str) -> str:
-  stem = Path(original_name).stem.lower()
-  stem = re.sub(r"[^a-z0-9_-]+", "-", stem).strip("-") or "producto"
+ALLOWED_REPLACEMENT_EXTENSIONS = (".jpg", ".jpeg", ".png", ".gif", ".webp", ".svg")
+
+
+def normalize_filename_stem(value: str) -> str:
+  stem = Path(value or "producto").stem.lower()
+  stem = re.sub(r"[^a-z0-9_-]+", "-", stem).strip("-")
+  return stem or "producto"
+
+
+def safe_filename(original_name: str, extension: str, target_name: str = "") -> str:
+  if target_name:
+    return f"{normalize_filename_stem(target_name)}{extension}"
+
+  stem = normalize_filename_stem(original_name)
   stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
   token = uuid4().hex[:8]
 
   return f"{stem}-{stamp}-{token}{extension}"
 
+
+def remove_sibling_images(stem: str) -> None:
+  safe_stem = normalize_filename_stem(stem)
+
+  for extension in ALLOWED_REPLACEMENT_EXTENSIONS:
+    target = UPLOAD_DIR / f"{safe_stem}{extension}"
+
+    if target.exists():
+      target.unlink()
 
 def persist_data_backup(raw_body: bytes) -> dict:
   if len(raw_body) > MAX_DATA_BACKUP_BYTES:
@@ -163,14 +192,18 @@ class SquatGymHandler(SimpleHTTPRequestHandler):
       if not boundary:
         raise ValueError("La solicitud no es multipart/form-data.")
 
-      original_name, image_data = parse_multipart_file(self.rfile.read(length), boundary)
+      original_name, image_data, target_name = parse_multipart_file(self.rfile.read(length), boundary)
 
       if not image_data:
         raise ValueError("La imagen esta vacia.")
 
       extension = detect_extension(image_data)
-      filename = safe_filename(original_name, extension)
+      filename = safe_filename(original_name, extension, target_name)
       UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+
+      if target_name:
+        remove_sibling_images(Path(filename).stem)
+
       target = UPLOAD_DIR / filename
       target.write_bytes(image_data)
 

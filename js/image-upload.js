@@ -17,6 +17,8 @@
   }
 
   function leerComoDataUrl(file) {
+    validarImagen(file);
+
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
 
@@ -32,10 +34,15 @@
     });
   }
 
-  async function subirAlServidor(file) {
+  async function subirAlServidor(file, options = {}) {
     validarImagen(file);
 
     const formData = new FormData();
+
+    if (options.targetName) {
+      formData.append('targetName', String(options.targetName));
+    }
+
     formData.append('image', file);
 
     const response = await fetch(UPLOAD_ENDPOINT, {
@@ -60,11 +67,11 @@
     };
   }
 
-  async function resolverImagen(file) {
+  async function resolverImagen(file, options = {}) {
     validarImagen(file);
 
     try {
-      return await subirAlServidor(file);
+      return await subirAlServidor(file, options);
     } catch (error) {
       console.warn(error);
       return leerComoDataUrl(file);
@@ -72,6 +79,7 @@
   }
 
   window.SquatGymImageUpload = {
+    validate: validarImagen,
     resolve: resolverImagen,
     upload: subirAlServidor,
     readAsDataUrl: leerComoDataUrl

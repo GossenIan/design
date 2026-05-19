@@ -1761,7 +1761,7 @@ h6,
 }
 
 @media print {
-  @page {
+  @page inventory-report {
     size: A4 landscape;
     margin: 14mm 16mm;
   }
@@ -2076,5 +2076,42 @@ h6,
   #inventory-management-buttons > button {
     width: 12rem;
     min-width: 12rem;
+  }
+}
+
+
+/* Kiosco receipt print fixes */
+@media print {
+  @page cash-receipt {
+    size: A4 portrait;
+    margin: 12mm;
+  }
+
+  .receipt-invoice,
+  .cash-close-report {
+    page: cash-receipt;
+  }
+
+  .inventory-report-print {
+    page: inventory-report;
+  }
+
+  body.cash-print-mode {
+    background: #ffffff !important;
+    color: #111111 !important;
+  }
+
+  body.cash-print-mode #cash-close-print-area {
+    display: block !important;
+    width: 100%;
+  }
+
+  .cash-close-report {
+    color: #111111;
+    font-family: Arial, Inter, sans-serif;
+    font-size: 13px;
+    line-height: 1.25;
+    margin: 0 auto;
+    max-width: 760px;
   }
 }

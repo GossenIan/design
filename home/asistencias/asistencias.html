@@ -112,10 +112,6 @@
           <span class="material-symbols-outlined">history</span>
           Últimas asistencias
         </a>
-        <a class="inv-sidebar-link flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-colors hover:bg-surface-container text-on-surface-variant" href="#manual-entry-panel">
-          <span class="material-symbols-outlined">edit_note</span>
-          Ingreso manual
-        </a>
       </div>
     </nav>
 
@@ -146,28 +142,7 @@
             <p class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Ausentes</p>
             <p id="metric-expired-membership" class="mt-4 font-headline text-3xl font-black text-error">0</p>
           </article>
-        </section>
-
-        <section id="manual-entry-panel" class="rounded-xl border border-outline-variant/15 bg-surface-container-lowest p-5 shadow-[0px_12px_32px_rgba(28,27,27,0.06)]">
-          <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-            <div>
-              <p class="text-xs font-black uppercase tracking-wider text-primary">Ingreso manual</p>
-              <h2 class="font-headline text-2xl font-black">Registrar nueva asistencia</h2>
-            </div>
-          </div>
-                    <form id="manual-attendance-form" class="mt-4 grid gap-3 sm:grid-cols-[minmax(12rem,22rem)_auto] sm:items-end">
-            <label class="grid gap-2 text-sm font-bold uppercase text-on-surface-variant">
-              DNI
-              <input id="attendance-member-input" class="rounded-lg border-none bg-surface-container-highest px-3 py-3 text-base font-medium normal-case text-on-surface focus:ring-2 focus:ring-primary" type="text" placeholder="30123456" inputmode="numeric" pattern="[0-9]{7,8}" maxlength="8" autocomplete="off" required>
-            </label>
-            <button type="submit" class="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 text-sm font-bold text-on-primary hover:bg-primary-container hover:text-on-primary-container">
-              <span class="material-symbols-outlined text-lg">how_to_reg</span>
-              Registrar
-            </button>
-          </form>
-        </section>
-
-        <section id="attendance-table-panel" class="rounded-xl border border-outline-variant/15 bg-surface-container-lowest shadow-[0px_12px_32px_rgba(28,27,27,0.06)]">
+        </section><section id="attendance-table-panel" class="rounded-xl border border-outline-variant/15 bg-surface-container-lowest shadow-[0px_12px_32px_rgba(28,27,27,0.06)]">
           <div class="grid gap-3 border-b border-outline-variant/15 p-4 lg:grid-cols-[minmax(0,1fr)_13rem_14rem]">
             <div class="relative">
               <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-secondary">search</span>
@@ -209,6 +184,37 @@
         </section>
       </div>
     </main>
+    </div>
+
+
+    <div id="manual-entry-modal" class="inventory-modal-backdrop fixed inset-0 z-[130] hidden items-center justify-center bg-black/45 px-4 py-6">
+      <section class="w-full max-w-xl rounded-xl bg-background p-5 shadow-2xl">
+        <header class="flex items-start justify-between gap-4">
+          <div>
+            <p class="text-xs font-black uppercase tracking-wider text-primary">Ingreso manual</p>
+            <h2 class="font-headline text-3xl font-black">Registrar nueva asistencia</h2>
+            <p class="mt-1 text-sm font-medium text-on-surface-variant">Ingresa solo el DNI para marcar la asistencia como presente.</p>
+          </div>
+          <button id="close-manual-entry-modal" type="button" class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-secondary hover:bg-surface-container" aria-label="Cerrar ingreso manual">
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </header>
+        <form id="manual-attendance-form" class="mt-5 grid gap-4">
+          <label class="grid gap-2 text-sm font-bold uppercase text-on-surface-variant">
+            DNI
+            <input id="attendance-member-input" class="rounded-lg border-none bg-surface-container-highest px-3 py-3 text-base font-medium normal-case text-on-surface focus:ring-2 focus:ring-primary" type="text" placeholder="30123456" inputmode="numeric" pattern="[0-9]{7,8}" maxlength="8" autocomplete="off" required>
+          </label>
+          <div class="grid gap-3 sm:grid-cols-2">
+            <button type="submit" class="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 text-sm font-bold text-on-primary hover:bg-primary-container hover:text-on-primary-container">
+              <span class="material-symbols-outlined text-lg">how_to_reg</span>
+              Registrar
+            </button>
+            <button id="cancel-manual-entry-modal" type="button" class="rounded-lg bg-surface-container px-5 py-3 font-bold text-on-surface hover:bg-surface-container-high">
+              Cancelar
+            </button>
+          </div>
+        </form>
+      </section>
     </div>
 
     <div id="attendance-modal" class="inventory-modal-backdrop fixed inset-0 z-[130] hidden items-center justify-center bg-black/45 px-4 py-6">
@@ -263,7 +269,7 @@
     <div id="attendance-toast" class="fixed bottom-5 right-5 z-[140] hidden max-w-sm rounded-xl border border-primary-container bg-primary-container px-4 py-3 text-sm font-bold text-primary shadow-2xl"></div>
 
     <script src="../../js/squatgym-header.js"></script>
-    <script src="../../js/asistencias.js?v=attendance-dni-only-1"></script>
+    <script src="../../js/asistencias.js?v=attendance-manual-modal-2"></script>
   </body>
 </html>
 

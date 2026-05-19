@@ -13,8 +13,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Manrope:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-    <link rel="stylesheet" href="../../css/squatgym-theme.css?v=dark-final-1">
-    <link rel="stylesheet" href="../../css/squatgym-header.css?v=dark-final-1">
+    <link rel="stylesheet" href="../../css/squatgym-theme.css?v=kiosco-print-1">
+    <link rel="stylesheet" href="../../css/squatgym-header.css?v=kiosco-print-1">
   </head>
   <body class="min-h-screen bg-background text-on-surface font-body antialiased" data-notification-icon="point_of_sale" data-notification-title="Venta pendiente" data-notification-body="Hay una operación de kiosco lista para finalizar.">
     <header class="fixed left-0 top-0 z-50 w-full border-b border-outline-variant bg-surface-container-lowest/95 shadow-sm backdrop-blur-md">
@@ -151,11 +151,6 @@
             <span class="material-symbols-outlined" data-icon="storefront">
               storefront</span>
             Tienda
-          </a>
-          <a class="flex items-center gap-3 text-[#5F5E5E] dark:text-zinc-400 px-4 py-3 hover:bg-[#EAE7E7] dark:hover:bg-zinc-800 transition-colors scale-100 active:scale-[0.98] rounded-xl font-['Inter'] text-sm font-semibold" href="../inventario/inventario.html">
-            <span class="material-symbols-outlined" data-icon="inventory_2">
-              inventory_2</span>
-            Inventario
           </a>
           <a id="open-sales-history" class="flex items-center gap-3 text-[#5F5E5E] dark:text-zinc-400 px-4 py-3 hover:bg-[#EAE7E7] dark:hover:bg-zinc-800 transition-colors scale-100 active:scale-[0.98] rounded-xl font-['Inter'] text-sm font-semibold" href="#historial">
             <span class="material-symbols-outlined" data-icon="history">
@@ -308,7 +303,7 @@
                       $0.00</span>
                   </div>
                   <div class="flex justify-between text-sm text-secondary"><span>
-                      Impuestos (IVA 16%)</span><span id="tax-amount">
+                      Impuestos (IVA 21%)</span><span id="tax-amount">
                       $0.00</span>
                   </div>
                   <div class="flex justify-between items-end mt-4 pt-4 border-t border-outline-variant/20">
@@ -379,7 +374,7 @@
                     $0.00</span>
                 </div>
                 <div class="flex justify-between"><span>
-                    IVA 16%</span><span id="payment-tax">
+                    IVA 21%</span><span id="payment-tax">
                     $0.00</span>
                 </div>
                 <div class="mt-2 flex items-end justify-between border-t border-outline-variant/20 pt-4">
@@ -613,7 +608,7 @@
                 </p>
               </div>
               <div class="rounded-lg bg-surface-container-lowest px-3 py-3"><span class="text-xs font-bold uppercase text-secondary">
-                  IVA 16%</span>
+                  IVA 21%</span>
                 <p id="cash-close-tax" class="mt-1 text-lg font-extrabold text-on-surface">
                   $0.00
                 </p>
@@ -813,10 +808,10 @@
     </div>
     <!-- Shared scripts -->
     <script src="../../js/squatgym-header.js"></script>
-    <script src="../../js/image-upload.js"></script>
+    <script src="../../js/image-upload.js?v=image-save-on-submit-1"></script>
     <script src="../../js/auth.js"></script>
     <!-- Page scripts -->
-    <script src="../../js/kiosco.js"></script>
+    <script src="../../js/kiosco.js?v=product-images-save-on-submit-1"></script>
   </body>
 </html>
 

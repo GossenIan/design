@@ -326,6 +326,47 @@ function cerrarModalEdicion() {
   document.getElementById('attendance-edit-form')?.reset();
 }
 
+function abrirModalManual() {
+  document.getElementById('manual-entry-modal')?.classList.remove('hidden');
+  window.setTimeout(() => document.getElementById('attendance-member-input')?.focus(), 0);
+}
+
+function cerrarModalManual() {
+  document.getElementById('manual-entry-modal')?.classList.add('hidden');
+  document.getElementById('manual-attendance-form')?.reset();
+}
+
+function normalizarDniInput(input) {
+  if (!input) {
+    return '';
+  }
+
+  const limpio = String(input.value || '').replace(/\D/g, '').slice(0, 8);
+  if (input.value !== limpio) {
+    input.value = limpio;
+  }
+
+  return limpio;
+}
+
+function activarSoloNumerosDni(input) {
+  if (!input) {
+    return;
+  }
+
+  input.addEventListener('beforeinput', (event) => {
+    if (event.inputType?.startsWith('delete') || event.inputType === 'insertFromPaste' || event.inputType === 'insertFromDrop') {
+      return;
+    }
+
+    if (event.data && /\D/.test(event.data)) {
+      event.preventDefault();
+    }
+  });
+
+  input.addEventListener('input', () => normalizarDniInput(input));
+}
+
 function obtenerPerfilAsistenciaPorDni(socio) {
   const registro = asistencias.find((item) => item.socio === socio)
     || asistenciasDemo.find((item) => item.socio === socio);
@@ -346,7 +387,16 @@ function guardarEdicion(event) {
     return;
   }
 
-  item.socio = document.getElementById('attendance-edit-member')?.value.trim() || item.socio;
+  const editMemberInput = document.getElementById('attendance-edit-member');
+  const socioEditado = normalizarDniInput(editMemberInput);
+
+  if (!/^\d{7,8}$/.test(socioEditado)) {
+    mostrarToast('Ingresa un DNI valido.', true);
+    editMemberInput?.focus();
+    return;
+  }
+
+  item.socio = socioEditado;
   item.nombre = document.getElementById('attendance-edit-name')?.value.trim() || item.nombre;
   item.plan = normalizarCategoria(document.getElementById('attendance-edit-plan')?.value || item.plan);
   item.estado = normalizarEstado(document.getElementById('attendance-edit-status')?.value || item.estado);
@@ -359,7 +409,7 @@ function guardarEdicion(event) {
 function guardarManual(event) {
   event.preventDefault();
   const input = document.getElementById('attendance-member-input');
-  const socio = String(input?.value || '').replace(/\D/g, '');
+  const socio = normalizarDniInput(input);
 
   if (!/^\d{7,8}$/.test(socio)) {
     mostrarToast('Ingresa un DNI valido.', true);
@@ -385,12 +435,15 @@ function guardarManual(event) {
   guardarAsistencias();
   asistenciasPaginaActual = 1;
   renderTodo();
+  cerrarModalManual();
   mostrarToast('Asistencia registrada por DNI.');
 }
 
 document.addEventListener('DOMContentLoaded', () => {
   cargarAsistencias();
   renderTodo();
+  activarSoloNumerosDni(document.getElementById('attendance-member-input'));
+  activarSoloNumerosDni(document.getElementById('attendance-edit-member'));
 
   document.getElementById('attendance-search')?.addEventListener('input', (event) => {
     attendanceSearch = event.target.value;
@@ -414,13 +467,36 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('attendance-edit-form')?.addEventListener('submit', guardarEdicion);
   document.getElementById('close-attendance-modal')?.addEventListener('click', cerrarModalEdicion);
   document.getElementById('cancel-attendance-modal')?.addEventListener('click', cerrarModalEdicion);
-  document.getElementById('open-manual-entry-modal')?.addEventListener('click', () => {
-    document.getElementById('manual-entry-panel')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    window.setTimeout(() => document.getElementById('attendance-member-input')?.focus(), 200);
+  document.getElementById('open-manual-entry-modal')?.addEventListener('click', abrirModalManual);
+  document.getElementById('close-manual-entry-modal')?.addEventListener('click', cerrarModalManual);
+  document.getElementById('cancel-manual-entry-modal')?.addEventListener('click', cerrarModalManual);
+
+  document.getElementById('manual-entry-modal')?.addEventListener('click', (event) => {
+    if (event.target === document.getElementById('manual-entry-modal')) {
+      cerrarModalManual();
+    }
   });
 
   document.getElementById('attendance-modal')?.addEventListener('click', (event) => {
     if (event.target === document.getElementById('attendance-modal')) {
+      cerrarModalEdicion();
+    }
+  });
+
+  window.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') {
+      return;
+    }
+
+    const manualModalOpen = !document.getElementById('manual-entry-modal')?.classList.contains('hidden');
+    const editModalOpen = !document.getElementById('attendance-modal')?.classList.contains('hidden');
+
+    if (manualModalOpen) {
+      cerrarModalManual();
+      return;
+    }
+
+    if (editModalOpen) {
       cerrarModalEdicion();
     }
   });

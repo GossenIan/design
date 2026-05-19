@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#f1f5f9"/>
+      <stop offset="1" stop-color="#cbd5e1"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="20" stdDeviation="18" flood-color="#0f172a" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+  <rect width="512" height="512" rx="44" fill="url(#bg)"/>
+  <circle cx="420" cy="92" r="64" fill="#ffffff" opacity="0.5"/>
+  <circle cx="82" cy="410" r="92" fill="#ffffff" opacity="0.38"/>
+  <g filter="url(#shadow)">
+    
+      <rect x="150" y="148" width="212" height="178" rx="38" fill="#334155"/>
+      <path d="M190 148l42-52h48l42 52M188 326l-26 58h188l-26-58" fill="#0f172a" opacity="0.9"/>
+      <path d="M205 194h102M205 236h102" stroke="#ffffff" stroke-width="18" stroke-linecap="round" opacity="0.72"/>
+    
+  </g>
+  <text x="256" y="48" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="900" letter-spacing="2" fill="#0f172a">INDUMENTARIA</text>
+  <text x="256" y="408" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="21" font-weight="800" fill="#111827">Toalla Deportiva</text>
+      <text x="256" y="432" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="21" font-weight="800" fill="#111827">Microfibra gris</text>
+  <text x="256" y="488" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#475569">0000000002</text>
+</svg>

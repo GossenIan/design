@@ -282,9 +282,13 @@ internal static class SquatGymLauncher
             }
 
             string extension = DetectExtension(uploaded.Data);
-            string fileName = SafeFileName(uploaded.FileName, extension);
+            string fileName = SafeFileName(uploaded.FileName, extension, uploaded.TargetName);
 
             Directory.CreateDirectory(UploadDir);
+            if (!string.IsNullOrWhiteSpace(uploaded.TargetName))
+            {
+                RemoveSiblingImages(Path.GetFileNameWithoutExtension(fileName));
+            }
             File.WriteAllBytes(Path.Combine(UploadDir, fileName), uploaded.Data);
 
             SendJson(stream, 200, "OK", "{\"ok\":true,\"url\":\"/img/uploads/" + JsonEscape(fileName) + "\",\"fileName\":\"uploads/" + JsonEscape(fileName) + "\"}");
@@ -401,6 +405,9 @@ internal static class SquatGymLauncher
     private static UploadedFile ParseMultipartImage(byte[] body, byte[] boundary)
     {
         int boundaryIndex = IndexOf(body, boundary, 0);
+        string targetName = "";
+        string imageFileName = "producto";
+        byte[] imageData = null;
 
         while (boundaryIndex >= 0)
         {
@@ -437,21 +444,30 @@ internal static class SquatGymLauncher
                 contentEnd -= 2;
             }
 
-            if (partHeaders.IndexOf("name=\"image\"", StringComparison.OrdinalIgnoreCase) >= 0)
+            int contentLength = Math.Max(0, contentEnd - contentStart);
+
+            if (partHeaders.IndexOf("name=\"targetName\"", StringComparison.OrdinalIgnoreCase) >= 0)
             {
-                string fileName = "producto";
+                targetName = Encoding.UTF8.GetString(body, contentStart, contentLength).Trim();
+            }
+            else if (partHeaders.IndexOf("name=\"image\"", StringComparison.OrdinalIgnoreCase) >= 0)
+            {
                 Match fileMatch = Regex.Match(partHeaders, "filename=\"([^\"]*)\"", RegexOptions.IgnoreCase);
                 if (fileMatch.Success && !string.IsNullOrWhiteSpace(fileMatch.Groups[1].Value))
                 {
-                    fileName = fileMatch.Groups[1].Value.Trim();
+                    imageFileName = fileMatch.Groups[1].Value.Trim();
                 }
 
-                byte[] data = new byte[Math.Max(0, contentEnd - contentStart)];
-                Buffer.BlockCopy(body, contentStart, data, 0, data.Length);
-                return new UploadedFile(fileName, data);
+                imageData = new byte[contentLength];
+                Buffer.BlockCopy(body, contentStart, imageData, 0, imageData.Length);
             }
 
             boundaryIndex = nextBoundary;
+        }
+
+        if (imageData != null)
+        {
+            return new UploadedFile(imageFileName, imageData, targetName);
         }
 
         throw new InvalidOperationException("No se encontro el archivo de imagen.");
@@ -489,16 +505,39 @@ internal static class SquatGymLauncher
         throw new InvalidOperationException("Formato de imagen no soportado. Usa JPG, PNG, WEBP o GIF.");
     }
 
-    private static string SafeFileName(string originalName, string extension)
+    private static string SafeFileName(string originalName, string extension, string targetName)
     {
-        string stem = Path.GetFileNameWithoutExtension(originalName).ToLowerInvariant();
-        stem = Regex.Replace(stem, "[^a-z0-9_-]+", "-").Trim('-');
-        if (string.IsNullOrEmpty(stem))
+        if (!string.IsNullOrWhiteSpace(targetName))
         {
-            stem = "producto";
+            return NormalizeFileNameStem(targetName) + extension;
         }
 
+        string stem = NormalizeFileNameStem(originalName);
         return stem + "-" + DateTime.Now.ToString("yyyyMMdd-HHmmss") + "-" + Guid.NewGuid().ToString("N").Substring(0, 8) + extension;
+    }
+
+    private static string NormalizeFileNameStem(string value)
+    {
+        string stem = Path.GetFileNameWithoutExtension(value ?? "producto").ToLowerInvariant();
+        stem = Regex.Replace(stem, "[^a-z0-9_-]+", "-").Trim('-');
+
+        return string.IsNullOrEmpty(stem) ? "producto" : stem;
+    }
+
+    private static void RemoveSiblingImages(string stem)
+    {
+        string safeStem = NormalizeFileNameStem(stem);
+        string[] extensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp", ".svg" };
+
+        foreach (string extension in extensions)
+        {
+            string candidate = Path.Combine(UploadDir, safeStem + extension);
+
+            if (File.Exists(candidate))
+            {
+                File.Delete(candidate);
+            }
+        }
     }
 
     private static void SendOptions(NetworkStream stream)
@@ -605,11 +644,13 @@ internal static class SquatGymLauncher
     {
         public readonly string FileName;
         public readonly byte[] Data;
+        public readonly string TargetName;
 
-        public UploadedFile(string fileName, byte[] data)
+        public UploadedFile(string fileName, byte[] data, string targetName)
         {
             FileName = fileName;
             Data = data;
+            TargetName = targetName ?? "";
         }
     }
 }
